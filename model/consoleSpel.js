@@ -1,15 +1,30 @@
 'use strict';
 
-var modSpel = require('./moduleSpel.js');
-// var modVakje = require('./moduleVakje.js');
-
+var modSpel = require('./modelSpel.js');
 var spel = new modSpel("Joske", 7, 7, 7);
-console.log(spel);
-console.log(spel.timer());
 
-var vak = new modVakje();
+function SpelConsole(spelObj) {
+  this.spel = spelObj;
+}
 
-var test1111 = spel.spelersnaam
-console.log(test1111)
-spel.initialiseren()
-spel.verdelingBommen()
+SpelConsole.prototype.toonBord = function () {
+  var bord = '';
+  this.spel.bord.forEach(rij => {
+    rij.forEach(vak => {
+      // bord += vak.bom ? ' *' : ' .';
+      bord += ' ' + vak.bomBuren;
+    });
+    bord += '\n';
+  });
+  console.log(bord);
+};
+
+SpelConsole.prototype.omdraaien = function (rij, kolom) {
+  if (this.spel.bord[rij][kolom].omdraaien()){
+
+  }
+};
+
+var cbord = new SpelConsole(spel);
+
+cbord.toonBord();
