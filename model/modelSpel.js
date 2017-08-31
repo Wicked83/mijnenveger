@@ -23,7 +23,7 @@ Spel.prototype.stuurData = function () {
     },
     body: JSON.stringify({
       naam: this.spelersnaam,
-      tijd: this.timer.eindtijd,
+      tijd: this.timer.seconden,
       rijen: this.rijen,
       kolommen: this.kolommen,
       bommen: this.bommen
