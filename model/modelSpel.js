@@ -11,7 +11,33 @@ function Spel(spelersnaam = "Joske", bommen = 10, rijen = 10, kolommen = 10) {
     this.speltijd = 0; // nodig wegens mog pauzeren
     this.bord = this.initialiseren();
     // this.bord = this.verdelingBommen();
+    this.timer = new Timer();
 }
+
+Spel.prototype.stuurData = function () {
+  fetch('http://192.168.23.15', {
+    method: 'post',
+    headers: {
+      'Accept': 'application/json, text/plain, */*',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      naam: this.spelersnaam,
+      tijd: this.timer.eindtijd,
+      rijen: this.rijen,
+      kolommen: this.kolommen,
+      bommen: this.bommen
+    })
+  }).then(res=>res.json())
+    .then(res => console.log(res));
+  };
+
+Spel.prototype.getTopDrie = function () {
+  fetch('http://192.168.23.15')
+    .then(res=>res.json())
+    .then(json => console.log(json));
+  };
+};
 
 Spel.prototype.initialiseren = function() {
     console.log("rijen: " + this.rijen);
