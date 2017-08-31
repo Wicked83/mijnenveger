@@ -50,6 +50,10 @@ Spel.prototype.initialiseren = function () {
 
 
 Spel.prototype.ontdekVeiligVakjes = function (rij, kolom) {
+  if (this.bord[rij][kolom].bomBuren != null) {
+    return false;
+  }
+  console.log('vinden veilige buren voor ' + rij + ', ' + kolom);
   var veiligeBuren = this.contoleerBuren(rij, kolom);
   veiligeBuren.forEach(koords => {
     this.vakjeOmdraaien(koords[0], koords[1]);
@@ -72,24 +76,26 @@ Spel.prototype.vakjeOmdraaien = function (rij, kolom) {
 // };
 
 Spel.prototype.contoleerBuren = function (rij, kolom) {
-  // var buurBommen = 0;
+
+  var buurBommen = 0;
   var veiligeBuren = [];
   for (var i = rij - 1; i <= rij + 1; i++) {
     if (this.bord[i]) {
       for (var j = kolom - 1; j <= kolom + 1; j++) {
         if (this.bord[i][j]) {
           if (this.bord[i][j].bom) {
-            // buurBommen++;
-            return [];
+            buurBommen++;
           } else {
-            veilig.push([i, j]);
+            if (!this.bord[i][j].omgedraaid) {
+              veiligeBuren.push([i, j]);
+            }
           }
         }
       }
     }
   }
-  // return !buurBommen ? veiligeBuren : false;
-  return veiligeBuren;
+  this.bord[rij][kolom].bomBuren = buurBommen;
+  return !buurBommen ? veiligeBuren : [];
 };
 
 Spel.prototype.initialiseren = function() {
@@ -142,7 +148,7 @@ Spel.prototype.verdelingBommen = function () {
 
 
 function Vak() {
-    this.bomBuren = 0;
+    this.bomBuren = null;
     this.bom = false;
     this.teller = 0;
     this.omgedraaid = false;
@@ -157,7 +163,7 @@ Vak.prototype.symboolBepalen = function () {
 Vak.prototype.omdraaien = function () {
     if (this.bom) {
         //end of the game
-        //alert('You are LOOOOOSEEEEER!!!');
+        console.log('You are LOOOOOSEEEEER!!!');
         return false;
     } else {
       this.omgedraaid = true;
