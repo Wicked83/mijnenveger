@@ -47,13 +47,34 @@ function Vak() {
     this.teller = 0;
     this.omgedraaid = false;
 }
-Spel.prototype.timer = function () {
+
+Vak.prototype.omdraaien = function () {
+    /* omdraaien, opentrekken, resultaat omringend */
+}
+
+Vak.prototype.vlag = function () {
+    /* % > blanco vak/"v"/"?" */
+}
+
+Spel.prototype.timerStarten = function () {
     /* speltijd++ elke sec */
     console.log("Hello vanuit model");
     return ("Nog eens hello");
+    /* starten/stoppen */
 }
+
+Spel.prototype.timerStoppen = function () {
+
+}
+
+function Timer(){
+    this.timer=timerStoppen();
+
+}
+
 var spelletje = new Spel("Jef", 1, 2, 5);
 spelletje.verdelingBommen()
 // console.log("op einde: " + this.bord)
 console.log("spelletje: " + spelletje.bord)
 module.exports = Spel;
+
