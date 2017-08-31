@@ -10,7 +10,7 @@ function Spel(spelersnaam = "Joske", bommen = 10, rijen = 10, kolommen = 10) {
     this.kolommen = kolommen;
     this.speltijd = 0; // nodig wegens mog pauzeren
     this.bord = this.initialiseren();
-<<<<<<< HEAD
+
     // this.bord = this.verdelingBommen();
     this.timer = new MijnTimer();
 }
@@ -42,7 +42,7 @@ Spel.prototype.getTopDrie = function () {
 Spel.prototype.initialiseren = function () {
     console.log("rijen: " + this.rijen);
     console.log("kolommen: " + this.kolommen)
-=======
+
     this.verdelingBommen();
     // this.bomBurenTellen();
     this.timer = new MijnTimer();
@@ -109,7 +109,7 @@ Spel.prototype.contoleerBuren = function (rij, kolom) {
 Spel.prototype.initialiseren = function() {
     // console.log("rijen: " + this.rijen);
     // console.log("kolommen: " + this.kolommen)
->>>>>>> 71d98d72ab57b4ace9b832b8f7b5e446a3c82b61
+
     var arr = [];
     for (var x = 0; x < this.rijen; x++) {
         arr[x] = [];
@@ -136,7 +136,7 @@ Spel.prototype.verdelingBommen = function () {
     // console.log("klaar met bommen: " + this.bord)
 }
 
-<<<<<<< HEAD
+
 Spel.prototype.saveConfig = function () {
     var config = {
         rijen: this.rijen,
@@ -154,7 +154,7 @@ Spel.prototype.loadConfig = function () {
         this.bommen = config.bommen;
     }
 };
-=======
+
 // Spel.prototype.saveConfig = function() {
 //     var config = {
 //         rijen: this.rijen,
@@ -172,7 +172,7 @@ Spel.prototype.loadConfig = function () {
 //         this.bommen = config.bommen;
 //     }
 // };
->>>>>>> 71d98d72ab57b4ace9b832b8f7b5e446a3c82b61
+
 
 function Vak() {
     this.bomBuren = 0;
@@ -199,13 +199,9 @@ Vak.prototype.omdraaien = function () {
     }
 }
 
-<<<<<<< HEAD
+
 Vak.prototype.vlag = function () {
     this.teller++;
-=======
-Vak.prototype.vlag = function() {
-  this.teller++;
->>>>>>> 71d98d72ab57b4ace9b832b8f7b5e446a3c82b61
 }
 
 function MijnTimer() {
@@ -235,16 +231,12 @@ function MijnTimer() {
 
 }
 
-<<<<<<< HEAD
-var spelletje = new Spel("Jef", 1, 2, 5);
-spelletje.verdelingBommen()
-// console.log("op einde: " + this.bord)
-console.log("spelletje: " + spelletje.bord)
-module.exports = Spel;
-=======
+
+
+
 // var spelletje = new Spel("Jef", 1, 2, 5);
 // spelletje.verdelingBommen()
     // console.log("op einde: " + this.bord)
 // console.log("spelletje: " + spelletje.bord)
 module.exports = Spel;
->>>>>>> 71d98d72ab57b4ace9b832b8f7b5e446a3c82b61
+
