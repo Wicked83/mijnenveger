@@ -14,29 +14,29 @@ function Spel(spelersnaam = "Joske", bommen = 10, rijen = 10, kolommen = 10) {
     this.timer = new Timer();
 }
 
-Spel.prototype.stuurData = function () {
-  fetch('http://192.168.23.15', {
-    method: 'post',
-    headers: {
-      'Accept': 'application/json, text/plain, */*',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      naam: this.spelersnaam,
-      tijd: this.timer.seconden,
-      rijen: this.rijen,
-      kolommen: this.kolommen,
-      bommen: this.bommen
-    })
-  }).then(res=>res.json())
-    .then(res => console.log(res));
-  };
+Spel.prototype.stuurData = function() {
+    fetch('http://192.168.23.15', {
+            method: 'post',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                naam: this.spelersnaam,
+                tijd: this.timer.seconden,
+                rijen: this.rijen,
+                kolommen: this.kolommen,
+                bommen: this.bommen
+            })
+        }).then(res => res.json())
+        .then(res => console.log(res));
+};
 
-Spel.prototype.getTopDrie = function () {
-  fetch('http://192.168.23.15')
-    .then(res=>res.json())
-    .then(json => console.log(json));
-  };
+Spel.prototype.getTopDrie = function() {
+    fetch('http://192.168.23.15')
+        .then(res => res.json())
+        .then(json => console.log(json));
+};
 };
 
 Spel.prototype.initialiseren = function() {
@@ -68,22 +68,22 @@ Spel.prototype.verdelingBommen = function() {
     console.log("klaar met bommen: " + this.bord)
 }
 
-Spel.prototype.saveConfig = function () {
-  var config = {
-    rijen: this.rijen,
-    kolommen: this.kolommen,
-    bommen: this.bommen
-  };
-  localStorage.setItem('bordConfig', JSON.stringify(config));
+Spel.prototype.saveConfig = function() {
+    var config = {
+        rijen: this.rijen,
+        kolommen: this.kolommen,
+        bommen: this.bommen
+    };
+    localStorage.setItem('bordConfig', JSON.stringify(config));
 };
 
-Spel.prototype.loadConfig = function () {
-  var config = JSON.parse(localStorage.getItem('bordConfig'));
-  if (config) {
-    this.rijen = config.rijen;
-    this.kolommen = config.kolommen;
-    this.bommen = config.bommen;
-  }
+Spel.prototype.loadConfig = function() {
+    var config = JSON.parse(localStorage.getItem('bordConfig'));
+    if (config) {
+        this.rijen = config.rijen;
+        this.kolommen = config.kolommen;
+        this.bommen = config.bommen;
+    }
 };
 
 function Vak() {
@@ -92,44 +92,24 @@ function Vak() {
     this.omgedraaid = false;
 }
 
-Vak.prototype.symboolBepalen = function () {
-  var mod = this.teller % 3;
-  return mod ? mod == 1 ? 'v' : '?' : ''
+Vak.prototype.symboolBepalen = function() {
+    var mod = this.teller % 3;
+    return mod ? mod == 1 ? 'v' : '?' : ''
 };
 
 Vak.prototype.omdraaien = function() {
     if (this.bom) {
-      //end of the game
-      alert('You are LOOOOOSEEEEER!!!');
+        //end of the game
+        alert('You are LOOOOOSEEEEER!!!');
     } else {
-      this.omgedraaid = true;
+        this.omgedraaid = true;
     }
 }
 
 Vak.prototype.vlag = function() {
-<<<<<<< HEAD
+
     // > blanco vak / "v" / "?"
 }
-
-
-=======
-  this.teller++;
-}
-
-function Timer() {
-  this.timer = timerStoppen();
-
-}
-
-Timer.prototype.timerStarten = function() {
-    /* speltijd++ elke sec */
-    console.log("Hello vanuit model");
-    return ("Nog eens hello");
-    /* starten/stoppen */
-}
-
-Timer.prototype.timerStoppen = function() {
->>>>>>> 3b1e637ce1347bef7724804472476767098462e8
 
 function MijnTimer() {
     var self = this;
@@ -142,7 +122,7 @@ function MijnTimer() {
         self.interval = setInterval(self.tellen, 1000);
     }
 
-<<<<<<< HEAD
+
     self.tellen = function() {
         self.seconden += 1;
     }
@@ -157,8 +137,6 @@ function MijnTimer() {
     }
 
 }
-=======
->>>>>>> 3b1e637ce1347bef7724804472476767098462e8
 
 var spelletje = new Spel("Jef", 1, 2, 5);
 spelletje.verdelingBommen()
