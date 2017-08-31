@@ -1,7 +1,7 @@
 'use strict';
 
 var modSpel = require('./moduleSpel.js');
-var modVakje = require('./moduleVakje.js');
+// var modVakje = require('./moduleVakje.js');
 
 var spel = new modSpel("Joske", 7, 7, 7);
 console.log(spel);

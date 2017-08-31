@@ -42,28 +42,46 @@ Spel.prototype.verdelingBommen = function() {
     console.log("klaar met bommen: " + this.bord)
 }
 
+Spel.prototype.saveConfig = function () {
+  var config = {
+    rijen: this.rijen,
+    kolommen: this.kolommen,
+    bommen: this.bommen
+  };
+  localStorage.setItem('bordConfig', JSON.stringify(config));
+};
+
+Spel.prototype.loadConfig = function () {
+  var config = JSON.parse(localStorage.getItem('bordConfig'));
+  if (config) {
+    this.rijen = config.rijen;
+    this.kolommen = config.kolommen;
+    this.bommen = config.bommen;
+  }
+};
+
 function Vak() {
     this.bom = false;
     this.teller = 0;
-    this.symbool = '';
     this.omgedraaid = false;
 }
 
-Vak.prototype.symboolZetten = function () {
+Vak.prototype.symboolBepalen = function () {
   var mod = this.teller % 3;
-  this.symbool = mod ? mod == 1 ? 'v' : '?' : ''
+  return mod ? mod == 1 ? 'v' : '?' : ''
 };
 
 Vak.prototype.omdraaien = function() {
     if (this.bom) {
       //end of the game
+      alert('You are LOOOOOSEEEEER!!!');
     } else {
       this.omgedraaid = true;
     }
 }
 
 Vak.prototype.vlag = function() {
-
+  this.teller++;
 }
 
 function Timer() {
