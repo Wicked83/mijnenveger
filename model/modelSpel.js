@@ -52,23 +52,35 @@ Vak.prototype.omdraaien = function() {
     /* omdraaien, opentrekken, resultaat omringend */
 }
 
-Vak.prototype.vlag = function() { %
+Vak.prototype.vlag = function() {
     // > blanco vak / "v" / "?"
 }
 
-Spel.prototype.timerStarten = function() {
-    /* speltijd++ elke sec */
-    console.log("Hello vanuit model");
-    return ("Nog eens hello");
-    /* starten/stoppen */
-}
 
-Spel.prototype.timerStoppen = function() {
 
-}
+function MijnTimer() {
+    var self = this;
+    self.interval = null;
+    self.seconden = 0;
 
-function Timer() {
-    this.timer = timerStoppen();
+
+    self.starten = function() {
+        self.seconden = 0;
+        self.interval = setInterval(self.tellen, 1000);
+    }
+
+    self.tellen = function() {
+        self.seconden += 1;
+    }
+
+    self.stoppen = function() {
+        if (self.interval != null)
+            clearTimeout(self.interval);
+    }
+
+    self.hernemen = function() {
+        self.interval = setInterval(self.tellen, 1000);
+    }
 
 }
 
