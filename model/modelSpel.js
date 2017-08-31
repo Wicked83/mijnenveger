@@ -13,7 +13,7 @@ function Spel(spelersnaam = "Joske", bommen = 10, rijen = 10, kolommen = 10) {
     // this.bord = this.verdelingBommen();
 }
 
-Spel.prototype.initialiseren = function () {
+Spel.prototype.initialiseren = function() {
     console.log("rijen: " + this.rijen);
     console.log("kolommen: " + this.kolommen)
     var arr = [];
@@ -26,7 +26,7 @@ Spel.prototype.initialiseren = function () {
     return arr;
 }
 
-Spel.prototype.verdelingBommen = function () {
+Spel.prototype.verdelingBommen = function() {
     // random bommen in vakjes steken
     var aantal = this.bommen;
     do {
@@ -48,33 +48,32 @@ function Vak() {
     this.omgedraaid = false;
 }
 
-Vak.prototype.omdraaien = function () {
+Vak.prototype.omdraaien = function() {
     /* omdraaien, opentrekken, resultaat omringend */
 }
 
-Vak.prototype.vlag = function () {
-    /* % > blanco vak/"v"/"?" */
+Vak.prototype.vlag = function() { %
+    > blanco vak / "v" / "?"
 }
 
-Spel.prototype.timerStarten = function () {
+Spel.prototype.timerStarten = function() {
     /* speltijd++ elke sec */
     console.log("Hello vanuit model");
     return ("Nog eens hello");
     /* starten/stoppen */
 }
 
-Spel.prototype.timerStoppen = function () {
+Spel.prototype.timerStoppen = function() {
 
 }
 
-function Timer(){
-    this.timer=timerStoppen();
+function Timer() {
+    this.timer = timerStoppen();
 
 }
 
 var spelletje = new Spel("Jef", 1, 2, 5);
 spelletje.verdelingBommen()
-// console.log("op einde: " + this.bord)
+    // console.log("op einde: " + this.bord)
 console.log("spelletje: " + spelletje.bord)
 module.exports = Spel;
-
