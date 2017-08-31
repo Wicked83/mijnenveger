@@ -53,7 +53,7 @@ Vak.prototype.omdraaien = function() {
 }
 
 Vak.prototype.vlag = function() { %
-    > blanco vak / "v" / "?"
+    // > blanco vak / "v" / "?"
 }
 
 Spel.prototype.timerStarten = function() {
