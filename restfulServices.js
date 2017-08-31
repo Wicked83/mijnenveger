@@ -10,24 +10,28 @@ app.use(bodyParser.urlencoded({
 }));
 
 app.get('/deelnemers', haalDeelnemerlijstOp);
-app.get('/naam', selecteerOpNaam);
-app.get('/config', selecteerOpConfig);
+// app.get('/naam', selecteerOpNaam);
+// app.get('/config', selecteerOpConfig);
 app.post('/nieuw', nieuweSpelerInvoegen);
 
 function haalDeelnemerlijstOp(request, response) {
-    var naam = 'Joske';
-    var bommen = 10, rijen = 10, kolommen = 10;
-    var query = naam ? { 'naam': naam } : { 'bommen': bommen, 'rijen': rijen, 'kolommen': kolommen };
+    var naam = '';
+    var bommen = ""//10, rijen = 10, kolommen = 10;
+    var query = naam ? { 'naam': naam } : bommen ? { 'bommen': bommen, 'rijen': rijen, 'kolommen': kolommen } : {};
     // var query = { 'naam': naam };
 
     mongoClient.connect(url, function (error, db) {
         console.log('connected to db');
         var collection = db.collection('mijnenveger');
-        collection.find(query).toArray(function (err, docs) {
-            console.log('deelnemerlijst gevonden');
-            response.send(JSON.stringify(docs));
-            db.close;
-        })
+        collection.find(query)
+            .sort({ bommen: -1, kolommen: -1, rijen: -1, tijd: 1 })
+            .toArray(function (err, docs) {
+                console.log('deelnemerlijst gevonden');
+                response.send(JSON.stringify(docs));
+                /* var resultaat = JSON.stringify(docs);
+                console.log(JSON.parse(resultaat)); */
+                db.close;
+            })
     })
 }
 function selecteerOpNaam(request, response) {
@@ -44,20 +48,33 @@ function nieuweSpelerInvoegen(req, res) {
     mongoClient.connect(url, function (err, db) {
         console.log('nieuwe invoer opgestart');
         var collection = db.collection('mijnenveger');
-        collection.insertOne({
-            naam: req.body.naam,
-            tijd: req.body.tijd,
-            bommen: req.body.bommen,
-            rijen: req.body.rijen,
-            kolommen: req.body.kolommen
-        }, function (err, r) {
-            // console.log("toegevoegd: " + r.insertedCount);
-            console.log("req: " + req);
-            console.log(req);
-            console.log("req.body: " + req.body);
-            console.log("req.body.naam: " + req.body.naam);
-            db.close;
-        })
+        console.log(collection)
+
+
+        /* opvragen & vgl */
+        var tijd = 70;
+        var bommen = 10, rijen = 10, kolommen = 10;
+        var query = { 'bommen': bommen, 'rijen': rijen, 'kolommen': kolommen };
+        collection.find(query);
+        if (tijd < collection.find({}))
+
+            collection.insertOne({
+                naam: req.body.naam,
+                tijd: req.body.tijd,
+                bommen: req.body.bommen,
+                rijen: req.body.rijen,
+                kolommen: req.body.kolommen,
+                // bom: req.body.bom
+            }, function (err, r) {
+                // console.log("toegevoegd: " + r.insertedCount);
+                console.log("res: " + res);
+                /* console.log(req);
+                console.log("req.body: " + req.body);
+                console.log("req.body.naam: " + req.body.naam); */
+                if (!err) { res.end(JSON.stringify({ message: "Je hoort niet bij de besten, dus doe iets zinvol met je leven!" })) }
+                else { console.log('error: ' + err) }
+                db.close;
+            })
     })
 }
 

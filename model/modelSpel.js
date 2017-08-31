@@ -11,35 +11,34 @@ function Spel(spelersnaam = "Joske", bommen = 10, rijen = 10, kolommen = 10) {
     this.speltijd = 0; // nodig wegens mog pauzeren
     this.bord = this.initialiseren();
     // this.bord = this.verdelingBommen();
-    this.timer = new Timer();
+    this.timer = new MijnTimer();
 }
 
-Spel.prototype.stuurData = function() {
+Spel.prototype.stuurData = function () {
     fetch('http://192.168.23.15', {
-            method: 'post',
-            headers: {
-                'Accept': 'application/json, text/plain, */*',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                naam: this.spelersnaam,
-                tijd: this.timer.seconden,
-                rijen: this.rijen,
-                kolommen: this.kolommen,
-                bommen: this.bommen
-            })
-        }).then(res => res.json())
+        method: 'post',
+        headers: {
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            naam: this.spelersnaam,
+            tijd: this.timer.seconden,
+            rijen: this.rijen,
+            kolommen: this.kolommen,
+            bommen: this.bommen
+        })
+    }).then(res => res.json())
         .then(res => console.log(res));
 };
 
-Spel.prototype.getTopDrie = function() {
+Spel.prototype.getTopDrie = function () {
     fetch('http://192.168.23.15')
         .then(res => res.json())
         .then(json => console.log(json));
 };
-};
 
-Spel.prototype.initialiseren = function() {
+Spel.prototype.initialiseren = function () {
     console.log("rijen: " + this.rijen);
     console.log("kolommen: " + this.kolommen)
     var arr = [];
@@ -52,7 +51,7 @@ Spel.prototype.initialiseren = function() {
     return arr;
 }
 
-Spel.prototype.verdelingBommen = function() {
+Spel.prototype.verdelingBommen = function () {
     // random bommen in vakjes steken
     var aantal = this.bommen;
     do {
@@ -68,7 +67,7 @@ Spel.prototype.verdelingBommen = function() {
     console.log("klaar met bommen: " + this.bord)
 }
 
-Spel.prototype.saveConfig = function() {
+Spel.prototype.saveConfig = function () {
     var config = {
         rijen: this.rijen,
         kolommen: this.kolommen,
@@ -77,7 +76,7 @@ Spel.prototype.saveConfig = function() {
     localStorage.setItem('bordConfig', JSON.stringify(config));
 };
 
-Spel.prototype.loadConfig = function() {
+Spel.prototype.loadConfig = function () {
     var config = JSON.parse(localStorage.getItem('bordConfig'));
     if (config) {
         this.rijen = config.rijen;
@@ -92,12 +91,13 @@ function Vak() {
     this.omgedraaid = false;
 }
 
-Vak.prototype.symboolBepalen = function() {
-    var mod = this.teller % 3;
-    return mod ? mod == 1 ? 'v' : '?' : ''
+Vak.prototype.symboolBepalen = function () {
+    /* ??werkt dit?? */
+    var mod = ++this.teller % 3;
+    return mod ? mod == 1 ? 'v' : '?' : '';
 };
 
-Vak.prototype.omdraaien = function() {
+Vak.prototype.omdraaien = function () {
     if (this.bom) {
         //end of the game
         alert('You are LOOOOOSEEEEER!!!');
@@ -106,9 +106,8 @@ Vak.prototype.omdraaien = function() {
     }
 }
 
-Vak.prototype.vlag = function() {
-
-    // > blanco vak / "v" / "?"
+Vak.prototype.vlag = function () {
+    this.teller++;
 }
 
 function MijnTimer() {
@@ -117,22 +116,22 @@ function MijnTimer() {
     self.seconden = 0;
 
 
-    self.starten = function() {
+    self.starten = function () {
         self.seconden = 0;
         self.interval = setInterval(self.tellen, 1000);
     }
 
 
-    self.tellen = function() {
+    self.tellen = function () {
         self.seconden += 1;
     }
 
-    self.stoppen = function() {
+    self.stoppen = function () {
         if (self.interval != null)
             clearTimeout(self.interval);
     }
 
-    self.hernemen = function() {
+    self.hernemen = function () {
         self.interval = setInterval(self.tellen, 1000);
     }
 
@@ -140,6 +139,6 @@ function MijnTimer() {
 
 var spelletje = new Spel("Jef", 1, 2, 5);
 spelletje.verdelingBommen()
-    // console.log("op einde: " + this.bord)
+// console.log("op einde: " + this.bord)
 console.log("spelletje: " + spelletje.bord)
 module.exports = Spel;
