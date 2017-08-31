@@ -10,34 +10,10 @@ function Spel(spelersnaam = "Joske", bommen = 10, rijen = 10, kolommen = 10) {
     this.kolommen = kolommen;
     this.speltijd = 0; // nodig wegens mog pauzeren
     this.bord = this.initialiseren();
-
-    // this.bord = this.verdelingBommen();
+    this.verdelingBommen();
+    // this.bomBurenTellen();
     this.timer = new MijnTimer();
 }
-
-Spel.prototype.stuurData = function () {
-    fetch('http://192.168.23.15', {
-        method: 'post',
-        headers: {
-            'Accept': 'application/json, text/plain, */*',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            naam: this.spelersnaam,
-            tijd: this.timer.seconden,
-            rijen: this.rijen,
-            kolommen: this.kolommen,
-            bommen: this.bommen
-        })
-    }).then(res => res.json())
-        .then(res => console.log(res));
-};
-
-Spel.prototype.getTopDrie = function () {
-    fetch('http://192.168.23.15')
-        .then(res => res.json())
-        .then(json => console.log(json));
-};
 
 Spel.prototype.initialiseren = function () {
     console.log("rijen: " + this.rijen);
@@ -74,36 +50,46 @@ Spel.prototype.initialiseren = function () {
 
 
 Spel.prototype.ontdekVeiligVakjes = function (rij, kolom) {
-
+  var veiligeBuren = this.contoleerBuren(rij, kolom);
+  veiligeBuren.forEach(koords => {
+    this.vakjeOmdraaien(koords[0], koords[1]);
+  });
 };
 
 
 Spel.prototype.vakjeOmdraaien = function (rij, kolom) {
-  this.bord[rij][kolom].omdraaien();
+  if (this.bord[rij][kolom].omdraaien()) {
+    this.ontdekVeiligVakjes(rij, kolom);
+  }
 };
 
-Spel.prototype.bomBurenTellen = function () {
-  this.bord.forEach((rij, i)=> {
-    rij.forEach((vak, j) => {
-      vak.bomBuren = this.contoleerBuren(i, j)
-    });
-  });
-};
+// Spel.prototype.bomBurenTellen = function () {
+//   this.bord.forEach((rij, i)=> {
+//     rij.forEach((vak, j) => {
+//       vak.bomBuren = this.contoleerBuren(i, j)
+//     });
+//   });
+// };
 
 Spel.prototype.contoleerBuren = function (rij, kolom) {
-  var buurBommen = 0;
-  // var veilig = [];
+  // var buurBommen = 0;
+  var veiligeBuren = [];
   for (var i = rij - 1; i <= rij + 1; i++) {
     if (this.bord[i]) {
       for (var j = kolom - 1; j <= kolom + 1; j++) {
-        if (this.bord[i][j] && this.bord[i][j].bom) {
-          buurBommen++;
-          // veilig.push([i, j]);
+        if (this.bord[i][j]) {
+          if (this.bord[i][j].bom) {
+            // buurBommen++;
+            return [];
+          } else {
+            veilig.push([i, j]);
+          }
         }
       }
     }
   }
-  return buurBommen;
+  // return !buurBommen ? veiligeBuren : false;
+  return veiligeBuren;
 };
 
 Spel.prototype.initialiseren = function() {
@@ -135,25 +121,6 @@ Spel.prototype.verdelingBommen = function () {
     while (aantal);
     // console.log("klaar met bommen: " + this.bord)
 }
-
-
-Spel.prototype.saveConfig = function () {
-    var config = {
-        rijen: this.rijen,
-        kolommen: this.kolommen,
-        bommen: this.bommen
-    };
-    localStorage.setItem('bordConfig', JSON.stringify(config));
-};
-
-Spel.prototype.loadConfig = function () {
-    var config = JSON.parse(localStorage.getItem('bordConfig'));
-    if (config) {
-        this.rijen = config.rijen;
-        this.kolommen = config.kolommen;
-        this.bommen = config.bommen;
-    }
-};
 
 // Spel.prototype.saveConfig = function() {
 //     var config = {
@@ -239,4 +206,3 @@ function MijnTimer() {
     // console.log("op einde: " + this.bord)
 // console.log("spelletje: " + spelletje.bord)
 module.exports = Spel;
-
