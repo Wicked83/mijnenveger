@@ -45,32 +45,43 @@ Spel.prototype.verdelingBommen = function() {
 function Vak() {
     this.bom = false;
     this.teller = 0;
+    this.symbool = '';
     this.omgedraaid = false;
 }
 
+Vak.prototype.symboolZetten = function () {
+  var mod = this.teller % 3;
+  this.symbool = mod ? mod == 1 ? 'v' : '?' : ''
+};
+
 Vak.prototype.omdraaien = function() {
-    /* omdraaien, opentrekken, resultaat omringend */
+    if (this.bom) {
+      //end of the game
+    } else {
+      this.omgedraaid = true;
+    }
 }
 
-Vak.prototype.vlag = function() { %
-    // > blanco vak / "v" / "?"
+Vak.prototype.vlag = function() {
+
 }
 
-Spel.prototype.timerStarten = function() {
+function Timer() {
+  this.timer = timerStoppen();
+
+}
+
+Timer.prototype.timerStarten = function() {
     /* speltijd++ elke sec */
     console.log("Hello vanuit model");
     return ("Nog eens hello");
     /* starten/stoppen */
 }
 
-Spel.prototype.timerStoppen = function() {
+Timer.prototype.timerStoppen = function() {
 
 }
 
-function Timer() {
-    this.timer = timerStoppen();
-
-}
 
 var spelletje = new Spel("Jef", 1, 2, 5);
 spelletje.verdelingBommen()
