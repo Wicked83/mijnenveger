@@ -1,7 +1,7 @@
 'use strict';
 
-var app = require('express')();     /* server */
-var mongoClient = require('mongodb').MongoClient;   /* communicatie mongodb */
+var app = require('express')(); /* server */
+var mongoClient = require('mongodb').MongoClient; /* communicatie mongodb */
 var url = "mongodb://localhost:27017/test"; /* !! NIET http !! */
 var path = require('path');
 var bodyParser = require('body-parser');
@@ -16,16 +16,16 @@ app.post('/nieuw', nieuweSpelerInvoegen);
 
 function haalDeelnemerlijstOp(request, response) {
     var naam = '';
-    var bommen = ""//10, rijen = 10, kolommen = 10;
+    var bommen = "" //10, rijen = 10, kolommen = 10;
     var query = naam ? { 'naam': naam } : bommen ? { 'bommen': bommen, 'rijen': rijen, 'kolommen': kolommen } : {};
     // var query = { 'naam': naam };
 
-    mongoClient.connect(url, function (error, db) {
+    mongoClient.connect(url, function(error, db) {
         console.log('connected to db');
         var collection = db.collection('mijnenveger');
         collection.find(query)
             .sort({ bommen: -1, kolommen: -1, rijen: -1, tijd: 1 })
-            .toArray(function (err, docs) {
+            .toArray(function(err, docs) {
                 console.log('deelnemerlijst gevonden');
                 response.send(JSON.stringify(docs));
                 /* var resultaat = JSON.stringify(docs);
@@ -34,6 +34,7 @@ function haalDeelnemerlijstOp(request, response) {
             })
     })
 }
+
 function selecteerOpNaam(request, response) {
     console.log('selectie op naam');
 }
@@ -45,40 +46,78 @@ function selecteerOpConfig(request, response) {
 /* 3/config, orden tijd, push & pop */
 function nieuweSpelerInvoegen(req, res) {
     // console.log('you are here');
-    mongoClient.connect(url, function (err, db) {
+    mongoClient.connect(url, function(err, db) {
         console.log('nieuwe invoer opgestart');
         var collection = db.collection('mijnenveger');
-        console.log(collection)
+        collection.insertOne({
+            naam: req.body.naam,
+            tijd: +req.body.tijd,
+            bommen: +req.body.bommen,
+            rijen: +req.body.rijen,
+            kolommen: +req.body.kolommen,
+            // bom: req.body.bom
+        }, function(err, r) {
+            // console.log("toegevoegd: " + r.insertedCount);
+            console.log("res: " + res);
+            console.log("tijdelijk toegevoegd");
+            /* console.log(req);
+            console.log("req.body: " + req.body);
+            console.log("req.body.naam: " + req.body.naam); */
+            if (!err) {
+                /* opvragen & vgl */
+                var bommen = +req.body.bommen,
+                    rijen = +req.body.rijen,
+                    kolommen = +req.body.kolommen;
+                var query = { 'bommen': bommen, 'rijen': rijen, 'kolommen': kolommen };
+                collection.find(query).sort({ tijd: -1 }).toArray(function(err, docs) {
+                    if (!err) {
+                        // console.log(docs)
+                        if (docs.length > 3) {
+                            var melding;
+                            if (+req.body.tijd < docs[0].tijd) {
+                                melding = "je staat in de top 3";
+                            } else {
+                                melding = "helaas... je staat niet in de top 3";
+                            }
+                            collection.deleteOne(docs[0], function(err, r) {
+                                if (!err) {
+                                    res.end(JSON.stringify({ message: melding }))
+                                        // TODO (optioneel): melden bijgevoegd in top3?
+                                } else {
+                                    res.end(JSON.stringify({ message: "Er is iets foutgelopen bij het aanpassen van de nieuwe top3" }));
+                                    console.log('error: ' + err)
+                                }
+                                db.close();
+                            })
+                        } else {
+                            res.end(JSON.stringify({ message: "je staat in de top3" }));
+                        }
+                    } else {
+                        res.end(JSON.stringify({ message: "Er is iets foutgelopen bij het opvragen van de nieuwe top3" }));
+                        console.log('error: ' + err)
+                        db.close();
+                    }
+
+                });
+
+            } else {
+                res.end(JSON.stringify({ message: "Er is iets foutgelopen bij het toevoegen aan de top3" }));
+                console.log('error: ' + err);
+                db.close();
+            }
+
+        })
 
 
-        /* opvragen & vgl */
-        var tijd = 70;
-        var bommen = 10, rijen = 10, kolommen = 10;
-        var query = { 'bommen': bommen, 'rijen': rijen, 'kolommen': kolommen };
-        collection.find(query);
-        if (tijd < collection.find({}))
 
-            collection.insertOne({
-                naam: req.body.naam,
-                tijd: req.body.tijd,
-                bommen: req.body.bommen,
-                rijen: req.body.rijen,
-                kolommen: req.body.kolommen,
-                // bom: req.body.bom
-            }, function (err, r) {
-                // console.log("toegevoegd: " + r.insertedCount);
-                console.log("res: " + res);
-                /* console.log(req);
-                console.log("req.body: " + req.body);
-                console.log("req.body.naam: " + req.body.naam); */
-                if (!err) { res.end(JSON.stringify({ message: "Je hoort niet bij de besten, dus doe iets zinvol met je leven!" })) }
-                else { console.log('error: ' + err) }
-                db.close;
-            })
+        // if (tijd < collection.find({}))
+
+
     })
 }
 
 app.listen(1111);
+
 
 /* app.get('/', function (req, res) {
     res.send('Hello world');
