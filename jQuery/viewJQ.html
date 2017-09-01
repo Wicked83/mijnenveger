@@ -12,13 +12,20 @@
 
     <div id="deelnemers">Hier komen de deelnemers</div>
 
-<button id="getIt">Dikke vette knop</button>
+    <button id="getIt">Dikke vette knop</button>
 
+    <form action="GET">
+        <label for="naam">Naam: </label><input type="text" name="naam" id="naam">
+        <label for="bom">Bommen: </label><input type="number" name="bom" id="bom">
+        <label for="rij">Rijen: </label><input type="number" name="rij" id="rij">
+        <label for="kolom">Kolommen:</label><input type="number" name="kolom" id="kolom">
+        <input type="submit" name="btnSubmit" id="btnSubmit">
+    </form>
     <script src="jquery-3.2.1.min.js"></script>
     <script src="controllerJQ.js"></script>
     <script src="../model/modelSpel.js"></script>
     <!-- <script src="../restfulServices.js"></script> -->
-    
+
 
 </body>
 

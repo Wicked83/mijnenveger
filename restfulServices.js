@@ -35,8 +35,8 @@ function haalDeelnemerlijstOp(request, response) {
             .toArray(function (err, docs) {
                 console.log('deelnemerlijst gevonden');
                 response.send(JSON.stringify(docs));
-                /* var resultaat = JSON.stringify(docs);
-                console.log(JSON.parse(resultaat)); */
+                var resultaat = JSON.stringify(docs);
+                console.log(JSON.parse(resultaat));
                 db.close;
             })
     })
