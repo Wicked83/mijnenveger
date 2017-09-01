@@ -3,7 +3,7 @@ $(function () {
     $('#getIt').click(function () {
         console.log('knopke')
 
-        var xml = new XMLHttpRequest();
+        /* var xml = new XMLHttpRequest();
 
         xml.onload = function () {
             if (xml.status == 200) {
@@ -11,12 +11,42 @@ $(function () {
             }
         }
         xml.open('GET', 'http://localhost:1111/deelnemers')
-        xml.send()
+        xml.send() */
+
+        var x = $.ajax({
+            url: 'http://localhost:1111/deelnemers',
+            /* beforeSend =function () {
+                console.log('start')
+            },
+            complete=function () {
+                console.log('success: ')
+            } */
+
+        })
+
+        $(document).ajaxSuccess(function (event, xhr, settings) {
+            // if (settings.url == "http://localhost:1111/deelnemers") {
+            {
+                var data = xhr.responseText
+                console.log("json parse =>" + JSON.parse(xhr.responseText))
+                var tekst = xhr.responseJSON
+                console.log("json response =>" + tekst)
+                verwerkGegevens(tekst, data)
+
+            }
+        });
+
+        // .then(console.log(this.ajax))
+
+        // console.log(x)
     })
 
-    function verwerkGegevens(data) {
-        var arr = JSON.parse(data)
+    function verwerkGegevens(json, txt) {
+        /* test met json laten teruggeven doo ajax faalde
+        console.log("txt = " + txt)
+        console.log("json = " + json) */
 
+        var arr = JSON.parse(txt)
         /* naam
         tijd
         bommen
@@ -50,42 +80,5 @@ $(function () {
             console.log(deelnemer.naam)
         }, this);
     }
-
-
-
-    //     var xml = new XMLHttpRequest();
-
-    //     /*  $.ajax({
-    //          method: "POST",
-    //          url: "localhost:1111/deelnemers",
-    //          data: { name: "John", location: "Boston" }
-    //        })
-    //          .done(function( msg ) {
-    //            alert( "Data Saved: " + msg );
-    //          }); */
-
-    //     var jqxhr = $.ajax({
-    //         method: "POST",
-    //         url: "localhost:1111/deelnemers",
-    //         data: { name: "John", location: "Boston" }
-    //     })
-    //         .done(function () {
-    //             alert("success");
-    //         })
-    //         .fail(function () {
-    //             alert("error");
-    //         })
-    //         .always(function () {
-    //             alert("complete");
-    //         });
-
-    //     // Perform other work here ...
-
-    //     // Set another completion function for the request above
-    //     jqxhr.always(function () {
-    //         alert("second complete");
-    //     });
-
-    //     console.log(jqxhr)
 
 });
