@@ -1,6 +1,6 @@
 'use strict';
 
-var exports = module.exports = {};
+// var exports = module.exports = {};
 /* spel: default params voorzien indien géén "local storage" */
 
 function Spel(spelersnaam = "Joske", bommen = 10, rijen = 10, kolommen = 10) {
@@ -127,4 +127,4 @@ function MijnTimer() {
 
 }
 
-module.exports = Spel;
+// module.exports = Spel;

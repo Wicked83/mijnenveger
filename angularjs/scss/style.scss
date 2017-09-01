@@ -1,0 +1,34 @@
+$cell-width: 40px;
+
+
+
+#gameHolder {
+  width: 600px;
+  margin: 50px auto;
+  text-align: center;
+  table {
+    margin: 30px auto;
+    border-collapse: collapse;
+    tr {
+      td {
+        width: $cell-width;
+        height: $cell-width;
+        border: 1px solid black;
+
+      }
+    }
+  }
+}
+
+.nietOmgedraaid {
+  background-color: gray;
+}
+
+.omgedraaid {
+  background-color: green;
+}
+
+#message {
+  position: absolute;
+  top: 280px;
+}
