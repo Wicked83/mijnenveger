@@ -1,57 +1,46 @@
+/* Tip verder werker: NodeJSvoorFEO, p. 13:
+Property query van de eerste parameter van de callback functie van methode get stelt de waarden van de doorgestuurde invoervelden voor. (of juister: van de querystring, dit is in de url van een request het gedeelte na het vraagteken, dat bestaat uit key-value paren)
+Om hetzelfde te doen als de form naar de server gestuurd is via een POST, moeten we vooraf module body-parser installeren (npm install body-parser) en gebruiken: */
+
+
 $(function () {
 
+    // Perform other work here ...
+
+    // Set another completion function for the request above
+    
+    /* standaard XMLHttpRequest
+        $('#getIt').click(function () {
+            console.log('knopke')
+    
+            standaard XMLHttpRequest
+            var xml = new XMLHttpRequest();
+            xml.onload = function () {
+                if (xml.status == 200) {
+                    verwerkGegevens(xml.responseText)
+                }
+            }
+            xml.open('GET', 'http://localhost:1111/deelnemers')
+            xml.send() 
+    }) */
+
     $('#getIt').click(function () {
-        console.log('knopke')
-
-        /* var xml = new XMLHttpRequest();
-
-        xml.onload = function () {
-            if (xml.status == 200) {
-                verwerkGegevens(xml.responseText)
-            }
-        }
-        xml.open('GET', 'http://localhost:1111/deelnemers')
-        xml.send() */
-
-        var x = $.ajax({
-            url: 'http://localhost:1111/deelnemers',
-            /* beforeSend =function () {
-                console.log('start')
-            },
-            complete=function () {
-                console.log('success: ')
-            } */
-
+        $.ajax({
+            url: "http://localhost:1111/deelnemers",
+            async: true, // overbodig
+            /* success: function (param) {
+                verwerkGegevens(param)
+            }, */
+            dataType: 'json'
+        }).done(function (param) {
+            console.log('klaar')
+            verwerkGegevens(param)
         })
-
-        $(document).ajaxSuccess(function (event, xhr, settings) {
-            // if (settings.url == "http://localhost:1111/deelnemers") {
-            {
-                var data = xhr.responseText
-                console.log("json parse =>" + JSON.parse(xhr.responseText))
-                var tekst = xhr.responseJSON
-                console.log("json response =>" + tekst)
-                verwerkGegevens(tekst, data)
-
-            }
-        });
-
-        // .then(console.log(this.ajax))
-
-        // console.log(x)
     })
 
-    function verwerkGegevens(json, txt) {
-        /* test met json laten teruggeven doo ajax faalde
-        console.log("txt = " + txt)
-        console.log("json = " + json) */
+    function verwerkGegevens(dataType) {
 
-        var arr = JSON.parse(txt)
-        /* naam
-        tijd
-        bommen
-        rijen
-        kolommen */
+        var arr = dataType
 
         $('#getIt').after(($('<table>').attr('id', 'tabelDeelnrs'))
             .append($('<thead>')
@@ -64,8 +53,8 @@ $(function () {
 
         /* $(pakKapstok).after($(tabel).append($(thead).append($(th)).append($(th)).append($(th))))
         after => er achter toevoegen SVGScriptElement. append => er in steken 
-        append($('<th>').html('teTonen').attr('id','willekeurigID').attr('class','willekeurigeClass'))
-        */
+        append($('<th>').html('teTonen').attr('id','willekeurigID').attr('class','willekeurigeClass')) */
+
         console.log(arr)
         arr.forEach(function (deelnemer) {
             $('#dlns').append($('<tr>')
@@ -73,11 +62,7 @@ $(function () {
                 .append($('<td>').html(deelnemer.tijd))
                 .append($('<td>').html(deelnemer.bommen))
                 .append($('<td>').html(deelnemer.rijen))
-                .append($('<td>').html(deelnemer.kolommen))
-            )
-
-
-            console.log(deelnemer.naam)
+                .append($('<td>').html(deelnemer.kolommen)))
         }, this);
     }
 
