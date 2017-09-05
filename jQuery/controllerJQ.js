@@ -8,7 +8,7 @@ $(function () {
     // Perform other work here ...
 
     // Set another completion function for the request above
-    
+
     /* standaard XMLHttpRequest
         $('#getIt').click(function () {
             console.log('knopke')
@@ -24,7 +24,7 @@ $(function () {
             xml.send() 
     }) */
 
-    $('#getIt').click(function () {
+    $('#getIt').click(function (param) {
         $.ajax({
             url: "http://localhost:1111/deelnemers",
             async: true, // overbodig
@@ -39,6 +39,10 @@ $(function () {
     })
 
     function verwerkGegevens(dataType) {
+
+        // if ($("#tabelDeelnrs")) {
+        $("#tabelDeelnrs").remove()
+        // }  // test blijkbaar niet nodig...?
 
         var arr = dataType
 
@@ -66,9 +70,40 @@ $(function () {
         }, this);
     }
 
-    $('#btnSubmit').submit(function(){
-        console.log("let's go!")
+    $('#btnSubmit').click(function (e) {
+        console.log("let's go!: " + e)
+        var naam = $("#naam").val(),
+            bom = $("#bom").val(),
+            rij = $("#rij").val(),
+            kolom = $("#kolom").val(),
+            tijd = 0;
+        // $.post(url [, data ] [, success ] [, dataType ] )
+        /*     var url = "http://localhost:1111/nieuw";
+            var data = {
+                "naam": naam,
+                "bommen": bom,
+                "rijen": rij,
+                "kolommen": kolom
+            } */
+        $.post({
+            url: "http://localhost:1111/nieuw",
+            data: {
+                "naam": naam,
+                "bommen": bom,
+                "rijen": rij,
+                "kolommen": kolom,
+                "tijd": tijd
+            },
+            success: function () {
+                console.log('ok')
+            }
+        })
+
+        $("#naam").val("");
+        $("#bom").val("");
+        $("#rij").val("");
+        $("#kolom").val("");
     })
 
-    
+
 });
