@@ -8,6 +8,7 @@ var bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({
     extended: true
 }));
+app.use(bodyParser.json());
 
 // enable cross domain calls (CORS = cross origin resource sharing)
 app.all('/*', function (req, res, next) {
@@ -45,10 +46,10 @@ function haalDeelnemerlijstOp(request, response) {
 
 /* 3/config, orden tijd, push & pop */
 function nieuweSpelerInvoegen(req, res) {
-    console.log(req.body)
     // console.log('you are here');
     mongoClient.connect(url, function (err, db) {
         console.log('nieuwe invoer opgestart');
+        console.log(req.body.naam)
         var collection = db.collection('mijnenveger');
         collection.insertOne({
             naam: req.body.naam,
