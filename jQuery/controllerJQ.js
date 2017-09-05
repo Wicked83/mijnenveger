@@ -24,27 +24,49 @@ $(function () {
             xml.send() 
     }) */
 
-    $('#getIt').click(function (param) {
+    $('#getIt').click(function () {
+
+        var naam = $("#dnNaam").val(),
+            bom = $("#dnBom").val(),
+            rij = $("#dnRij").val(),
+            kolom = $("#dnKolom").val();
+
+        // var param = {
+        //     "naam": naam,
+        //     "bommen": bom,
+        //     "rijen": rij,
+        //     "kolommen": kolom
+        // };
+        // console.log('voor fie: ' + param);
+
         $.ajax({
             url: "http://localhost:1111/deelnemers",
             async: true, // overbodig
             /* success: function (param) {
                 verwerkGegevens(param)
             }, */
+            data: {
+                "naam": naam,
+                "bommen": bom,
+                "rijen": rij,
+                "kolommen": kolom
+            },
             dataType: 'json'
         }).done(function (param) {
-            console.log('klaar')
+            console.log("naam: " + naam)
+            console.log(param)
             verwerkGegevens(param)
         })
     })
 
-    function verwerkGegevens(dataType) {
+    function verwerkGegevens(data) {
+
 
         // if ($("#tabelDeelnrs")) {
         $("#tabelDeelnrs").remove()
         // }  // test blijkbaar niet nodig...?
-
-        var arr = dataType
+        console.log('data fie is ' + data)
+        var arr = data
 
         $('#getIt').after(($('<table>').attr('id', 'tabelDeelnrs'))
             .append($('<thead>')

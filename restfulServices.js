@@ -17,13 +17,14 @@ app.all('/*', function (req, res, next) {
 });
 
 app.get('/deelnemers', haalDeelnemerlijstOp);
-// app.get('/naam', selecteerOpNaam);
-// app.get('/config', selecteerOpConfig);
+
 app.post('/nieuw', nieuweSpelerInvoegen);
 
 function haalDeelnemerlijstOp(request, response) {
-    var naam = '';
-    var bommen = "" //10, rijen = 10, kolommen = 10;
+
+    console.log(request.query.naam)
+    var naam = request.query.naam;
+    var bommen = request.query.bommen, rijen = request.query.rijen, kolommen = request.query.kolommen;
     var query = naam ? { 'naam': naam } : bommen ? { 'bommen': bommen, 'rijen': rijen, 'kolommen': kolommen } : {};
     // var query = { 'naam': naam };
 
@@ -42,16 +43,9 @@ function haalDeelnemerlijstOp(request, response) {
     })
 }
 
-function selecteerOpNaam(request, response) {
-    console.log('selectie op naam');
-}
-
-function selecteerOpConfig(request, response) {
-    console.log('selectie op config');
-}
-
 /* 3/config, orden tijd, push & pop */
 function nieuweSpelerInvoegen(req, res) {
+    console.log(req.body)
     // console.log('you are here');
     mongoClient.connect(url, function (err, db) {
         console.log('nieuwe invoer opgestart');
