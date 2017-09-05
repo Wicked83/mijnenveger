@@ -66,4 +66,9 @@ $(function () {
         }, this);
     }
 
+    $('#btnSubmit').submit(function(){
+        console.log("let's go!")
+    })
+
+    
 });
