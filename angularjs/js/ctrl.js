@@ -1,21 +1,73 @@
-app.controller('mijnenCtrl', ['$interval', function($interval) {
-  // var this = this;
-  this.spel = new Spel();
+app.controller('mijnenCtrl', ['$interval', '$http', function($interval, $http) {
+
+  this.naam = '';
+  this.spel = null;
   this.tijd = 0;
   this.interval = null;
-  this.running = false;
+  this.running = true;
+
+  this.stuurData = function() {
+    $http({
+      method: 'post',
+      url: 'http://192.168.23.124:1111/nieuw',
+      data:  {
+        naam: this.spel.spelersnaam,
+        tijd: this.tijd,
+        rijen: this.spel.rijen,
+        kolommen: this.spel.kolommen,
+        bommen: this.spel.bommen
+      }
+    }).then(function(res) {
+      // console.log(res);
+    }).then(function(res) {
+      // console.log(res);
+    });
+  };
+  this.kreegData = function() {
+    $http.get('http://192.168.23.124:1111/deelnemers?bommen=1&rijen=10&kolommen=10')
+    .then(function(response) {
+      console.log(response);
+    });
+  };
+  this.reload = function() {
+    location.reload();
+  };
+  this.startGame = function() {
+    this.spel = new Spel(this.naam, this.bommen, this.rijen, this.kolommen);
+    this.saveConfig();
+  };
+  this.loadConfig = function() {
+    var config = JSON.parse(localStorage.getItem('bordConfig'));
+    this.rijen = config ? config.rijen : 10;
+    this.kolommen = config ? config.kolommen : 10;
+    this.bommen = config ? config.bommen : 10;
+  };
+  this.saveConfig = function() {
+    var config = {
+        rijen: this.rijen,
+        kolommen: this.kolommen,
+        bommen: this.bommen
+    };
+    localStorage.setItem('bordConfig', JSON.stringify(config));
+};
   this.handleLC = function(x, y) {
     this.startTimer(this.spel.timer.starten);
     this.spel.vakjeOmdraaien(x, y);
+    if (this.spel.boom || this.spel.win) {
+      this.stopTimer();
+      if (this.spel.win) {
+        this.stuurData();
+        this.kreegData();
+      }
+    }
   };
-
   this.handleRC = function(vak) {
     vak.vlag();
   };
-  this.startTimer = function (f) {
+  this.startTimer = function (func) {
     this.running = true;
     if (!this.interval) {
-      f();
+      func();
       this.interval = $interval(() => {
               this.tijd = this.spel.timer.seconden;
           }, 1000)
@@ -27,17 +79,10 @@ app.controller('mijnenCtrl', ['$interval', function($interval) {
     this.interval = null;
     this.running = false;
   };
-  // this.timer = function() {
-  //   var begin = new Date().getTime();
-  //   if (!this.interval) {
-  //     this.interval = $interval(() => {
-  //         this.tijd = (new Date().getTime() - begin) / 1000;
-  //       console.log(this.tijd);
-  //     }, 1000)
-  //   }
-  // };
-}]);
 
+  this.loadConfig();
+
+}]);
 
 app.directive('ngRightClick', function($parse) {
   return function(scope, element, attrs) {

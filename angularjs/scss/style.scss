@@ -28,6 +28,16 @@ $cell-width: 40px;
   background-color: green;
 }
 
+#controls {
+  width: 400px;
+  height: 300px;
+  border: 1px solid black;
+  background-color: white;
+  margin: 50px auto;
+  // position: absolute;
+  // top: 100px;
+}
+
 #message {
   position: absolute;
   top: 280px;
