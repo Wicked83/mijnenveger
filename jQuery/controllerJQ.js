@@ -4,6 +4,8 @@ Om hetzelfde te doen als de form naar de server gestuurd is via een POST, moeten
 
 $(function () {
 
+    haalUitLocalStorage();
+
     $("#divSpel").hide();
 
     $("#btnStart").click(function () {
@@ -32,6 +34,7 @@ $(function () {
                         var rij = this.id.split('_')[0]
                         var kolom = this.id.split('_')[1]
                         console.log("links ", rij, ": ", kolom)
+                        $('#'+this.id).attr('class','clicked')
                     }).
                     contextmenu(function (event) {
                         var rij = this.id.split('_')[0]
@@ -55,17 +58,36 @@ $(function () {
 
         console.log(spel.bord);
 
+<<<<<<< HEAD
 
     });
 
     $("#test").mousedown(function (event) {
         if (event.which == 1) { // dwz als met de linkermuisknop geklikt wordt
             alert('omdraaien gelukt');
+=======
+        var config = {
+            "bommen": aantalBommen,
+            "rijen": aantalRijen,
+            "kolommen": aantalKolommen
+>>>>>>> 457d3fd82c6eff1dde230113ca0a5944d7367397
         }
+        bewaarInLocalStorage(config);
+
     });
 
+    function bewaarInLocalStorage(config) {
+        localStorage.setItem("configuratie", JSON.stringify(config));
+    }
 
-
+    function haalUitLocalStorage() {
+        var config = JSON.parse(localStorage.getItem("configuratie"));
+        if (config) {
+            $("#invoerRijen").val(config.rijen);
+            $("#invoerKolommen").val(config.kolommen);
+            $("#invoerBommen").val(config.bommen);
+        }
+    }
 
     // Perform other work here ...
 
