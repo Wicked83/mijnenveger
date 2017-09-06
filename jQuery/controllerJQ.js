@@ -1,25 +1,49 @@
 /* Tip verder werker: NodeJSvoorFEO, p. 13:
 Property query van de eerste parameter van de callback functie van methode get stelt de waarden van de doorgestuurde invoervelden voor. (of juister: van de querystring, dit is in de url van een request het gedeelte na het vraagteken, dat bestaat uit key-value paren)
 Om hetzelfde te doen als de form naar de server gestuurd is via een POST, moeten we vooraf module body-parser installeren (npm install body-parser) en gebruiken: */
-// praat voor de vaak om die githib te foppen ;-)
-$(function() {
+
+$(function () {
 
     $("#divSpel").hide();
 
-    $("#btnStart").click(function() {
+    $("#btnStart").click(function () {
 
         $("#divSpel").show();
 
         //$("#divBeginSpel").hide();
         var aantalRijen = $("#invoerRijen").val();
-        for (var i = 0; i < aantalRijen; i++) {
-            $("#tabelSpel").append($("<tr>"));
-        } // te vervangen dr $each 
-
         var aantalKolommen = $("#invoerKolommen").val();
-        for (var i = 0; i < aantalKolommen; i++) {
-            $("tr").append($("<td>"));
+        /* for (var i = 0; i < aantalRijen; i++) {
+            for (var y = 0; y < aantalKolommen; y++) {
+                $("#tabelSpel").append($("<tr>"));
+                var z = i + y;
+                $("tr").append($("<td>").attr('id', i + y).click(function () { alert(z) }));
+            }
+        } // te vervangen dr $each  */
+
+        $("<table>").attr('id', 'speelveld')
+        $('#divSpel').append($("<table>").attr('id', 'speelveld'))
+        for (var i = 0; i < aantalRijen; i++) {
+            $("#speelveld").append($('<tr>').attr('id', i))
+            for (var y = 0; y < aantalKolommen; y++) {
+                console.log(i + '.' + y)
+                $('#' + i).append($('<td>').attr('id', i + '_' + y).
+                    click(function (event) {
+                        var rij = this.id.split('_')[0]
+                        var kolom = this.id.split('_')[1]
+                        console.log("links ", rij, ": ", kolom)
+                    }).
+                    contextmenu(function (event) {
+                        var rij = this.id.split('_')[0]
+                        var kolom = this.id.split('_')[1]
+                        spel.bord[rij][kolom].vlag()
+                        $("#" + this.id).html(spel.bord[rij][kolom].symboolBepalen())
+                        console.log("rechts ", rij, ": ", kolom)
+                    }));
+            }
+
         }
+
 
         var aantalBommen = $("#invoerBommen").val();
         var spelersnaam = $("#invoerNaam").val();
@@ -34,7 +58,7 @@ $(function() {
 
     });
 
-    $("#test").mousedown(function(event) {
+    $("#test").mousedown(function (event) {
         if (event.which == 1) { // dwz als met de linkermuisknop geklikt wordt
             alert('omdraaien gelukt');
         }
@@ -50,7 +74,7 @@ $(function() {
     /* standaard XMLHttpRequest
         $('#getIt').click(function () {
             console.log('knopke')
-    
+     
             standaard XMLHttpRequest
             var xml = new XMLHttpRequest();
             xml.onload = function () {
@@ -64,7 +88,7 @@ $(function() {
 
 
 
-    $('#getIt').click(function() {
+    $('#getIt').click(function () {
 
         var naam = $("#dnNaam").val(),
             bom = $("#dnBom").val(),
@@ -92,7 +116,7 @@ $(function() {
                 "kolommen": kolom
             },
             dataType: 'json'
-        }).done(function(param) {
+        }).done(function (param) {
             console.log("naam: " + naam)
             console.log(param)
             verwerkGegevens(param)
@@ -103,7 +127,7 @@ $(function() {
     function verwerkGegevens(data) {
         // if ($("#tabelDeelnrs")) {
         $("#tabelDeelnrs").remove()
-            // }  // test blijkbaar niet nodig...?
+        // }  // test blijkbaar niet nodig...?
         console.log('data fie is ' + data)
         var arr = data
 
@@ -120,7 +144,7 @@ $(function() {
         append($('<th>').html('teTonen').attr('id','willekeurigID').attr('class','willekeurigeClass')) */
 
         console.log(arr)
-        arr.forEach(function(deelnemer) {
+        arr.forEach(function (deelnemer) {
             $('#dlns').append($('<tr>')
                 .append($('<td>').html(deelnemer.naam))
                 .append($('<td>').html(deelnemer.tijd))
@@ -130,7 +154,7 @@ $(function() {
         }, this);
     }
 
-    $('#btnSubmit').click(function(e) {
+    $('#btnSubmit').click(function (e) {
         console.log("let's go!: " + e)
         var naam = $("#naam").val(),
             bom = $("#bom").val(),
@@ -154,7 +178,7 @@ $(function() {
                 "kolommen": kolom,
                 "tijd": tijd
             },
-            success: function() {
+            success: function () {
                 console.log('ok')
             }
         })
