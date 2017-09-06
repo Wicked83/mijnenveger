@@ -2,8 +2,46 @@
 Property query van de eerste parameter van de callback functie van methode get stelt de waarden van de doorgestuurde invoervelden voor. (of juister: van de querystring, dit is in de url van een request het gedeelte na het vraagteken, dat bestaat uit key-value paren)
 Om hetzelfde te doen als de form naar de server gestuurd is via een POST, moeten we vooraf module body-parser installeren (npm install body-parser) en gebruiken: */
 
+$(function() {
 
-$(function () {
+    $("#divSpel").hide();
+
+    $("#btnStart").click(function() {
+
+        $("#divSpel").show();
+
+        //$("#divBeginSpel").hide();
+        var aantalRijen = $("#invoerRijen").val();
+        for (var i = 0; i < aantalRijen; i++) {
+            $("#tabelSpel").append($("<tr>"));
+        } // te vervangen dr $each 
+
+        var aantalKolommen = $("#invoerKolommen").val();
+        for (var i = 0; i < aantalKolommen; i++) {
+            $("tr").append($("<td>"));
+        }
+
+        var aantalBommen = $("#invoerBommen").val();
+        var spelersnaam = $("#invoerNaam").val();
+
+        var spel = new Spel(spelersnaam, aantalBommen, aantalRijen, aantalKolommen);
+
+        spel.initialiseren();
+        spel.verdelingBommen();
+
+        console.log(spel.bord);
+
+
+    });
+
+    $("#test").mousedown(function(event) {
+        if (event.which == 1) { // dwz als met de linkermuisknop geklikt wordt
+            alert('omdraaien gelukt');
+        }
+    });
+
+
+
 
     // Perform other work here ...
 
@@ -24,7 +62,9 @@ $(function () {
             xml.send() 
     }) */
 
-    $('#getIt').click(function () {
+
+
+    $('#getIt').click(function() {
 
         var naam = $("#dnNaam").val(),
             bom = $("#dnBom").val(),
@@ -40,7 +80,7 @@ $(function () {
         // console.log('voor fie: ' + param);
 
         $.ajax({
-            url: "http://localhost:1111/deelnemers",
+            url: "http://192.168.23.124:1111/deelnemers",
             async: true, // overbodig
             /* success: function (param) {
                 verwerkGegevens(param)
@@ -52,19 +92,18 @@ $(function () {
                 "kolommen": kolom
             },
             dataType: 'json'
-        }).done(function (param) {
+        }).done(function(param) {
             console.log("naam: " + naam)
             console.log(param)
             verwerkGegevens(param)
         })
     })
 
+
     function verwerkGegevens(data) {
-
-
         // if ($("#tabelDeelnrs")) {
         $("#tabelDeelnrs").remove()
-        // }  // test blijkbaar niet nodig...?
+            // }  // test blijkbaar niet nodig...?
         console.log('data fie is ' + data)
         var arr = data
 
@@ -74,15 +113,14 @@ $(function () {
                 .append($('<th>').html('Tijd'))
                 .append($('<th>').html('Bommen'))
                 .append($('<th>').html('Rijen'))
-                .append($('<th>').html('Kolommen')
-                )).append($('<tbody>').attr('id', 'dlns')))
+                .append($('<th>').html('Kolommen'))).append($('<tbody>').attr('id', 'dlns')))
 
         /* $(pakKapstok).after($(tabel).append($(thead).append($(th)).append($(th)).append($(th))))
         after => er achter toevoegen SVGScriptElement. append => er in steken 
         append($('<th>').html('teTonen').attr('id','willekeurigID').attr('class','willekeurigeClass')) */
 
         console.log(arr)
-        arr.forEach(function (deelnemer) {
+        arr.forEach(function(deelnemer) {
             $('#dlns').append($('<tr>')
                 .append($('<td>').html(deelnemer.naam))
                 .append($('<td>').html(deelnemer.tijd))
@@ -92,7 +130,7 @@ $(function () {
         }, this);
     }
 
-    $('#btnSubmit').click(function (e) {
+    $('#btnSubmit').click(function(e) {
         console.log("let's go!: " + e)
         var naam = $("#naam").val(),
             bom = $("#bom").val(),
@@ -108,7 +146,7 @@ $(function () {
                 "kolommen": kolom
             } */
         $.post({
-            url: "http://localhost:1111/nieuw",
+            url: "http://192.168.23.124:1111/nieuw",
             data: {
                 "naam": naam,
                 "bommen": bom,
@@ -116,7 +154,7 @@ $(function () {
                 "kolommen": kolom,
                 "tijd": tijd
             },
-            success: function () {
+            success: function() {
                 console.log('ok')
             }
         })
