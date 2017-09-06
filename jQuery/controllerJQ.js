@@ -4,6 +4,8 @@ Om hetzelfde te doen als de form naar de server gestuurd is via een POST, moeten
 // praat voor de vaak om die githib te foppen ;-)
 $(function() {
 
+    haalUitLocalStorage();
+
     $("#divSpel").hide();
 
     $("#btnStart").click(function() {
@@ -31,17 +33,27 @@ $(function() {
 
         console.log(spel.bord);
 
-
-    });
-
-    $("#test").mousedown(function(event) {
-        if (event.which == 1) { // dwz als met de linkermuisknop geklikt wordt
-            alert('omdraaien gelukt');
+        var config = {
+            "bommen": aantalBommen,
+            "rijen": aantalRijen,
+            "kolommen": aantalKolommen
         }
+        bewaarInLocalStorage(config);
+
     });
 
+    function bewaarInLocalStorage(config) {
+        localStorage.setItem("configuratie", JSON.stringify(config));
+    }
 
-
+    function haalUitLocalStorage() {
+        var config = JSON.parse(localStorage.getItem("configuratie"));
+        if (config) {
+            $("#invoerRijen").val(config.rijen);
+            $("#invoerKolommen").val(config.kolommen);
+            $("#invoerBommen").val(config.bommen);
+        }
+    }
 
     // Perform other work here ...
 
