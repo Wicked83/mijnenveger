@@ -13,46 +13,15 @@
   <title>Mijnenveger</title>
 </head>
 <body>
+  <div id="bar">
+    <h1>Mijnenveger</h1>
+  </div>
   <div id="gameHolder"
        ng-app="mijnenApp"
        ng-controller="mijnenCtrl as ctrl">
-    <h1>Mijnenveger</h1>
-    <div id="controls" ng-hide="ctrl.spel">
-      <form ng-submit="ctrl.startGame()">
-        <h1>Configuration</h1>
-        <p>Naam: <input type="text" ng-model="ctrl.naam" required></p>
-        <p>Rows: <input type="number" ng-model="ctrl.rijen"></p>
-        <p>Cols: <input type="number" ng-model="ctrl.kolommen"></p>
-        <p>Boms: <input type="number" ng-model="ctrl.bommen"></p>
-        <button>Start game</button>
-      </form>
-    </div>
-    <div id="spelBoard" ng-show="ctrl.spel">
-      <div id="timer"><span >{{ctrl.tijd}}</span>
-        <button ng-click="ctrl.stopTimer()"
-                ng-show="ctrl.running"
-                ng-disabled="ctrl.spel.boom || ctrl.spel.win">
-                Pause
-        </button>
-        <button ng-click="ctrl.startTimer(ctrl.spel.timer.hernemen)"
-                ng-show="!ctrl.running && ctrl.tijd"
-                ng-disabled="ctrl.spel.boom || ctrl.spel.win">
-                Continue
-        </button>
-      </div>
-      <table ng-show="ctrl.running">
-        <tr ng-repeat="rij in ctrl.spel.bord">
-          <td ng-repeat="vak in rij"
-              ng-class="{omgedraaid: vak.omgedraaid, nietOmgedraaid: !vak.omgedraaid}"
-              ng-click="ctrl.handleLC($parent.$index, $index)"
-              ng-right-click="ctrl.handleRC(vak)">
-            <span ng-show="vak.omgedraaid">{{vak.bomBuren}}</span>
-            <span ng-show="!vak.omgedraaid">{{vak.symboolBepalen()}}</span>
-          </td>
-        </tr>
-      </table>
+    <div id="message">
       <h1 id="message_lose"
-          ng-show="ctrl.spel.boom"
+          ng-show="ctrl.spel.boem"
           class="animated bounceIn">
           BOOOOOMMMMM!!! GAME OVER!!!
       </h1>
@@ -61,9 +30,65 @@
           class="animated bounceIn">
           YOU WIN!!!
       </h1>
-      <button ng-click="ctrl.reload()" ng-show="ctrl.spel.boom || ctrl.spel.win">Start new game</button>
     </div>
+    <div class="win" id="controls" ng-hide="ctrl.spel">
+      <form ng-submit="ctrl.startGame()">
+        <h1>Game configuration</h1>
+        <div class="inpF">Naam: <input type="text" ng-model="ctrl.naam" required></div>
+        <div class="inpF">Rows: <input type="number" min="0" ng-model="ctrl.rijen"></div>
+        <div class="inpF">Cols: <input type="number" min="0" ng-model="ctrl.kolommen"></div>
+        <div class="inpF">Boms: <input type="number" min="0" ng-model="ctrl.bommen"></div>
+        <button class="button">Start game</button>
+      </form>
+    </div>
+    <div id="spelBoard" ng-show="ctrl.spel">
+      <div id="timer" ng-hide="ctrl.spel.win"><span >{{ctrl.tijd}}</span>
+        <button ng-click="ctrl.stopTimer()"
+                ng-show="ctrl.running"
+                ng-disabled="ctrl.spel.boem || ctrl.spel.win">
+                Pause
+        </button>
+        <button ng-click="ctrl.startTimer(ctrl.spel.timer.hernemen)"
+                ng-show="!ctrl.running && ctrl.tijd"
+                ng-disabled="ctrl.spel.boem || ctrl.spel.win">
+                Continue
+        </button>
+      </div>
+      <table ng-show="ctrl.running || ctrl.spel.boem">
+        <tr ng-repeat="rij in ctrl.spel.bord">
+          <td ng-repeat="vak in rij"
+              ng-class="{omgedraaid: vak.omgedraaid, nietOmgedraaid: !vak.omgedraaid}"
+              ng-click="ctrl.handleLC($parent.$index, $index)"
+              ng-right-click="ctrl.handleRC(vak)">
+            <span ng-show="vak.omgedraaid">{{vak.bomBuren}}</span>
+            <span ng-show="!vak.omgedraaid">{{vak.symboolBepalen()}}</span>
+            <span ng-show="ctrl.spel.boem && vak.bom">B</span>
+          </td>
+        </tr>
+      </table>
 
+      <button class="button" ng-click="ctrl.reload()" ng-show="ctrl.spel.boem || ctrl.spel.win">Start new game</button>
+    </div>
+    <div class="win" id="top3" ng-show="ctrl.spel.win">
+      <h1>Top 3</h1>
+      <p>rows: {{ctrl.top3[0].rijen}}, cols: {{ctrl.top3[0].kolommen}}, boms: {{ctrl.top3[0].bommen}}</p>
+      <table>
+        <thead>
+          <tr>
+            <td>Place</td>
+            <td>Naam</td>
+            <td>Tijd</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="speller in ctrl.top3 | orderBy: 'tijd' | limitTo: 3">
+            <td>{{$index + 1}}</td>
+            <td>{{speller.naam}}</td>
+            <td>{{speller.tijd}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
 </body>
