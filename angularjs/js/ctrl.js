@@ -1,10 +1,12 @@
-app.controller('mijnenCtrl', ['$interval', '$http', function($interval, $http) {
 
+app.controller('mijnenCtrl', ['$interval', '$http', function($interval, $http) {
+  var self = this;
   this.naam = '';
   this.spel = null;
   this.tijd = 0;
   this.interval = null;
   this.running = true;
+  this.top3 = [];
 
   this.stuurData = function() {
     $http({
@@ -23,10 +25,14 @@ app.controller('mijnenCtrl', ['$interval', '$http', function($interval, $http) {
       // console.log(res);
     });
   };
-  this.kreegData = function() {
-    $http.get('http://192.168.23.124:1111/deelnemers?bommen=1&rijen=10&kolommen=10')
+  this.kreegData = function(naam, rijen, kolommen, bommen) {
+    var url = 'http://192.168.23.124:1111/deelnemers' +
+      (naam ? '?naam=' + naam : '') +
+      (rijen && kolommen && bommen ? '?rijen=' + rijen + '&kolommen=' + kolommen + '&bommen=' + bommen : '');
+    $http.get(url)
     .then(function(response) {
-      console.log(response);
+      console.log(response.data);
+      self.top3 = response.data;
     });
   };
   this.reload = function() {
@@ -53,11 +59,11 @@ app.controller('mijnenCtrl', ['$interval', '$http', function($interval, $http) {
   this.handleLC = function(x, y) {
     this.startTimer(this.spel.timer.starten);
     this.spel.vakjeOmdraaien(x, y);
-    if (this.spel.boom || this.spel.win) {
+    if (this.spel.boem || this.spel.win) {
       this.stopTimer();
       if (this.spel.win) {
         this.stuurData();
-        this.kreegData();
+        this.kreegData('', 10,10,10);
       }
     }
   };

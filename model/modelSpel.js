@@ -9,6 +9,7 @@ function Spel(spelersnaam = "Joske", bommen = 10, rijen = 10, kolommen = 10) {
     this.rijen = rijen;
     this.kolommen = kolommen;
     this.speltijd = 0; // nodig wegens mog pauzeren
+    this.bomCoords = [];
     this.bord = this.initialiseren();
     this.verdelingBommen();
     this.timer = new MijnTimer();
@@ -23,6 +24,7 @@ Spel.prototype.ontdekVeiligVakjes = function (rij, kolom) {
     return false;
   }
   var veiligeBuren = this.contoleerBuren(rij, kolom);
+
   veiligeBuren.forEach(koords => {
     this.vakjeOmdraaien(koords[0], koords[1]);
   });
@@ -33,14 +35,35 @@ Spel.prototype.winControle = function () {
   this.win = (this.omgedraaideVakjes == this.kolommen * this.rijen - this.bommen);
 };
 
+// Spel.prototype.zoek = function (rij, kolom) {
+//   var buren = [];
+//   var r = rij;
+//   var k = kolom;
+//   while (this.bord[rij][kolom].bomBuren == null) {
+//     var veiligeBuren = this.contoleerBuren(rij, kolom);
+//     buren = buren.concat(veiligeBuren);
+//     veiligeBuren.forEach(koords => {
+//       if (this.vakjeOmdraaien(koords[0], koords[1])) {
+//         r = koords[0];
+//         k = koords[1];
+//       }
+//     });
+//   }
+//   buren.forEach(koords => {
+//     this.vakjeOmdraaien(koords[0], koords[1])
+//   });
+// };
+
 Spel.prototype.vakjeOmdraaien = function (rij, kolom) {
   if (!this.bord[rij][kolom].omgedraaid) {
     if (this.bord[rij][kolom].bom) {
-      this.boom = true;
+      this.boem = true;
+      return false;
     } else {
       this.bord[rij][kolom].omgedraaid = true;
       this.omgedraaideVakjes++;
       this.ontdekVeiligVakjes(rij, kolom);
+      return true;
     }
   }
 };
@@ -87,6 +110,7 @@ Spel.prototype.verdelingBommen = function () {
         if (!this.bord[a][b].bom) {
             aantal--;
             this.bord[a][b].bom = true;
+            this.bomCoords.push([a, b]);
         }
     }
     while (aantal);
@@ -104,6 +128,15 @@ Vak.prototype.symboolBepalen = function () {
     return mod ? mod == 1 ? 'v' : '?' : '';
 };
 
+Vak.prototype.omdraai = function() {
+  if (this.bom) {
+    this.boem = true;
+    return false;
+  } else {
+    this.omgedraaid = true;
+    return true;
+  }
+};
 
 Vak.prototype.vlag = function () {
     this.teller++;

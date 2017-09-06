@@ -1,10 +1,27 @@
+@import url('https://fonts.googleapis.com/css?family=Baloo+Tammudu');
+@import url('https://fonts.googleapis.com/css?family=Archivo+Black|Bal');
+@import url('https://fonts.googleapis.com/css?family=Archivo+Black|Baloo+Tammudu|Gloria+Hallelujah');
+
 $cell-width: 40px;
+$bar-color: #aaaaaa;
+$bg-color:  #fef4e8;
+$font-color: #dddddd;
+$window-color: #cccccc;
+$cel-color: #bbbbbb;
 
-
+body {
+  font-family: Arial;
+  margin: 0;
+  background-color: $bg-color;
+}
 
 #gameHolder {
   width: 600px;
-  margin: 50px auto;
+  margin: 20px auto;
+  padding: 20px;
+  // background-color: #727272;
+  // border: 1px solid black;
+
   text-align: center;
   table {
     margin: 30px auto;
@@ -20,25 +37,60 @@ $cell-width: 40px;
   }
 }
 
+#bar {
+  height: 80px;
+  padding: 5px 20px;
+  background-color: $bar-color;
+}
+
 .nietOmgedraaid {
-  background-color: gray;
+  background-color: $cel-color;
 }
 
 .omgedraaid {
-  background-color: green;
+  background-color: gray;
 }
 
-#controls {
+.button {
+  padding: 5px;
+  font-size: 1.2em;
+  // background-color: $bar-color;
+  // color: $bg-color;
+}
+
+.test {
+  width: 100%;
+  height: 100%;
+  background-color: red;
+}
+
+.inpF {
+  margin: 5px auto;
+  font-size: 20px;
+  text-align: right;
+  padding-right: 90px;
+  input {
+    font-size: 18px;
+  }
+}
+
+.win {
   width: 400px;
   height: 300px;
-  border: 1px solid black;
-  background-color: white;
+  padding: 20px;
+
+  // border: 1px solid black;
+  // color: $font-color;
+  background-color: $window-color;
   margin: 50px auto;
   // position: absolute;
   // top: 100px;
+
 }
 
 #message {
+  width: 100%;
   position: absolute;
   top: 280px;
+  left: 0;
 }

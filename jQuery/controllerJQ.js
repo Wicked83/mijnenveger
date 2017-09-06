@@ -6,6 +6,8 @@ $(function () {
 
     haalUitLocalStorage();
 
+    haalUitLocalStorage();
+
     $("#divSpel").hide();
 
     $("#btnStart").click(function () {
