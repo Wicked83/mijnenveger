@@ -25,7 +25,7 @@ function haalDeelnemerlijstOp(request, response) {
 
     console.log(request.query.naam)
     var naam = request.query.naam;
-    var bommen = request.query.bommen, rijen = request.query.rijen, kolommen = request.query.kolommen;
+    var bommen = +request.query.bommen, rijen = +request.query.rijen, kolommen = +request.query.kolommen;
     var query = naam ? { 'naam': naam } : bommen ? { 'bommen': bommen, 'rijen': rijen, 'kolommen': kolommen } : {};
     // var query = { 'naam': naam };
 
