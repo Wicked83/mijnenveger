@@ -58,19 +58,10 @@ $(function () {
 
         console.log(spel.bord);
 
-<<<<<<< HEAD
-
-    });
-
-    $("#test").mousedown(function (event) {
-        if (event.which == 1) { // dwz als met de linkermuisknop geklikt wordt
-            alert('omdraaien gelukt');
-=======
         var config = {
             "bommen": aantalBommen,
             "rijen": aantalRijen,
             "kolommen": aantalKolommen
->>>>>>> 457d3fd82c6eff1dde230113ca0a5944d7367397
         }
         bewaarInLocalStorage(config);
 
