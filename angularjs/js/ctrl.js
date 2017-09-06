@@ -1,3 +1,4 @@
+
 app.controller('mijnenCtrl', ['$interval', '$http', function($interval, $http) {
 
   this.naam = '';
@@ -53,7 +54,7 @@ app.controller('mijnenCtrl', ['$interval', '$http', function($interval, $http) {
   this.handleLC = function(x, y) {
     this.startTimer(this.spel.timer.starten);
     this.spel.vakjeOmdraaien(x, y);
-    if (this.spel.boom || this.spel.win) {
+    if (this.spel.boem || this.spel.win) {
       this.stopTimer();
       if (this.spel.win) {
         this.stuurData();
