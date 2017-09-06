@@ -12,7 +12,7 @@ function Spel(spelersnaam = "Joske", bommen = 10, rijen = 10, kolommen = 10) {
     this.bord = this.initialiseren();
     this.verdelingBommen();
     this.timer = new MijnTimer();
-    this.boom = false;
+    this.boem = false;
     this.win = false;
     this.omgedraaideVakjes = 0;
 }
