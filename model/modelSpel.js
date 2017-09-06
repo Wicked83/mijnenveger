@@ -12,7 +12,9 @@ function Spel(spelersnaam = "Joske", bommen = 10, rijen = 10, kolommen = 10) {
     this.bord = this.initialiseren();
     this.verdelingBommen();
     this.timer = new MijnTimer();
-    this.einde = false;
+    this.boom = false;
+    this.win = false;
+    this.omgedraaideVakjes = 0;
 }
 
 
@@ -24,15 +26,22 @@ Spel.prototype.ontdekVeiligVakjes = function (rij, kolom) {
   veiligeBuren.forEach(koords => {
     this.vakjeOmdraaien(koords[0], koords[1]);
   });
+  this.winControle();
 };
 
+Spel.prototype.winControle = function () {
+  this.win = (this.omgedraaideVakjes == this.kolommen * this.rijen - this.bommen);
+};
 
 Spel.prototype.vakjeOmdraaien = function (rij, kolom) {
-  if (this.bord[rij][kolom].bom) {
-    this.einde = true;
-  } else {
-    this.bord[rij][kolom].omgedraaid = true;
-    this.ontdekVeiligVakjes(rij, kolom);
+  if (!this.bord[rij][kolom].omgedraaid) {
+    if (this.bord[rij][kolom].bom) {
+      this.boom = true;
+    } else {
+      this.bord[rij][kolom].omgedraaid = true;
+      this.omgedraaideVakjes++;
+      this.ontdekVeiligVakjes(rij, kolom);
+    }
   }
 };
 

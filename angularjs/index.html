@@ -13,25 +13,57 @@
   <title>Mijnenveger</title>
 </head>
 <body>
-  <div id="gameHolder" ng-app="mijnenApp" ng-controller="mijnenCtrl as ctrl">
+  <div id="gameHolder"
+       ng-app="mijnenApp"
+       ng-controller="mijnenCtrl as ctrl">
     <h1>Mijnenveger</h1>
-    <div id="timer"><span >{{ctrl.tijd}}</span>
-      <button ng-click="ctrl.stopTimer()" ng-show="ctrl.running ">Pause</button>
-      <button ng-click="ctrl.startTimer(ctrl.spel.timer.hernemen)" ng-show="!ctrl.running && ctrl.tijd">Continue</button>
-
+    <div id="controls" ng-hide="ctrl.spel">
+      <form ng-submit="ctrl.startGame()">
+        <h1>Configuration</h1>
+        <p>Naam: <input type="text" ng-model="ctrl.naam" required></p>
+        <p>Rows: <input type="number" ng-model="ctrl.rijen"></p>
+        <p>Cols: <input type="number" ng-model="ctrl.kolommen"></p>
+        <p>Boms: <input type="number" ng-model="ctrl.bommen"></p>
+        <button>Start game</button>
+      </form>
     </div>
-    <table>
-      <tr ng-repeat="rij in ctrl.spel.bord">
-        <td ng-repeat="vak in rij"
-            ng-class="{omgedraaid: vak.omgedraaid, nietOmgedraaid: !vak.omgedraaid}"
-            ng-click="ctrl.handleLC($parent.$index, $index)"
-            ng-right-click="ctrl.handleRC(vak)">
-          <span ng-show="vak.omgedraaid">{{vak.bomBuren}}</span>
-          <span ng-show="!vak.omgedraaid">{{vak.symboolBepalen()}}</span>
-        </td>
-      </tr>
-    </table>
-    <h1 id="message" ng-show="ctrl.spel.einde" class="animated bounceIn">BOOOOOMMMMM!!! GAME OVER!!!</h1>
+    <div id="spelBoard" ng-show="ctrl.spel">
+      <div id="timer"><span >{{ctrl.tijd}}</span>
+        <button ng-click="ctrl.stopTimer()"
+                ng-show="ctrl.running"
+                ng-disabled="ctrl.spel.boom || ctrl.spel.win">
+                Pause
+        </button>
+        <button ng-click="ctrl.startTimer(ctrl.spel.timer.hernemen)"
+                ng-show="!ctrl.running && ctrl.tijd"
+                ng-disabled="ctrl.spel.boom || ctrl.spel.win">
+                Continue
+        </button>
+      </div>
+      <table ng-show="ctrl.running">
+        <tr ng-repeat="rij in ctrl.spel.bord">
+          <td ng-repeat="vak in rij"
+              ng-class="{omgedraaid: vak.omgedraaid, nietOmgedraaid: !vak.omgedraaid}"
+              ng-click="ctrl.handleLC($parent.$index, $index)"
+              ng-right-click="ctrl.handleRC(vak)">
+            <span ng-show="vak.omgedraaid">{{vak.bomBuren}}</span>
+            <span ng-show="!vak.omgedraaid">{{vak.symboolBepalen()}}</span>
+          </td>
+        </tr>
+      </table>
+      <h1 id="message_lose"
+          ng-show="ctrl.spel.boom"
+          class="animated bounceIn">
+          BOOOOOMMMMM!!! GAME OVER!!!
+      </h1>
+      <h1 id="message_win"
+          ng-show="ctrl.spel.win"
+          class="animated bounceIn">
+          YOU WIN!!!
+      </h1>
+      <button ng-click="ctrl.reload()" ng-show="ctrl.spel.boom || ctrl.spel.win">Start new game</button>
+    </div>
+
   </div>
 
 </body>
