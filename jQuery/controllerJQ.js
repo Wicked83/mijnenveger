@@ -1,7 +1,7 @@
 /* Tip verder werker: NodeJSvoorFEO, p. 13:
 Property query van de eerste parameter van de callback functie van methode get stelt de waarden van de doorgestuurde invoervelden voor. (of juister: van de querystring, dit is in de url van een request het gedeelte na het vraagteken, dat bestaat uit key-value paren)
 Om hetzelfde te doen als de form naar de server gestuurd is via een POST, moeten we vooraf module body-parser installeren (npm install body-parser) en gebruiken: */
-
+// praat voor de vaak om die githib te foppen ;-)
 $(function() {
 
     $("#divSpel").hide();
