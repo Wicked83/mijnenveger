@@ -5,7 +5,6 @@ Om hetzelfde te doen als de form naar de server gestuurd is via een POST, moeten
 $(function() {
     /*     // dit is
                 window.onload = init;
-    
                 function init() {
                     // al de brol
                 }
@@ -104,14 +103,7 @@ $(function() {
             localStorage.setItem("configuratie", JSON.stringify(config));
         }
 
-        function haalUitLocalStorage() {
-            var config = JSON.parse(localStorage.getItem("configuratie"));
-            if (config) {
-                $("#invoerRijen").val(config.rijen);
-                $("#invoerKolommen").val(config.kolommen);
-                $("#invoerBommen").val(config.bommen);
-            }
-        }
+
 
         // Perform other work here ...
 
@@ -239,3 +231,12 @@ $(function() {
 
     })
 });
+
+function haalUitLocalStorage() {
+    var config = JSON.parse(localStorage.getItem("configuratie"));
+    if (config) {
+        $("#invoerRijen").val(config.rijen);
+        $("#invoerKolommen").val(config.kolommen);
+        $("#invoerBommen").val(config.bommen);
+    }
+}
