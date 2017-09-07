@@ -21,6 +21,7 @@ function Spel(spelersnaam = "Joske", bommen = 10, rijen = 10, kolommen = 10) {
 
 Spel.prototype.ontdekVeiligVakjes = function (rij, kolom) {
   if (this.bord[rij][kolom].bomBuren != null) {
+    // if (!this.bord[rij][kolom].bomBuren) { // zelfde resultaat?
     return false;
   }
   var veiligeBuren = this.contoleerBuren(rij, kolom);
@@ -60,7 +61,9 @@ Spel.prototype.vakjeOmdraaien = function (rij, kolom) {
       this.boem = true;
       return false;
     } else {
+      // console.log('fie omdraaien')
       this.bord[rij][kolom].omgedraaid = true;
+console.log(this.bord[rij][kolom].omgedraaid )//= true;
       this.omgedraaideVakjes++;
       this.ontdekVeiligVakjes(rij, kolom);
       return true;
