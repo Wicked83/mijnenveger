@@ -15,6 +15,14 @@ td {
     border: 1px solid black;
 }
 
-.clicked{
+.clicked {
     background-color: red;
+}
+
+.bom {
+    background-color: rebeccapurple;
+}
+
+.gedraaid {
+    background-color: green;
 }

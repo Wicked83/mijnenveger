@@ -17,7 +17,7 @@ $(function () {
 
     $("#divSpel").hide();
 
-    $("#btnStart").click(function () { //ook comment op lijn rond de 80
+    // $("#btnStart").click(function () { //ook comment op lijn rond de 80
     $('#speelveld').remove()
     $("#divSpel").show();
 
@@ -44,7 +44,10 @@ $(function () {
                     var kolom = this.id.split('_')[1];
                     console.log("links ", rij, ": ", kolom);
                     $('#' + this.id).attr('class', 'clicked');
+                    $('#' + this.id);
                     spel.vakjeOmdraaien(rij, kolom);
+                    grafischeWeergaveAanpassen();
+
 
                 }).
                 contextmenu(function (event) {
@@ -58,6 +61,18 @@ $(function () {
 
     }
 
+    function grafischeWeergaveAanpassen() {
+        for (var i = 0; i < spel.bord.length; i++) {
+            for (var y = 0; y < spel.bord[i].length; y++) {
+                if (spel.bord[i][y].omgedraaid) {
+                    $('#' + i + '_' + y).attr('class', 'gedraaid')
+                }
+                if (f){
+                    //bomburen opsporen
+                }
+            }
+        }
+    }
 
     var aantalBommen = $("#invoerBommen").val();
     var spelersnaam = $("#invoerNaam").val();
@@ -76,7 +91,7 @@ $(function () {
     }
     bewaarInLocalStorage(config);
 
-     });
+    //  });
 
     function bewaarInLocalStorage(config) {
         localStorage.setItem("configuratie", JSON.stringify(config));
