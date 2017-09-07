@@ -12,6 +12,9 @@ $(function() {
 
     var interval;
     var timer;
+    var tellerV = 0;
+
+    haalUitLocalStorage();
 
     $("#divSpel").hide();
 
@@ -21,31 +24,44 @@ $(function() {
 
         var aantalRijen = $("#invoerRijen").val();
         var aantalKolommen = $("#invoerKolommen").val();
+        var aantalBommen = $("#invoerBommen").val();
+        var spelersnaam = $("#invoerNaam").val();
 
         //$("<table>").attr('id', 'speelveld')
         $('#divSpel').append($("<table>").attr('id', 'speelveld'));
+        $("#speelveld").one("click", function() {
+            timer.starten();
+        });
         for (var i = 0; i < aantalRijen; i++) {
             $("#speelveld").append($('<tr>').attr('id', i))
             for (var y = 0; y < aantalKolommen; y++) {
                 console.log(i + '.' + y)
-                $('#' + i).append($('<td>').attr('id', i + '_' + y).click(function(event) {
-                    var rij = this.id.split('_')[0];
-                    var kolom = this.id.split('_')[1];
-                    console.log("links ", rij, ": ", kolom);
-                    $('#' + this.id).attr('class', 'clicked');
-                    $('#' + this.id);
-                    spel.vakjeOmdraaien(rij, kolom);
-                    grafischeWeergaveAanpassen();
-                }).contextmenu(function(event) {
-                    var rij = this.id.split('_')[0]
-                    var kolom = this.id.split('_')[1]
-                    spel.bord[rij][kolom].vlag()
-                    $("#" + this.id).html(spel.bord[rij][kolom].symboolBepalen())
-                    console.log("rechts ", rij, ": ", kolom)
-                }));
+                $('#' + i).append($('<td>').attr('id', i + '_' + y)
+                    .click(function(event) {
+                        var rij = this.id.split('_')[0];
+                        var kolom = this.id.split('_')[1];
+                        console.log("links ", rij, ": ", kolom);
+                        $('#' + this.id).attr('class', 'clicked');
+                        $('#' + this.id);
+                        spel.vakjeOmdraaien(rij, kolom);
+                        grafischeWeergaveAanpassen();
+                        controleerEindeSpel();
+                    }).contextmenu(function(event) {
+                        var rij = this.id.split('_')[0]
+                        var kolom = this.id.split('_')[1]
+                        spel.bord[rij][kolom].vlag()
+                        $("#" + this.id).html(spel.bord[rij][kolom].symboolBepalen())
+                        console.log("rechts ", rij, ": ", kolom);
+                        if (spel.bord[rij][kolom].symboolBepalen() == 'v') {
+                            tellerV++;
+                        } else if (spel.bord[rij][kolom].symboolBepalen() == '?') {
+                            tellerV--;
+                        }
+                        document.getElementById("aantalNogTeMarkerenBommen").innerHTML = aantalBommen - tellerV;
+                    })
+                );
             }
         }
-
 
         function grafischeWeergaveAanpassen() {
             for (var i = 0; i < spel.bord.length; i++) {
@@ -61,8 +77,6 @@ $(function() {
                 }
             }
         }
-        var aantalBommen = $("#invoerBommen").val();
-        var spelersnaam = $("#invoerNaam").val();
 
         var spel = new Spel(spelersnaam, aantalBommen, aantalRijen, aantalKolommen);
 
@@ -78,9 +92,11 @@ $(function() {
 
         timer = new MijnTimer();
 
-        $("#speelveld").one("click", function() {
-            timer.starten();
-        });
+        /*
+                $("#speelveld").one("click", function() {
+                    timer.starten();
+                });
+                */
 
         interval = setInterval(function() {
             document.getElementById("toonTijd").innerHTML = timer.seconden;
@@ -95,16 +111,17 @@ $(function() {
             timer.hernemen();
             $("#divSpel").show();
         });
-        // de stop button moet nog vervangen worden dr 'het einde van het spel = laatste bom gevonden'
-        $("#btnStop").click(function() {
-            timer.stoppen();
-        });
+
+        function controleerEindeSpel() {
+            console.log(spel.boem);
+            if (spel.win || spel.boem) {
+                timer.stoppen();
+            }
+        }
 
         function bewaarInLocalStorage(config) {
             localStorage.setItem("configuratie", JSON.stringify(config));
         }
-
-
 
         // Perform other work here ...
 
