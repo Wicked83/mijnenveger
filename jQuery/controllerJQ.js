@@ -24,8 +24,8 @@ $(function() {
         var aantalRijen = $("#invoerRijen").val();
         var aantalKolommen = $("#invoerKolommen").val();
 
-        $("<table>").attr('id', 'speelveld')
-        $('#divSpel').append($("<table>").attr('id', 'speelveld'))
+        //$("<table>").attr('id', 'speelveld')
+        $('#divSpel').append($("<table>").attr('id', 'speelveld'));
         for (var i = 0; i < aantalRijen; i++) {
             $("#speelveld").append($('<tr>').attr('id', i))
             for (var y = 0; y < aantalKolommen; y++) {
@@ -46,7 +46,6 @@ $(function() {
                     console.log("rechts ", rij, ": ", kolom)
                 }));
             }
-
         }
 
         function grafischeWeergaveAanpassen() {
@@ -55,21 +54,17 @@ $(function() {
                     if (spel.bord[i][y].omgedraaid) {
                         $('#' + i + '_' + y).attr('class', 'gedraaid')
                     }
-                    if (f) {
-                        //bomburen opsporen
-                    }
+                    //if (f) {
+                    //bomburen opsporen
+                    //}
                 }
             }
         }
-
 
         var aantalBommen = $("#invoerBommen").val();
         var spelersnaam = $("#invoerNaam").val();
 
         var spel = new Spel(spelersnaam, aantalBommen, aantalRijen, aantalKolommen);
-
-        spel.initialiseren();
-        spel.verdelingBommen();
 
         console.log(spel.bord);
 
@@ -82,17 +77,23 @@ $(function() {
         bewaarInLocalStorage(config);
 
         timer = new MijnTimer();
-        timer.starten();
+
+        $("#speelveld").one("click", function() {
+            timer.starten();
+        });
+
         interval = setInterval(function() {
             document.getElementById("toonTijd").innerHTML = timer.seconden;
         }, 1000);
 
         $("#btnPauzeer").click(function() {
             timer.stoppen();
+            $("#divSpel").hide();
         });
 
         $("#btnHerneem").click(function() {
             timer.hernemen();
+            $("#divSpel").show();
         });
         // de stop button moet nog vervangen worden dr 'het einde van het spel = laatste bom gevonden'
         $("#btnStop").click(function() {
