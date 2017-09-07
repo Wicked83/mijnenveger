@@ -7,7 +7,22 @@ app.controller('mijnenCtrl', ['$interval', '$http', function($interval, $http) {
   this.interval = null;
   this.running = true;
   this.top3 = [];
-
+  this.showCtrl1 = true;
+  this.showCtrl2 = false;
+  this.fullLijst = [];
+  this.toggleViewCtrl = function(tabNum) {
+    switch (tabNum) {
+      case 1:
+        this.showCtrl1 = true;
+        this.showCtrl2= false;
+        break;
+      case 2:
+        this.showCtrl1 = false;
+        this.showCtrl2= true;
+        break;
+      default:
+    }
+  };
   this.stuurData = function() {
     $http({
       method: 'post',
@@ -25,13 +40,23 @@ app.controller('mijnenCtrl', ['$interval', '$http', function($interval, $http) {
       // console.log(res);
     });
   };
-  this.kreegData = function(naam, rijen, kolommen, bommen) {
+
+  this.kreegData = function() {
+    $http.get('http://192.168.23.124:1111/deelnemers')
+    .then(function(response) {
+      // console.log(response.data);
+      self.fullLijst = {
+        namenlijst: response.data;
+      };
+    });
+  };
+  this.kreegTop3 = function(naam, rijen, kolommen, bommen) {
     var url = 'http://192.168.23.124:1111/deelnemers' +
       (naam ? '?naam=' + naam : '') +
       (rijen && kolommen && bommen ? '?rijen=' + rijen + '&kolommen=' + kolommen + '&bommen=' + bommen : '');
     $http.get(url)
     .then(function(response) {
-      console.log(response.data);
+      // console.log(response.data);
       self.top3 = response.data;
     });
   };
@@ -59,11 +84,14 @@ app.controller('mijnenCtrl', ['$interval', '$http', function($interval, $http) {
   this.handleLC = function(x, y) {
     this.startTimer(this.spel.timer.starten);
     this.spel.vakjeOmdraaien(x, y);
+    // this.spel.zoek(x, y);
     if (this.spel.boem || this.spel.win) {
       this.stopTimer();
       if (this.spel.win) {
         this.stuurData();
-        this.kreegData('', 10,10,10);
+        this.kreegData();
+        this.toggleViewCtrl(2);
+        this.kreegTop3('', this.rijen,this.kolommen,this.bommen);
       }
     }
   };

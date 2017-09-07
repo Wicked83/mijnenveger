@@ -22,24 +22,55 @@
     <div id="message">
       <h1 id="message_lose"
           ng-show="ctrl.spel.boem"
-          class="animated bounceIn">
+          class="animated bounceIn bounceOut">
           BOOOOOMMMMM!!! GAME OVER!!!
       </h1>
       <h1 id="message_win"
           ng-show="ctrl.spel.win"
-          class="animated bounceIn">
+          class="animated bounceIn bounceOut">
           YOU WIN!!!
       </h1>
     </div>
-    <div class="win" id="controls" ng-hide="ctrl.spel">
-      <form ng-submit="ctrl.startGame()">
-        <h1>Game configuration</h1>
-        <div class="inpF">Naam: <input type="text" ng-model="ctrl.naam" required></div>
-        <div class="inpF">Rows: <input type="number" min="0" ng-model="ctrl.rijen"></div>
-        <div class="inpF">Cols: <input type="number" min="0" ng-model="ctrl.kolommen"></div>
-        <div class="inpF">Boms: <input type="number" min="0" ng-model="ctrl.bommen"></div>
-        <button class="button">Start game</button>
-      </form>
+    <div id="info" ng-show="!ctrl.spel || ctrl.spel.win">
+      <div id="nav-sm">
+        <div class="menu-sm" ng-class="{active: !ctrl.showCtrl2}" ng-click="ctrl.toggleViewCtrl(1)">Controls</div>
+        <div class="menu-sm" ng-class="{active: ctrl.showCtrl2}" ng-click="ctrl.toggleViewCtrl(2)">Ranking</div>
+      </div>
+      <div class="win" id="controls" ng-hide="!ctrl.showCtrl1">
+        <form ng-submit="ctrl.startGame()">
+          <h1>Game configuration</h1>
+          <div class="inpF">Naam: <input type="text" ng-model="ctrl.naam" required></div>
+          <div class="inpF">Rows: <input type="number" min="0" ng-model="ctrl.rijen"></div>
+          <div class="inpF">Cols: <input type="number" min="0" ng-model="ctrl.kolommen"></div>
+          <div class="inpF">Boms: <input type="number" min="0" ng-model="ctrl.bommen"></div>
+          <button class="button">Start game</button>
+        </form>
+      </div>
+      <div class="win" id="top3" ng-show="ctrl.showCtrl2">
+        <h1>Top 3</h1>
+        <select ng-model="namen" ng-options="item.naam for item in ctrl.fullLijst | unique 'naam'">
+          <option value="">All</option>
+        </select>
+        <!-- <p>rows: {{ctrl.top3[0].rijen}}, cols: {{ctrl.top3[0].kolommen}}, boms: {{ctrl.top3[0].bommen}}</p> -->
+        <table>
+          <thead>
+            <tr>
+              <td>Place</td>
+              <td>Naam</td>
+              <td>Tijd</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="speller in ctrl.top3 | orderBy: 'tijd' | limitTo: 3">
+              <td>{{$index + 1}}</td>
+              <td>{{speller.naam}}</td>
+              <td>{{speller.tijd}}</td>
+            </tr>
+          </tbody>
+        </table>
+        <button class="button">Show</button>
+      </div>
+
     </div>
     <div id="spelBoard" ng-show="ctrl.spel">
       <div id="timer" ng-hide="ctrl.spel.win"><span >{{ctrl.tijd}}</span>
@@ -67,27 +98,7 @@
         </tr>
       </table>
 
-      <button class="button" ng-click="ctrl.reload()" ng-show="ctrl.spel.boem || ctrl.spel.win">Start new game</button>
-    </div>
-    <div class="win" id="top3" ng-show="ctrl.spel.win">
-      <h1>Top 3</h1>
-      <p>rows: {{ctrl.top3[0].rijen}}, cols: {{ctrl.top3[0].kolommen}}, boms: {{ctrl.top3[0].bommen}}</p>
-      <table>
-        <thead>
-          <tr>
-            <td>Place</td>
-            <td>Naam</td>
-            <td>Tijd</td>
-          </tr>
-        </thead>
-        <tbody>
-          <tr ng-repeat="speller in ctrl.top3 | orderBy: 'tijd' | limitTo: 3">
-            <td>{{$index + 1}}</td>
-            <td>{{speller.naam}}</td>
-            <td>{{speller.tijd}}</td>
-          </tr>
-        </tbody>
-      </table>
+      <!-- <button class="button" ng-click="ctrl.reload()" ng-show="ctrl.spel.boem || ctrl.spel.win">Start new game</button> -->
     </div>
   </div>
 

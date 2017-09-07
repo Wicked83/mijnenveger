@@ -20,6 +20,7 @@ function Spel(spelersnaam = "Joske", bommen = 10, rijen = 10, kolommen = 10) {
 
 
 Spel.prototype.ontdekVeiligVakjes = function (rij, kolom) {
+  var self = this;
   if (this.bord[rij][kolom].bomBuren != null) {
     return false;
   }
@@ -27,32 +28,81 @@ Spel.prototype.ontdekVeiligVakjes = function (rij, kolom) {
 
   veiligeBuren.forEach(koords => {
     this.vakjeOmdraaien(koords[0], koords[1]);
+
+    // (function f(index, array) {
+    //   if (index < array.length) {
+    //     var vak = self.bord[array[index][0]][array[index][1]];
+    //     setTimeout(function() {
+    //       if (!vak.omgedraaid) {
+    //         if (vak.bom) {
+    //           self.boem = true;
+    //         } else {
+    //           vak.omgedraaid = true;
+    //           self.omgedraaideVakjes++;
+    //
+    //           self.ontdekVeiligVakjes(array[index][0], array[index][1]);
+    //           f(index + 1, array);
+    //         }
+    //       }
+    //     }, 200);
+    //   }
+    // })(0, veiligeBuren);
+
   });
   this.winControle();
 };
+
+
 
 Spel.prototype.winControle = function () {
   this.win = (this.omgedraaideVakjes == this.kolommen * this.rijen - this.bommen);
 };
 
-// Spel.prototype.zoek = function (rij, kolom) {
-//   var buren = [];
-//   var r = rij;
-//   var k = kolom;
-//   while (this.bord[rij][kolom].bomBuren == null) {
-//     var veiligeBuren = this.contoleerBuren(rij, kolom);
-//     buren = buren.concat(veiligeBuren);
-//     veiligeBuren.forEach(koords => {
-//       if (this.vakjeOmdraaien(koords[0], koords[1])) {
-//         r = koords[0];
-//         k = koords[1];
-//       }
-//     });
+// Spel.prototype.zoek = function (rij, kolom, vakjes) {
+//
+//   var veiligeBuren = this.contoleerBuren(rij, kolom);
+//
+//   if (veiligeBuren.length == 0) {
+//     console.log(vakjes.length);
 //   }
-//   buren.forEach(koords => {
-//     this.vakjeOmdraaien(koords[0], koords[1])
+//   veiligeBuren.forEach(koords => {
+//
+//     if (this.bord[koords[0]][koords[1]].bomBuren == null) {
+//       if (!this.bord[koords[0]][koords[1]].bom) {
+//
+//         vakjes.push(this.bord[koords[0]][koords[1]]);
+//         this.zoek(koords[0], koords[1], vakjes);
+//       }
+//     }
 //   });
+
+
+  // this.winControle();
+
+
+  // var buren = [];
+  // var r = rij;
+  // var k = kolom;
+  // while (this.bord[r][k].bomBuren == null) {
+  //   var veiligeBuren = this.contoleerBuren(r, k);
+  //   buren = buren.concat(veiligeBuren);
+  //   veiligeBuren.forEach(koords => {
+  //     if (!this.bord[rij][kolom].omgedraaid) {
+  //       if (!this.bord[koords[0]][koords[1]].bom) {
+  //         r = koords[0];
+  //         k = koords[1];
+  //       }
+  //     }
+  //   });
+  // }
+  // buren.forEach(koords => {
+  //   this.vakjeOmdraaien(koords[0], koords[1])
+  // });
+  // console.log(buren);
+  // return buren;
 // };
+
+
 
 Spel.prototype.vakjeOmdraaien = function (rij, kolom) {
   if (!this.bord[rij][kolom].omgedraaid) {
