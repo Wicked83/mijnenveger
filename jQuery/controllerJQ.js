@@ -13,8 +13,6 @@ $(function() {
     var interval;
     var timer;
 
-    haalUitLocalStorage();
-
     $("#divSpel").hide();
 
     $("#btnStart").click(function() {
@@ -48,19 +46,21 @@ $(function() {
             }
         }
 
+
         function grafischeWeergaveAanpassen() {
             for (var i = 0; i < spel.bord.length; i++) {
                 for (var y = 0; y < spel.bord[i].length; y++) {
                     if (spel.bord[i][y].omgedraaid) {
                         $('#' + i + '_' + y).attr('class', 'gedraaid')
                     }
-                    //if (f) {
-                    //bomburen opsporen
-                    //}
+                    console.log(this.bomBuren)
+                    if (spel.bord[i][y].bomBuren) {
+                        //bomburen opsporen
+                        console.log('bomburen!')
+                    }
                 }
             }
         }
-
         var aantalBommen = $("#invoerBommen").val();
         var spelersnaam = $("#invoerNaam").val();
 
