@@ -18,8 +18,70 @@ app.all('/*', function (req, res, next) {
 });
 
 app.get('/deelnemers', haalDeelnemerlijstOp);
+app.get('/namenlijst', haalNamenLijst);
+
+app.get('/rijen', vulRijenIn);
+app.get('/kolommen', vulKolommennIn);
+app.get('/bommen', vulBommenIn);
 
 app.post('/nieuw', nieuweSpelerInvoegen);
+
+function haalNamenLijst(req, res) {
+
+
+    mongoClient.connect(url, function (error, db) {
+        console.log('connected to db');
+        var collection = db.collection('mijnenveger');
+        collection.distinct('naam', (function (err, docs) {
+            console.log(docs);
+            res.send(JSON.stringify(docs));
+            db.close();
+        })
+        )
+    })
+}
+function vulRijenIn(req, res) {
+
+
+    mongoClient.connect(url, function (error, db) {
+        console.log('connected to db');
+        var collection = db.collection('mijnenveger');
+        collection.distinct('rijen', (function (err, docs) {
+            console.log(docs);
+            res.send(JSON.stringify(docs));
+            db.close();
+        })
+        )
+    })
+}
+function vulKolommennIn(req, res) {
+    var rij = req.query.rij;
+
+    mongoClient.connect(url, function (error, db) {
+        console.log('connected to db');
+        var collection = db.collection('mijnenveger');
+        collection.distinct('kolommen', (function (err, docs) {
+            console.log(docs);
+            res.send(JSON.stringify(docs));
+            db.close();
+        })
+        )
+    })
+}
+function vulBommenIn(req, res) {
+    var rijen = req.body.bommen
+
+    mongoClient.connect(url, function (error, db) {
+        console.log('connected to db');
+        var collection = db.collection('mijnenveger');
+        collection.distinct('bommen', (function (err, docs) {
+            console.log(docs);
+            res.send(JSON.stringify(docs));
+            db.close();
+        })
+        )
+    })
+}
 
 function haalDeelnemerlijstOp(request, response) {
 

@@ -1,16 +1,34 @@
 <!DOCTYPE html>
 <html lang="nl">
+<!--voro de github-->
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Mijnenveger jQuery</title>
-    <link rel="stylesheet" href="CSS/main.css">
+    <style>
+        #gameHolder {
+            width: 600px;
+            margin: 50px auto;
+            text-align: center;
+        }
+
+        table {
+            margin: 30px auto;
+            border-collapse: collapse;
+        }
+
+        td {
+            width: 50px;
+            height: 50px;
+            border: 1px solid black;
+        }
+    </style>
 </head>
 
 
-<body oncontextmenu="return false;">
+<body>
     <div id="gameHolder">
         <h1>Mijnenveger</h1>
         <!--BEGIN SPEL MET INPUT NAAM EN CONFIGURATIE-->
@@ -18,28 +36,20 @@
             <form>
                 <h1>Begin Spel</h1>
                 <p>Naam: <input type="text" name="invoerNaam" id="invoerNaam"></p>
-                <p>Rijen: <input type="number" name="invoerRijen" id="invoerRijen" value="10"></p>
-                <p>Kolommen: <input type="number" name="invoerKolommen" id="invoerKolommen" value="10"></p>
-                <p>Bommen: <input type="number" name="invoerBommen" id="invoerBommen" value="10"></p>
+                <p>Rijen: <input type="number" name="invoerRijen" id="invoerRijen"></p>
+                <p>Kolommen: <input type="number" name="invoerKolommen" id="invoerKolommen"></p>
+                <p>Bommen: <input type="number" name="invoerBommen" id="invoerBommen"></p>
                 <input type="button" id="btnStart" value="Start spel">
+                <input type="button" name="test" id="test" value="test">
             </form>
-        </div>
-
-        <div id="tijd">
-            <input type="button" name="btnPauzeer" id="btnPauzeer" value="Pauzeer spel">
-            <input type="button" name="btnHerneem" id="btnHerneem" value="Herneem spel">
-            <br>
-            <input type="button" name="btnStop" id="btnStop" value="Stop spel">
-            <!--de stop button moet nog verwijderd worden, dient voorlopig om de timer te kunnen stoppen-->
-            <p id="toonTijd"></p>
         </div>
 
         <!--SPEL-->
         <div id="divSpel">
             <h1>Spel</h1>
+            <table id="tabelSpel"></table>
+
         </div>
-
-
 
         <!-- LIJST SPELERS-->
 
