@@ -60,7 +60,9 @@ Spel.prototype.vakjeOmdraaien = function (rij, kolom) {
       this.boem = true;
       return false;
     } else {
+      // console.log('fie omdraaien')
       this.bord[rij][kolom].omgedraaid = true;
+console.log(      this.bord[rij][kolom].omgedraaid )//= true;
       this.omgedraaideVakjes++;
       this.ontdekVeiligVakjes(rij, kolom);
       return true;

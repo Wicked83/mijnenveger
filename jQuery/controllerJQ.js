@@ -3,6 +3,13 @@ Property query van de eerste parameter van de callback functie van methode get s
 Om hetzelfde te doen als de form naar de server gestuurd is via een POST, moeten we vooraf module body-parser installeren (npm install body-parser) en gebruiken: */
 
 $(function () {
+    /*     // dit is
+        window.onload = init;
+    
+        function init() {
+            // al de brol
+        }
+     */
 
     haalUitLocalStorage();
 
@@ -10,64 +17,66 @@ $(function () {
 
     $("#divSpel").hide();
 
-    $("#btnStart").click(function () {
+    $("#btnStart").click(function () { //ook comment op lijn rond de 80
+    $('#speelveld').remove()
+    $("#divSpel").show();
 
-        $("#divSpel").show();
+    //$("#divBeginSpel").hide();
+    var aantalRijen = $("#invoerRijen").val();
+    var aantalKolommen = $("#invoerKolommen").val();
+    /* for (var i = 0; i < aantalRijen; i++) {
+        for (var y = 0; y < aantalKolommen; y++) {
+            $("#tabelSpel").append($("<tr>"));
+            var z = i + y;
+            $("tr").append($("<td>").attr('id', i + y).click(function () { alert(z) }));
+        }
+    } // te vervangen dr $each  */
 
-        //$("#divBeginSpel").hide();
-        var aantalRijen = $("#invoerRijen").val();
-        var aantalKolommen = $("#invoerKolommen").val();
-        /* for (var i = 0; i < aantalRijen; i++) {
-            for (var y = 0; y < aantalKolommen; y++) {
-                $("#tabelSpel").append($("<tr>"));
-                var z = i + y;
-                $("tr").append($("<td>").attr('id', i + y).click(function () { alert(z) }));
-            }
-        } // te vervangen dr $each  */
+    $("<table>").attr('id', 'speelveld')
+    $('#divSpel').append($("<table>").attr('id', 'speelveld'))
+    for (var i = 0; i < aantalRijen; i++) {
+        $("#speelveld").append($('<tr>').attr('id', i))
+        for (var y = 0; y < aantalKolommen; y++) {
+            console.log(i + '.' + y)
+            $('#' + i).append($('<td>').attr('id', i + '_' + y).
+                click(function (event) {
+                    var rij = this.id.split('_')[0];
+                    var kolom = this.id.split('_')[1];
+                    console.log("links ", rij, ": ", kolom);
+                    $('#' + this.id).attr('class', 'clicked');
+                    spel.vakjeOmdraaien(rij, kolom);
 
-        $("<table>").attr('id', 'speelveld')
-        $('#divSpel').append($("<table>").attr('id', 'speelveld'))
-        for (var i = 0; i < aantalRijen; i++) {
-            $("#speelveld").append($('<tr>').attr('id', i))
-            for (var y = 0; y < aantalKolommen; y++) {
-                console.log(i + '.' + y)
-                $('#' + i).append($('<td>').attr('id', i + '_' + y).
-                    click(function (event) {
-                        var rij = this.id.split('_')[0]
-                        var kolom = this.id.split('_')[1]
-                        console.log("links ", rij, ": ", kolom)
-                        $('#'+this.id).attr('class','clicked')
-                    }).
-                    contextmenu(function (event) {
-                        var rij = this.id.split('_')[0]
-                        var kolom = this.id.split('_')[1]
-                        spel.bord[rij][kolom].vlag()
-                        $("#" + this.id).html(spel.bord[rij][kolom].symboolBepalen())
-                        console.log("rechts ", rij, ": ", kolom)
-                    }));
-            }
-
+                }).
+                contextmenu(function (event) {
+                    var rij = this.id.split('_')[0]
+                    var kolom = this.id.split('_')[1]
+                    spel.bord[rij][kolom].vlag()
+                    $("#" + this.id).html(spel.bord[rij][kolom].symboolBepalen())
+                    console.log("rechts ", rij, ": ", kolom)
+                }));
         }
 
+    }
 
-        var aantalBommen = $("#invoerBommen").val();
-        var spelersnaam = $("#invoerNaam").val();
 
-        var spel = new Spel(spelersnaam, aantalBommen, aantalRijen, aantalKolommen);
+    var aantalBommen = $("#invoerBommen").val();
+    var spelersnaam = $("#invoerNaam").val();
 
-        spel.initialiseren();
-        spel.verdelingBommen();
+    var spel = new Spel(spelersnaam, aantalBommen, aantalRijen, aantalKolommen);
 
-        console.log(spel.bord);
+    spel.initialiseren();
+    spel.verdelingBommen();
 
-        var config = {
-            "bommen": aantalBommen,
-            "rijen": aantalRijen,
-            "kolommen": aantalKolommen
-        }
-        bewaarInLocalStorage(config);
+    console.log(spel.bord);
 
-    });
+    var config = {
+        "bommen": aantalBommen,
+        "rijen": aantalRijen,
+        "kolommen": aantalKolommen
+    }
+    bewaarInLocalStorage(config);
+
+     });
 
     function bewaarInLocalStorage(config) {
         localStorage.setItem("configuratie", JSON.stringify(config));
@@ -152,7 +161,8 @@ $(function () {
                 .append($('<th>').html('Tijd'))
                 .append($('<th>').html('Bommen'))
                 .append($('<th>').html('Rijen'))
-                .append($('<th>').html('Kolommen'))).append($('<tbody>').attr('id', 'dlns')))
+                .append($('<th>').html('Kolommen')))
+            .append($('<tbody>').attr('id', 'dlns')))
 
         /* $(pakKapstok).after($(tabel).append($(thead).append($(th)).append($(th)).append($(th))))
         after => er achter toevoegen SVGScriptElement. append => er in steken 
