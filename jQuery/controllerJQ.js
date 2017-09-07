@@ -13,8 +13,6 @@ $(function () {
 
     haalUitLocalStorage();
 
-    haalUitLocalStorage();
-
     $("#divSpel").hide();
 
     // $("#btnStart").click(function () { //ook comment op lijn rond de 80
@@ -67,8 +65,10 @@ $(function () {
                 if (spel.bord[i][y].omgedraaid) {
                     $('#' + i + '_' + y).attr('class', 'gedraaid')
                 }
-                if (f){
+                console.log (this.bomBuren)
+                    if (spel.bord[i][y].bomBuren){
                     //bomburen opsporen
+                    console.log('bomburen!')
                 }
             }
         }
