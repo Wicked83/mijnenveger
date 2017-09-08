@@ -55,17 +55,23 @@ function vulRijenIn(req, res) {
     })
 }
 function vulKolommennIn(req, res) {
-    var rij = req.query.rij;
-
+    var rij = +req.query.rij; // ok
+    // var pipeline = [{$match:{'rijen':10}},{$group:{_id:'$kolommen'}}]
     mongoClient.connect(url, function (error, db) {
         console.log('connected to db');
         var collection = db.collection('mijnenveger');
-        collection.distinct('kolommen', (function (err, docs) {
-            console.log(docs);
-            res.send(JSON.stringify(docs));
-            db.close();
-        })
-        )
+        collection.aggregate(
+            {
+                $match: { rijen: rij }
+            },
+            {
+                $group: { _id: '$kolommen' }
+            }, function (err, docs) {
+                // console.log(docs);
+                res.send(JSON.stringify(docs));
+                db.close();
+            }
+        )//.toArray()
     })
 }
 function vulBommenIn(req, res) {
