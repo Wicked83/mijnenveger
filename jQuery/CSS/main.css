@@ -55,3 +55,7 @@ td {
 table {
     border: 10px solid#94a2af
 }
+
+input, button {
+    text-align: center;
+}
