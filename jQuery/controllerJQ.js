@@ -3,12 +3,6 @@ Property query van de eerste parameter van de callback functie van methode get s
 Om hetzelfde te doen als de form naar de server gestuurd is via een POST, moeten we vooraf module body-parser installeren (npm install body-parser) en gebruiken: */
 
 $(function() {
-    /*     // dit is
-                window.onload = init;
-                function init() {
-                    // al de brol
-                }
-             */
 
     var interval;
     var timer;
@@ -27,11 +21,12 @@ $(function() {
         var aantalBommen = $("#invoerBommen").val();
         var spelersnaam = $("#invoerNaam").val();
 
-        //$("<table>").attr('id', 'speelveld')
         $('#divSpel').append($("<table>").attr('id', 'speelveld'));
+
         $("#speelveld").one("click", function() {
             timer.starten();
         });
+
         for (var i = 0; i < aantalRijen; i++) {
             $("#speelveld").append($('<tr>').attr('id', i))
             for (var y = 0; y < aantalKolommen; y++) {
@@ -64,18 +59,21 @@ $(function() {
         }
 
         function grafischeWeergaveAanpassen() {
+            // } //else {
             for (var i = 0; i < spel.bord.length; i++) {
                 for (var y = 0; y < spel.bord[i].length; y++) {
                     if (spel.bord[i][y].omgedraaid) {
                         $('#' + i + '_' + y).attr('class', 'gedraaid')
                     }
-                    console.log(this.bomBuren)
+                    // console.log(this.bomBuren)
                     if (spel.bord[i][y].bomBuren) {
                         //bomburen opsporen
-                        console.log('bomburen!')
+                        $('#' + i + '_' + y).html(spel.bord[i][y].bomBuren)
+                        console.log(spel.bord[i][y].bomBuren)
                     }
                 }
             }
+            //}
         }
 
         var spel = new Spel(spelersnaam, aantalBommen, aantalRijen, aantalKolommen);
@@ -91,12 +89,6 @@ $(function() {
         bewaarInLocalStorage(config);
 
         timer = new MijnTimer();
-
-        /*
-                $("#speelveld").one("click", function() {
-                    timer.starten();
-                });
-                */
 
         interval = setInterval(function() {
             document.getElementById("toonTijd").innerHTML = timer.seconden;
@@ -123,41 +115,12 @@ $(function() {
             localStorage.setItem("configuratie", JSON.stringify(config));
         }
 
-        // Perform other work here ...
-
-        // Set another completion function for the request above
-
-        /* standaard XMLHttpRequest
-            $('#getIt').click(function () {
-                console.log('knopke')
-         
-                standaard XMLHttpRequest
-                var xml = new XMLHttpRequest();
-                xml.onload = function () {
-                    if (xml.status == 200) {
-                        verwerkGegevens(xml.responseText)
-                    }
-                }
-                xml.open('GET', 'http://localhost:1111/deelnemers')
-                xml.send() 
-        }) */
-
-
-
         $('#getIt').click(function() {
 
             var naam = $("#dnNaam").val(),
                 bom = $("#dnBom").val(),
                 rij = $("#dnRij").val(),
                 kolom = $("#dnKolom").val();
-
-            // var param = {
-            //     "naam": naam,
-            //     "bommen": bom,
-            //     "rijen": rij,
-            //     "kolommen": kolom
-            // };
-            // console.log('voor fie: ' + param);
 
             $.ajax({
                 url: "http://192.168.23.124:1111/deelnemers",
@@ -195,11 +158,6 @@ $(function() {
                     .append($('<th>').html('Rijen'))
                     .append($('<th>').html('Kolommen')))
                 .append($('<tbody>').attr('id', 'dlns')))
-
-            /* $(pakKapstok).after($(tabel).append($(thead).append($(th)).append($(th)).append($(th))))
-            after => er achter toevoegen SVGScriptElement. append => er in steken 
-            append($('<th>').html('teTonen').attr('id','willekeurigID').attr('class','willekeurigeClass')) */
-
             console.log(arr)
             arr.forEach(function(deelnemer) {
                 $('#dlns').append($('<tr>')
@@ -218,14 +176,6 @@ $(function() {
                 rij = $("#rij").val(),
                 kolom = $("#kolom").val(),
                 tijd = 0;
-            // $.post(url [, data ] [, success ] [, dataType ] )
-            /*     var url = "http://localhost:1111/nieuw";
-                var data = {
-                    "naam": naam,
-                    "bommen": bom,
-                    "rijen": rij,
-                    "kolommen": kolom
-                } */
             $.post({
                 url: "http://192.168.23.124:1111/nieuw",
                 data: {
@@ -245,8 +195,6 @@ $(function() {
             $("#rij").val("");
             $("#kolom").val("");
         })
-
-
     })
 });
 
