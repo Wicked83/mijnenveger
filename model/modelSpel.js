@@ -5,9 +5,9 @@
 
 function Spel(spelersnaam = "Joske", bommen = 10, rijen = 10, kolommen = 10) {
   this.spelersnaam = spelersnaam;
-  this.bommen = +bommen;
-  this.rijen = +rijen;
-  this.kolommen = +kolommen;
+  this.bommen = bommen;
+  this.rijen = rijen;
+  this.kolommen = kolommen;
   this.speltijd = 0; // nodig wegens mog pauzeren
   this.bomCoords = [];
   this.bord = this.initialiseren();
@@ -15,14 +15,15 @@ function Spel(spelersnaam = "Joske", bommen = 10, rijen = 10, kolommen = 10) {
   this.timer = new MijnTimer();
   this.boem = false;
   this.win = false;
-  this.omgedraaideVakjes = 0;
+  // this.omgedraaideVakjes = 0;
+  this.markedVakjes = 0;
 }
 
 
 Spel.prototype.ontdekVeiligVakjes = function (rij, kolom) {
-  var self = this;
-  rij = +rij;
-  kolom = +kolom;
+  // var self = this;
+  // rij = +rij;
+  // kolom = +kolom;
   if (this.bord[rij][kolom].bomBuren != null) {
     // if (!this.bord[rij][kolom].bomBuren) { // zelfde resultaat?
     return false;
@@ -32,40 +33,50 @@ Spel.prototype.ontdekVeiligVakjes = function (rij, kolom) {
   veiligeBuren.forEach(koords => {
     this.vakjeOmdraaien(koords[0], koords[1]);
 
-    
+
   });
   this.winControle();
 };
 
 
 
+// Spel.prototype.winControle = function () {
+//   this.win = (this.omgedraaideVakjes == this.kolommen * this.rijen - this.bommen);
+// };
+
 Spel.prototype.winControle = function () {
-  this.win = (this.omgedraaideVakjes == this.kolommen * this.rijen - this.bommen);
+  if (this.markedVakjes == this.bommen) {
+    for (var i = 0; i < this.bomCoords; i++) {
+      if (this.bord[i[0]][i[1]].symboolBepalen() !== 'v' ) {
+        return false;
+      }
+    }
+    this.win = true;
+    return true;
+  }
 };
 
-
-
 Spel.prototype.vakjeOmdraaien = function (rij, kolom) {
-  rij = +rij;
-  kolom = +kolom;
+  // rij = +rij;
+  // kolom = +kolom;
   if (!this.bord[rij][kolom].omgedraaid) {
     if (this.bord[rij][kolom].bom) {
       this.boem = true;
-      return false;
+      // return false;
     } else {
       // console.log('fie omdraaien')
       this.bord[rij][kolom].omgedraaid = true;
-      console.log(this.bord[rij][kolom].omgedraaid)//= true;
-      this.omgedraaideVakjes++;
+      // console.log(this.bord[rij][kolom].omgedraaid)//= true;
+      // this.omgedraaideVakjes++;
       this.ontdekVeiligVakjes(rij, kolom);
-      return true;
+      // return true;
     }
   }
 };
 
 Spel.prototype.contoleerBuren = function (rij, kolom) {
-  rij = +rij;
-  kolom = +kolom;
+  // rij = +rij;
+  // kolom = +kolom;
   var buurBommen = 0;
   var veiligeBuren = [];
   for (var i = rij - 1; i <= rij + 1; i++) {

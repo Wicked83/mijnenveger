@@ -9,7 +9,8 @@ app.controller('mijnenCtrl', ['$interval', '$http', function($interval, $http) {
   this.top3 = [];
   this.showCtrl1 = true;
   this.showCtrl2 = false;
-  this.fullLijst = [];
+  this.fullLijst = {};
+  this.sortOptie = 'naam';
   this.toggleViewCtrl = function(tabNum) {
     switch (tabNum) {
       case 1:
@@ -40,14 +41,32 @@ app.controller('mijnenCtrl', ['$interval', '$http', function($interval, $http) {
       // console.log(res);
     });
   };
-
-  this.kreegData = function() {
-    $http.get('http://192.168.23.124:1111/deelnemers')
+  this.tableFlaten = function() {
+    var flatArr = [];
+    this.spel.bord.forEach((rij, i) => {rij.forEach((vak, j) => {
+      vak.x = i;
+      vak.y = j;
+      flatArr.push(vak);
+    })});
+    return flatArr;
+  };
+  this.rijSelChange = function() {
+    $http.get('http://192.168.23.124:1111/kolommen?rij=' + this.rijenSel)
     .then(function(response) {
       // console.log(response.data);
-      self.fullLijst = {
-        namenlijst: response.data;
-      };
+      self.fullLijst.kolommen = response.data.map(val => val._id);
+    });
+  };
+  this.kreegNamenEnRijen = function() {
+    $http.get('http://192.168.23.124:1111/namenlijst')
+    .then(function(response) {
+      // console.log(response.data);
+      self.fullLijst.namen = response.data;
+    });
+    $http.get('http://192.168.23.124:1111/rijen')
+    .then(function(response) {
+      // console.log(response.data);
+      self.fullLijst.rijen = response.data;
     });
   };
   this.kreegTop3 = function(naam, rijen, kolommen, bommen) {
@@ -89,7 +108,7 @@ app.controller('mijnenCtrl', ['$interval', '$http', function($interval, $http) {
       this.stopTimer();
       if (this.spel.win) {
         this.stuurData();
-        this.kreegData();
+
         this.toggleViewCtrl(2);
         this.kreegTop3('', this.rijen,this.kolommen,this.bommen);
       }
@@ -115,6 +134,7 @@ app.controller('mijnenCtrl', ['$interval', '$http', function($interval, $http) {
   };
 
   this.loadConfig();
+  this.kreegNamenEnRijen();
 
 }]);
 
