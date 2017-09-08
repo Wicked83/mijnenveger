@@ -6,24 +6,25 @@ $(function() {
 
     var interval;
     var timer;
-    var tellerV = 0;
 
     haalUitLocalStorage();
 
     $("#divSpel").hide();
 
     $("#btnStart").click(function() {
-        $('#speelveld').remove()
-        $("#divSpel").show();
 
+        $('#speelveld').remove();
+        $("#divSpel").show();
+        var tellerV = 0;
         var aantalRijen = $("#invoerRijen").val();
         var aantalKolommen = $("#invoerKolommen").val();
         var aantalBommen = $("#invoerBommen").val();
+        document.getElementById("aantalNogTeMarkerenBommen").innerHTML = aantalBommen;
         var spelersnaam = $("#invoerNaam").val();
 
         $('#divSpel').append($("<table>").attr('id', 'speelveld'));
 
-        $("#speelveld").one("click", function() {
+        $("#speelveld").one("mousedown", function() {
             timer.starten();
         });
 
