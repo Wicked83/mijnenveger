@@ -59,3 +59,13 @@ table {
 input, button {
     text-align: center;
 }
+
+.alert {
+    color: rgb(255, 255, 0);
+    background-color: rgb(255, 125, 10)
+}
+
+.warning {
+    background-color: rgb(255, 255, 0);
+    color: rgb(255, 125, 10)
+}
