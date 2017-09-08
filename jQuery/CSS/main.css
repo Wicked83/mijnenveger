@@ -16,7 +16,7 @@ td {
 }
 
 .clicked {
-    background-color: red;
+    background-color: rgb( 170, 30, 9);
 }
 
 .bom {
@@ -25,4 +25,33 @@ td {
 
 .gedraaid {
     background-color: green;
+}
+
+.jumbotron {
+    /* background-image: url('http://libertynews.com/wp-content/uploads/2013/10/cartoon-bomb-pictures.jpg'); */
+    background-image: url('../Images/bom.jpg')
+}
+
+#titel {
+    color: gold;
+    text-shadow: -2px 0 goldenrod, 0 2px goldenrod, 2px 0 goldenrod, 0 -2px goldenrod;
+}
+
+.body {
+    background-color: lightslategray
+}
+
+
+/* .form-group{
+    max-width: 80vmax;
+} */
+
+td {
+    border-radius: 5px 5px 5px 5px;
+    border: 0 solid lightskyblue;
+    background-color: #8695a4;
+}
+
+table {
+    border: 10px solid#94a2af
 }
