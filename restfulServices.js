@@ -27,8 +27,6 @@ app.get('/bommen', vulBommenIn);
 app.post('/nieuw', nieuweSpelerInvoegen);
 
 function haalNamenLijst(req, res) {
-
-
     mongoClient.connect(url, function (error, db) {
         console.log('connected to db');
         var collection = db.collection('mijnenveger');
@@ -41,14 +39,12 @@ function haalNamenLijst(req, res) {
     })
 }
 function vulRijenIn(req, res) {
-
-
     mongoClient.connect(url, function (error, db) {
         console.log('connected to db');
         var collection = db.collection('mijnenveger');
         collection.distinct('rijen', (function (err, docs) {
             console.log(docs);
-            res.send(JSON.stringify(docs));
+            res.send(docs);
             db.close();
         })
         )
@@ -56,7 +52,6 @@ function vulRijenIn(req, res) {
 }
 function vulKolommennIn(req, res) {
     var rij = +req.query.rij; // ok
-    // var pipeline = [{$match:{'rijen':10}},{$group:{_id:'$kolommen'}}]
     mongoClient.connect(url, function (error, db) {
         console.log('connected to db');
         var collection = db.collection('mijnenveger');
@@ -75,16 +70,23 @@ function vulKolommennIn(req, res) {
     })
 }
 function vulBommenIn(req, res) {
-    var rijen = req.body.bommen
+  var rij = +req.query.rij;
+  var kolom = +req.query.kolom;
 
     mongoClient.connect(url, function (error, db) {
         console.log('connected to db');
         var collection = db.collection('mijnenveger');
-        collection.distinct('bommen', (function (err, docs) {
-            console.log(docs);
-            res.send(JSON.stringify(docs));
-            db.close();
-        })
+        collection.aggregate(
+            {
+                $match: { rijen: rij, kolommen: kolom }
+            },
+            {
+                $group: { _id: '$bommen' }
+            }, function (err, docs) {
+                // console.log(docs);
+                res.send(JSON.stringify(docs));
+                db.close();
+            }
         )
     })
 }
@@ -194,7 +196,7 @@ app.listen(1111);
 })
 app.listen(3000) */
 
-/* 
+/*
 opvragen top > configuratie >> top 3
 limit 3
 config inwerken > string 'bomxrijxkolom'
