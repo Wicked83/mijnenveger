@@ -45,7 +45,7 @@ Spel.prototype.ontdekVeiligVakjes = function (rij, kolom) {
 Spel.prototype.winControle = function () {
   if (this.markedVakjes == this.bommen) {
     for (var i = 0; i < this.bomCoords; i++) {
-      if (this.bord[i[0]][i[1]].symboolBepalen() !== 'v' ) {
+      if (this.bord[i[0]][i[1]].symboolBepalen() !== 'v') {
         return false;
       }
     }
@@ -57,7 +57,7 @@ Spel.prototype.winControle = function () {
 Spel.prototype.vakjeOmdraaien = function (rij, kolom) {
   // rij = +rij;
   // kolom = +kolom;
-  if (!this.bord[rij][kolom].omgedraaid) {
+  if (!this.bord[rij][kolom].omgedraaid && this.bord[rij][kolom].symboolBepalen() != 'v') {
     if (this.bord[rij][kolom].bom) {
       this.boem = true;
       // return false;
@@ -137,7 +137,8 @@ Vak.prototype.symboolBepalen = function () {
 };
 
 Vak.prototype.omdraai = function () {
-  if (this.bom) {
+  if (this.symboolBepalen() == 'v') { }
+  else if (this.bom) {
     this.boem = true;
     return false;
   } else {
