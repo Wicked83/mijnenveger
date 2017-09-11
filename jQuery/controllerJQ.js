@@ -62,9 +62,9 @@ $(function () {
                             } else if (spel.bord[rij][kolom].symboolBepalen() == '?') {
                                 tellerV--;
                                 $(this).addClass('warning');
-                                $(this).remove('alert')
+                                $(this).removeClass('alert')
                             }
-                            $(this).remove('warning')
+                            $(this).removeClass('warning')
                             document.getElementById("aantalNogTeMarkerenBommen").innerHTML = aantalBommen - tellerV;
                         })
                     );
