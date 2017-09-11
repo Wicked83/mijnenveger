@@ -9,7 +9,10 @@ app.controller('mijnenCtrl', ['$interval', '$http', function($interval, $http) {
   this.top3 = [];
   this.showCtrl1 = true;
   this.showCtrl2 = false;
-  this.fullLijst = [];
+  this.fullLijst = {};
+  this.sortOptie = 'naam';
+  // this.apiUrl = 'http://192.168.23.124:1111';
+  this.apiUrl = 'http://localhost:1111';
   this.toggleViewCtrl = function(tabNum) {
     switch (tabNum) {
       case 1:
@@ -26,7 +29,7 @@ app.controller('mijnenCtrl', ['$interval', '$http', function($interval, $http) {
   this.stuurData = function() {
     $http({
       method: 'post',
-      url: 'http://192.168.23.124:1111/nieuw',
+      url: this.apiUrl + '/nieuw',
       data:  {
         naam: this.spel.spelersnaam,
         tijd: this.tijd,
@@ -40,24 +43,49 @@ app.controller('mijnenCtrl', ['$interval', '$http', function($interval, $http) {
       // console.log(res);
     });
   };
-
-  this.kreegData = function() {
-    $http.get('http://192.168.23.124:1111/deelnemers')
+  this.tableFlaten = function() {
+    var flatArr = [];
+    this.spel.bord.forEach((rij, i) => {rij.forEach((vak, j) => {
+      vak.x = i;
+      vak.y = j;
+      flatArr.push(vak);
+    })});
+    return flatArr;
+  };
+  this.rijSelChange = function() {
+    $http.get(this.apiUrl + '/kolommen?rij=' + this.rijenSel)
     .then(function(response) {
       // console.log(response.data);
-      self.fullLijst = {
-        namenlijst: response.data;
-      };
+      self.fullLijst.kolommen = response.data.map(val => +val._id);
+    });
+  };
+  this.kolSelChange = function() {
+    $http.get(this.apiUrl + '/bommen?rij=' + this.rijenSel + '&kolom=' + this.kolommenSel)
+    .then(function(response) {
+      // console.log(response.data);
+      self.fullLijst.bommen = response.data.map(val => +val._id);
+    });
+  };
+  this.kreegNamenEnRijen = function() {
+    $http.get(this.apiUrl + '/namenlijst')
+    .then(function(response) {
+      // console.log(response.data);
+      self.fullLijst.namen = response.data;
+    });
+    $http.get(this.apiUrl + '/rijen')
+    .then(function(response) {
+      // console.log(response.data);
+      self.fullLijst.rijen = response.data;
     });
   };
   this.kreegTop3 = function(naam, rijen, kolommen, bommen) {
-    var url = 'http://192.168.23.124:1111/deelnemers' +
+    var url = this.apiUrl + '/deelnemers' +
       (naam ? '?naam=' + naam : '') +
       (rijen && kolommen && bommen ? '?rijen=' + rijen + '&kolommen=' + kolommen + '&bommen=' + bommen : '');
     $http.get(url)
     .then(function(response) {
       // console.log(response.data);
-      self.top3 = response.data;
+      self.top3 = response.data.slice(0, 3);
     });
   };
   this.reload = function() {
@@ -89,7 +117,7 @@ app.controller('mijnenCtrl', ['$interval', '$http', function($interval, $http) {
       this.stopTimer();
       if (this.spel.win) {
         this.stuurData();
-        this.kreegData();
+
         this.toggleViewCtrl(2);
         this.kreegTop3('', this.rijen,this.kolommen,this.bommen);
       }
@@ -115,6 +143,7 @@ app.controller('mijnenCtrl', ['$interval', '$http', function($interval, $http) {
   };
 
   this.loadConfig();
+  this.kreegNamenEnRijen();
 
 }]);
 

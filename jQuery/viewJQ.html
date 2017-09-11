@@ -65,30 +65,27 @@
         <!--EINDE SPEL-->
 
         <!-- LIJST SPELERS-->
-        <div id="divLijst">
-            <form action="http://192.168.23.124:1111/deelnemers" onsubmit="return false">
-                <input type="text" name="naam" id="dnNaam" placeholder="Zoek op naam">
-                <input type="text" name="bommen" id="dnBom" placeholder="Zoek op aantal bommen">
-                <input type="text" name="rijen" id="dnRij" placeholder="Zoek op aantal rijen">
-                <input type="text" name="kolommen" id="dnKolom" placeholder="Zoek op aantal kolommen">
-                <input type="submit" id="getIt" value="Haal selectie op">
-            </form>
+        <div id="divLijst"></div>
+        <form action="http://192.168.23.124:1111/deelnemers" onsubmit="return false">
+            <div class="form-group"> <input type="text" name="naam" id="dnNaam" placeholder="Zoek op naam"></div>
+            <div class="form-group"><input type="text" name="bommen" id="dnBom" placeholder="Zoek op aantal bommen"></div>
+            <div class="form-group"><input type="text" name="rijen" id="dnRij" placeholder="Zoek op aantal rijen"></div>
+            <div class="form-group"><input type="text" name="kolommen" id="dnKolom" placeholder="Zoek op aantal kolommen"></div>
+            <input type="submit" id="getIt" value="Haal selectie op">
+        </form>
+        <div id="deelnemers">Hier komen de deelnemers</div>
+        <!-- EINDE LIJST SPELERS-->
 
-            <div id="deelnemers">Hier komen de deelnemers</div>
-
-            <!--<form onsubmit="return false">
+        <!--<form onsubmit="return false">
                 <label for="naam">Naam: </label><input type="text" name="naam" id="naam">
                 <label for="bom">Bommen: </label><input type="number" name="bommen" id="bom">
                 <label for="rij">Rijen: </label><input type="number" name="rij" id="rij">
                 <label for="kolom">Kolommen:</label><input type="number" name="kolom" id="kolom">
                 <input type="submit" name="btnSubmit" id="btnSubmit" value="Post nieuwe deelnemer">
             </form>-->
-            <script src="jquery-3.2.1.min.js"></script>
-            <script src="controllerJQ.js"></script>
-            <script src="../model/modelSpel.js"></script>
-
-        </div>
-        <!-- EINDE LIJST SPELERS-->
+        <script src="jquery-3.2.1.min.js"></script>
+        <script src="controllerJQ.js"></script>
+        <script src="../model/modelSpel.js"></script>
 
     </div>
 
