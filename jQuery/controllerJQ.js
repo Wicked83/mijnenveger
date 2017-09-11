@@ -16,10 +16,10 @@ $(function() {
             alert('Gelieve het spelidee te respecteren')
         } else {
 
-            console.log("bommen: " + $('#invoerBommen').val());
-            console.log("rijen: " + $('#invoerRijen').val());
-            console.log("kolommen: " + $('#invoerKolommen').val());
-            console.log('product: ' + $('#invoerRijen').val() * $('#invoerKolommen').val());
+            // console.log("bommen: " + $('#invoerBommen').val());
+            // console.log("rijen: " + $('#invoerRijen').val());
+            // console.log("kolommen: " + $('#invoerKolommen').val());
+            // console.log('product: ' + $('#invoerRijen').val() * $('#invoerKolommen').val());
 
             $('#speelveld').remove();
             $("#divSpelbord").show();
@@ -42,12 +42,12 @@ $(function() {
             for (var i = 0; i < aantalRijen; i++) {
                 $("#speelveld").append($('<tr>').attr('id', i))
                 for (var y = 0; y < aantalKolommen; y++) {
-                    console.log(i + '.' + y)
+                    //console.log(i + '.' + y)
                     $('#' + i).append($('<td>').attr('id', i + '_' + y)
                         .click(function(event) {
                             var rij = +this.id.split('_')[0];
                             var kolom = +this.id.split('_')[1];
-                            console.log("links ", rij, ": ", kolom);
+                            //console.log("links ", rij, ": ", kolom);
                             if (spel.bord[rij][kolom].symboolBepalen() != 'v') {
                                 $('#' + this.id).attr('class', 'clicked');
                                 $('#' + this.id);
@@ -60,24 +60,22 @@ $(function() {
                             var kolom = this.id.split('_')[1]
                             spel.bord[rij][kolom].vlag()
                             $("#" + this.id).html(spel.bord[rij][kolom].symboolBepalen())
-                            console.log("rechts ", rij, ": ", kolom);
+                                //console.log("rechts ", rij, ": ", kolom);
                             if (spel.bord[rij][kolom].symboolBepalen() == 'v') {
                                 tellerV++;
                                 spel.markedVakjes++;
-                                spel.winControle();
-                                controleerEindeSpel();
+                                controleerEindeSpel(rij, kolom);
                                 $(this).addClass('alert');
                                 // $(this).on('click', function () { prop("disabled", false) });
                                 // $(this).prop('click()', 'disabled')
                                 $(this).attr({ disabled: true })
                                     // $(this).attr('disabled', 'disabled')
-                                console.log(this)
-                                console.log($(this))
+                                    //console.log(this)
+                                    //console.log($(this))
                             } else if (spel.bord[rij][kolom].symboolBepalen() == '?') {
                                 tellerV--;
                                 spel.markedVakjes--;
-                                spel.winControle();
-                                controleerEindeSpel();
+                                controleerEindeSpel(rij, kolom);
                                 $(this).removeClass('alert');
                                 $(this).addClass('warning');
                                 $(this).prop('disabled', true)
@@ -101,7 +99,7 @@ $(function() {
                         if (spel.bord[i][y].bomBuren) {
                             //bomburen opsporen
                             $('#' + i + '_' + y).html(spel.bord[i][y].bomBuren)
-                            console.log(spel.bord[i][y].bomBuren)
+                                //console.log(spel.bord[i][y].bomBuren)
                         }
                     }
                 }
@@ -134,9 +132,9 @@ $(function() {
                 $("#divSpelbord").show();
             });
 
-            function controleerEindeSpel() {
-                console.log(spel.boem);
-                if (spel.win || spel.boem) {
+            function controleerEindeSpel(rij, kolom) {
+                console.log("Dit is spel winControle uit controleerEindeSpel: " + spel.winControle());
+                if (spel.winControle(rij, kolom) || spel.boem) {
                     timer.stoppen();
                 }
             }
@@ -166,8 +164,8 @@ $(function() {
                     },
                     dataType: 'json'
                 }).done(function(param) {
-                    console.log("naam: " + naam)
-                    console.log(param)
+                    //console.log("naam: " + naam)
+                    //console.log(param)
                     verwerkGegevens(param)
                 })
             })
@@ -181,14 +179,14 @@ $(function() {
                 var arr = data
 
                 $('#getIt').after(($('<table>').attr('id', 'tabelDeelnrs'))
-                    .append($('<thead>')
-                        .append($('<th>').html('Naam'))
-                        .append($('<th>').html('Tijd'))
-                        .append($('<th>').html('Bommen'))
-                        .append($('<th>').html('Rijen'))
-                        .append($('<th>').html('Kolommen')))
-                    .append($('<tbody>').attr('id', 'dlns')))
-                console.log(arr)
+                        .append($('<thead>')
+                            .append($('<th>').html('Naam'))
+                            .append($('<th>').html('Tijd'))
+                            .append($('<th>').html('Bommen'))
+                            .append($('<th>').html('Rijen'))
+                            .append($('<th>').html('Kolommen')))
+                        .append($('<tbody>').attr('id', 'dlns')))
+                    //console.log(arr)
                 arr.forEach(function(deelnemer) {
                     $('#dlns').append($('<tr>')
                         .append($('<td>').html(deelnemer.naam))
@@ -200,7 +198,7 @@ $(function() {
             }
 
             $('#btnSubmit').click(function(e) {
-                console.log("let's go!: " + e)
+                //console.log("let's go!: " + e)
                 var naam = $("#naam").val(),
                     bom = $("#bom").val(),
                     rij = $("#rij").val(),
