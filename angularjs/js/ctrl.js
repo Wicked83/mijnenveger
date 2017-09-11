@@ -12,7 +12,8 @@ app.controller('mijnenCtrl', ['$interval', '$http', '$mdDialog', function($inter
   // this.showCtrl2 = false;
   this.fullLijst = {};
   this.sortOptie = 'naam';
-  this.apiUrl = 'http://192.168.23.124:1111';
+  // this.apiUrl = 'http://192.168.23.124:1111';
+  this.apiUrl = 'http://localhost:1111';
   // this.toggleViewCtrl = function(tabNum) {
   //   switch (tabNum) {
   //     case 1:
@@ -47,14 +48,11 @@ app.controller('mijnenCtrl', ['$interval', '$http', '$mdDialog', function($inter
       // console.log(res);
     });
   };
-  this.tableFlaten = function() {
-    var flatArr = [];
-    this.spel.bord.forEach((rij, i) => {rij.forEach((vak, j) => {
-      vak.x = i;
-      vak.y = j;
-      flatArr.push(vak);
-    })});
-    return flatArr;
+  this.tableReborn = function() {
+    return this.spel.bord.map(rij => rij.map(vak => {
+      vak.marked = false;
+      return vak;
+    }));
   };
   this.rijSelChange = function() {
     $http.get(this.apiUrl + '/kolommen?rij=' + this.rijenSel)
@@ -92,11 +90,13 @@ app.controller('mijnenCtrl', ['$interval', '$http', '$mdDialog', function($inter
       self.top3 = response.data.slice(0, 3);
     });
   };
-  this.reload = function() {
-    location.reload();
-  };
+  // this.reload = function() {
+  //   location.reload();
+  // };
   this.startGame = function() {
     this.spel = new Spel(this.naam, this.bommen, this.rijen, this.kolommen);
+    this.spel.bord = this.tableReborn();
+    
     this.saveConfig();
     this.changeActiveTab(2);
     // this.naam = '';
