@@ -43,11 +43,13 @@ $(function() {
                 $("#speelveld").append($('<tr>').attr('id', i))
                 for (var y = 0; y < aantalKolommen; y++) {
                     //console.log(i + '.' + y)
+                    // console.log(i + '.' + y)
                     $('#' + i).append($('<td>').attr('id', i + '_' + y)
                         .click(function(event) {
                             var rij = +this.id.split('_')[0];
                             var kolom = +this.id.split('_')[1];
                             //console.log("links ", rij, ": ", kolom);
+                            // console.log("links ", rij, ": ", kolom);
                             if (spel.bord[rij][kolom].symboolBepalen() != 'v') {
                                 $('#' + this.id).attr('class', 'clicked');
                                 $('#' + this.id);
@@ -61,6 +63,7 @@ $(function() {
                             spel.bord[rij][kolom].vlag()
                             $("#" + this.id).html(spel.bord[rij][kolom].symboolBepalen())
                                 //console.log("rechts ", rij, ": ", kolom);
+                                // console.log("rechts ", rij, ": ", kolom);
                             if (spel.bord[rij][kolom].symboolBepalen() == 'v') {
                                 tellerV++;
                                 spel.markedVakjes++;
@@ -72,6 +75,9 @@ $(function() {
                                     // $(this).attr('disabled', 'disabled')
                                     //console.log(this)
                                     //console.log($(this))
+                                    // $(this).attr('disabled', 'disabled')
+                                    // console.log(this)
+                                    // console.log($(this))
                             } else if (spel.bord[rij][kolom].symboolBepalen() == '?') {
                                 tellerV--;
                                 spel.markedVakjes--;
@@ -124,12 +130,18 @@ $(function() {
 
             $("#btnPauzeer").click(function() {
                 timer.stoppen();
-                $("#divSpelbord").hide();
+                // $("#divSpelbord").hide();
+                // $("#divSpelbord").addClass('pauze')
+                $("#divSpelbord").prepend($('<img>').attr("src", "Images/pauze.gif"))
+                $("#speelveld").hide()
             });
+
 
             $("#btnHerneem").click(function() {
                 timer.hernemen();
                 $("#divSpelbord").show();
+                $("#divSpelbord>img").remove()
+                $("#speelveld").show()
             });
 
             function controleerEindeSpel(rij, kolom) {
@@ -166,6 +178,9 @@ $(function() {
                 }).done(function(param) {
                     //console.log("naam: " + naam)
                     //console.log(param)
+                }).done(function(param) {
+                    // console.log("naam: " + naam)
+                    // console.log(param)
                     verwerkGegevens(param)
                 })
             })
@@ -175,7 +190,7 @@ $(function() {
                 // if ($("#tabelDeelnrs")) {
                 $("#tabelDeelnrs").remove()
                     // }  // test blijkbaar niet nodig...?
-                console.log('data fie is ' + data)
+                    // console.log('data fie is ' + data)
                 var arr = data
 
                 $('#getIt').after(($('<table>').attr('id', 'tabelDeelnrs'))
@@ -188,6 +203,7 @@ $(function() {
                         .append($('<tbody>').attr('id', 'dlns')))
                     //console.log(arr)
                 arr.forEach(function(deelnemer) {
+
                     $('#dlns').append($('<tr>')
                         .append($('<td>').html(deelnemer.naam))
                         .append($('<td>').html(deelnemer.tijd))
@@ -197,8 +213,9 @@ $(function() {
                 }, this);
             }
 
+
             $('#btnSubmit').click(function(e) {
-                //console.log("let's go!: " + e)
+                // console.log("let's go!: " + e)
                 var naam = $("#naam").val(),
                     bom = $("#bom").val(),
                     rij = $("#rij").val(),
@@ -214,7 +231,7 @@ $(function() {
                         "tijd": tijd
                     },
                     success: function() {
-                        console.log('ok')
+                        // console.log('ok')
                     }
                 })
 

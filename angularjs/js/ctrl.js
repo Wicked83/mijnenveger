@@ -1,30 +1,34 @@
 
-app.controller('mijnenCtrl', ['$interval', '$http', function($interval, $http) {
+app.controller('mijnenCtrl', ['$interval', '$http', '$mdDialog', function($interval, $http, $mdDialog) {
   var self = this;
   this.naam = '';
   this.spel = null;
-  this.tijd = 0;
+  // this.tijd = 0;
   this.interval = null;
   this.running = true;
   this.top3 = [];
-  this.showCtrl1 = true;
-  this.showCtrl2 = false;
+  this.activeTab = 0;
+  // this.showCtrl1 = true;
+  // this.showCtrl2 = false;
   this.fullLijst = {};
   this.sortOptie = 'naam';
-  // this.apiUrl = 'http://192.168.23.124:1111';
-  this.apiUrl = 'http://localhost:1111';
-  this.toggleViewCtrl = function(tabNum) {
-    switch (tabNum) {
-      case 1:
-        this.showCtrl1 = true;
-        this.showCtrl2= false;
-        break;
-      case 2:
-        this.showCtrl1 = false;
-        this.showCtrl2= true;
-        break;
-      default:
-    }
+  this.apiUrl = 'http://192.168.23.124:1111';
+  // this.toggleViewCtrl = function(tabNum) {
+  //   switch (tabNum) {
+  //     case 1:
+  //       this.showCtrl1 = true;
+  //       this.showCtrl2= false;
+  //       break;
+  //     case 2:
+  //       this.showCtrl1 = false;
+  //       this.showCtrl2= true;
+  //       break;
+  //     default:
+  //   }
+  // };
+  this.changeActiveTab = function(tabNum) {
+    // angular.element(document.getElementsByTagName('md-tabs')[0]).attr('md-selected', tabNum);
+    this.activeTab = tabNum;
   };
   this.stuurData = function() {
     $http({
@@ -32,7 +36,7 @@ app.controller('mijnenCtrl', ['$interval', '$http', function($interval, $http) {
       url: this.apiUrl + '/nieuw',
       data:  {
         naam: this.spel.spelersnaam,
-        tijd: this.tijd,
+        tijd: this.spel.speltijd,
         rijen: this.spel.rijen,
         kolommen: this.spel.kolommen,
         bommen: this.spel.bommen
@@ -94,6 +98,9 @@ app.controller('mijnenCtrl', ['$interval', '$http', function($interval, $http) {
   this.startGame = function() {
     this.spel = new Spel(this.naam, this.bommen, this.rijen, this.kolommen);
     this.saveConfig();
+    this.changeActiveTab(2);
+    // this.naam = '';
+    this.running = true;
   };
   this.loadConfig = function() {
     var config = JSON.parse(localStorage.getItem('bordConfig'));
@@ -110,28 +117,42 @@ app.controller('mijnenCtrl', ['$interval', '$http', function($interval, $http) {
     localStorage.setItem('bordConfig', JSON.stringify(config));
 };
   this.handleLC = function(x, y) {
-    this.startTimer(this.spel.timer.starten);
-    this.spel.vakjeOmdraaien(x, y);
-    // this.spel.zoek(x, y);
-    if (this.spel.boem || this.spel.win) {
-      this.stopTimer();
-      if (this.spel.win) {
-        this.stuurData();
-
-        this.toggleViewCtrl(2);
-        this.kreegTop3('', this.rijen,this.kolommen,this.bommen);
+    if (this.running) {
+      this.startTimer(this.spel.timer.starten);
+      this.spel.vakjeOmdraaien(x, y);
+      // this.spel.zoek(x, y);
+      if (this.spel.einde) {
+        this.stopTimer();
+        this.showAlert('Booommmmmm!!!', 'You lose!!!');
       }
     }
   };
   this.handleRC = function(vak) {
-    vak.vlag();
+    if (this.running) {
+      var currVal = vak.symboolBepalen();
+      vak.vlag();
+      if (vak.symboolBepalen() == 'v') {
+        this.spel.markedVakjes++;
+      } else {
+        if (currVal == 'v') {
+          this.spel.markedVakjes--;
+        }
+      }
+      if (this.spel.winControle()) {
+        this.stopTimer();
+        this.showAlert('Congratulations!!!', 'You win!!!');
+        this.stuurData();
+        this.changeActiveTab(1);
+        this.kreegTop3('', this.rijen,this.kolommen,this.bommen);
+      }
+    }
   };
   this.startTimer = function (func) {
     this.running = true;
     if (!this.interval) {
       func();
       this.interval = $interval(() => {
-              this.tijd = this.spel.timer.seconden;
+              this.spel.speltijd = this.spel.timer.seconden;
           }, 1000)
     }
   };
@@ -140,6 +161,20 @@ app.controller('mijnenCtrl', ['$interval', '$http', function($interval, $http) {
     $interval.cancel(this.interval);
     this.interval = null;
     this.running = false;
+  };
+
+  this.showAlert = function(title, text) {
+      alert = $mdDialog.alert({
+        title: title,
+        textContent: text,
+        ok: 'Close'
+      });
+
+      $mdDialog
+        .show( alert )
+        .finally(function() {
+          alert = undefined;
+        });
   };
 
   this.loadConfig();

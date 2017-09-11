@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="node_modules/angular-material/angular-material.min.css" />
 
   <!-- <link rel="stylesheet" href="node_modules/md-data-table/dist/md-data-table-style.css" /> -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous"> -->
 
   <link rel="stylesheet" href="css/style.min.css" />
   <script src="node_modules/jquery/dist/jquery.min.js"></script>
@@ -24,9 +24,9 @@
   <!-- <script src="node_modules/md-data-table/dist/md-data-table-templates.js"></script> -->
   <!-- <script src="node_modules/md-data-table/dist/md-data-table.js"></script> -->
 
-  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script> -->
 
   <script src="js/app.js"></script>
   <script src="../model/modelSpel.js"></script>
@@ -41,20 +41,8 @@
        ng-app="mijnenApp"
        ng-controller="mijnenCtrl as ctrl"
        ng-cloack>
-    <div id="message">
-      <h1 id="message_lose"
-          ng-show="ctrl.spel.boem"
-          class="animated bounceIn bounceOut">
-          BOOOOOMMMMM!!! GAME OVER!!!
-      </h1>
-      <h1 id="message_win"
-          ng-show="ctrl.spel.win"
-          class="animated bounceIn bounceOut">
-          YOU WIN!!!
-      </h1>
-    </div>
-    <md-tabs md-dynamic-height md-center-tabs>
-      <md-tab md-selected>
+    <md-tabs md-selected="ctrl.activeTab" md-dynamic-height md-center-tabs>
+      <md-tab>
         <md-tab-label>
           Controls
         </md-tab-label>
@@ -108,7 +96,9 @@
               </md-radio-button>
             </md-radio-group>
             <md-input-container ng-show="ctrl.sortOptie == 'naam'">
-              <md-select ng-model="ctrl.namen" placeholder="Select a naam">
+              <md-select ng-model="ctrl.namen"
+                         ng-change="ctrl.kreegTop3(ctrl.namen)"
+                          placeholder="Select a naam">
                 <md-option ng-value="nm" ng-repeat="nm in ctrl.fullLijst.namen | orderBy">{{ nm }}</md-option>
               </md-select>
             </md-input-container>
@@ -137,7 +127,7 @@
             </div>
           </form>
 
-        <table class="table">
+        <table>
           <thead>
             <tr>
               <td>Name</td>
@@ -153,33 +143,42 @@
         </table>
         </md-tab-body>
       </md-tab>
+      <md-tab>
+        <md-tab-label>
+          Play
+        </md-tab-label>
+        <md-tab-body>
+            <div id="timer" ng-hide="ctrl.spel.win"><span >{{ctrl.spel.speltijd}}</span>
+              <button ng-click="ctrl.stopTimer()"
+                      ng-show="ctrl.running"
+                      ng-disabled="ctrl.spel.boem || ctrl.spel.win">
+                      Pause
+              </button>
+              <button ng-click="ctrl.startTimer(ctrl.spel.timer.hernemen)"
+                      ng-show="!ctrl.running && ctrl.spel.speltijd"
+                      ng-disabled="ctrl.spel.boem || ctrl.spel.win">
+                      Continue
+              </button>
+              Marked cells: <span>{{ctrl.spel.bommen - ctrl.spel.markedVakjes}}</span>
+            </div>
+            <table>
+              <tr ng-repeat="rij in ctrl.spel.bord">
+                <td ng-repeat="vak in rij"
+                    ng-class="{omgedraaid: vak.omgedraaid, nietOmgedraaid: !vak.omgedraaid}"
+                    ng-click="ctrl.handleLC($parent.$index, $index)"
+                    ng-right-click="ctrl.handleRC(vak)">
+                  <span ng-show="vak.omgedraaid">{{vak.bomBuren}}</span>
+                  <span ng-show="!vak.omgedraaid">{{vak.symboolBepalen()}}</span>
+                  <span ng-show="ctrl.spel.boem && vak.bom">B</span>
+                </td>
+              </tr>
+            </table>
+            <md-button ng-click="ctrl.startGame()" ng-show="ctrl.spel.boem">Restart game</md-button>
+          </md-tab-body>
+        </md-tab>
     </md-tabs>
 
-    <div id="spelBoard" ng-show="ctrl.spel">
-      <div id="timer" ng-hide="ctrl.spel.win"><span >{{ctrl.tijd}}</span>
-        <button ng-click="ctrl.stopTimer()"
-                ng-show="ctrl.running"
-                ng-disabled="ctrl.spel.boem || ctrl.spel.win">
-                Pause
-        </button>
-        <button ng-click="ctrl.startTimer(ctrl.spel.timer.hernemen)"
-                ng-show="!ctrl.running && ctrl.tijd"
-                ng-disabled="ctrl.spel.boem || ctrl.spel.win">
-                Continue
-        </button>
-      </div>
-      <table ng-show="ctrl.running || ctrl.spel.boem">
-        <tr ng-repeat="rij in ctrl.spel.bord">
-          <td ng-repeat="vak in rij"
-              ng-class="{omgedraaid: vak.omgedraaid, nietOmgedraaid: !vak.omgedraaid}"
-              ng-click="ctrl.handleLC($parent.$index, $index)"
-              ng-right-click="ctrl.handleRC(vak)">
-            <span ng-show="vak.omgedraaid">{{vak.bomBuren}}</span>
-            <span ng-show="!vak.omgedraaid">{{vak.symboolBepalen()}}</span>
-            <span ng-show="ctrl.spel.boem && vak.bom">B</span>
-          </td>
-        </tr>
-      </table>
+
       <!-- <md-grid-list md-cols="ctrl.spel.kolommen"  md-row-height="fit">
         <md-grid-tile
         ng-repeat="vak in ctrl.tableFlaten()"
