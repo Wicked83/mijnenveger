@@ -48,11 +48,13 @@ $(function() {
                             var rij = +this.id.split('_')[0];
                             var kolom = +this.id.split('_')[1];
                             console.log("links ", rij, ": ", kolom);
-                            $('#' + this.id).attr('class', 'clicked');
-                            $('#' + this.id);
-                            spel.vakjeOmdraaien(rij, kolom);
-                            grafischeWeergaveAanpassen();
-                            controleerEindeSpel();
+                            if (spel.bord[rij][kolom].symboolBepalen() != 'v') {
+                                $('#' + this.id).attr('class', 'clicked');
+                                $('#' + this.id);
+                                spel.vakjeOmdraaien(rij, kolom);
+                                grafischeWeergaveAanpassen();
+                                controleerEindeSpel();
+                            }
                         }).contextmenu(function(event) {
                             var rij = this.id.split('_')[0]
                             var kolom = this.id.split('_')[1]
@@ -65,17 +67,24 @@ $(function() {
                                 spel.winControle();
                                 controleerEindeSpel();
                                 $(this).addClass('alert');
+                                // $(this).on('click', function () { prop("disabled", false) });
+                                // $(this).prop('click()', 'disabled')
+                                $(this).attr({ disabled: true })
+                                    // $(this).attr('disabled', 'disabled')
+                                console.log(this)
+                                console.log($(this))
                             } else if (spel.bord[rij][kolom].symboolBepalen() == '?') {
                                 tellerV--;
                                 spel.markedVakjes--;
                                 spel.winControle();
                                 controleerEindeSpel();
+                                $(this).removeClass('alert');
                                 $(this).addClass('warning');
-                                $(this).removeClass('alert')
+                                $(this).prop('disabled', true)
+                            } else {
+                                $(this).removeClass('warning');
                             }
-                            $(this).removeClass('warning');
                             $("#showBombs").html("Resterende bommen: " + (aantalBommen - tellerV));
-
                         })
                     );
                 }
