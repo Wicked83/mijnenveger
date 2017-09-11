@@ -9,7 +9,7 @@ $(function () {
 
     haalUitLocalStorage();
 
-    $("#divSpel").hide();
+    $("#divSpelbord").hide();
 
     $("#btnStart").click(function () {
         if ($('#invoerBommen').val() < 1 || $('#invoerBommen').val() >= $('#invoerRijen').val() * $('#invoerKolommen').val()) {
@@ -22,15 +22,15 @@ $(function () {
             console.log('product: ' + $('#invoerRijen').val() * $('#invoerKolommen').val());
 
             $('#speelveld').remove();
-            $("#divSpel").show();
+            $("#divSpelbord").show();
             var tellerV = 0;
-            var aantalRijen = $("#invoerRijen").val();
-            var aantalKolommen = $("#invoerKolommen").val();
-            var aantalBommen = $("#invoerBommen").val();
-            document.getElementById("aantalNogTeMarkerenBommen").innerHTML = aantalBommen;
+            var aantalRijen = +$("#invoerRijen").val();
+            var aantalKolommen = +$("#invoerKolommen").val();
+            var aantalBommen = +$("#invoerBommen").val();
+            document.getElementById("showBombs").innerHTML = "Resterende bommen: " + aantalBommen;
             var spelersnaam = $("#invoerNaam").val();
 
-            $('#divSpel').append($("<table>").attr('id', 'speelveld'));
+            $('#divSpelbord').append($("<table>").attr('id', 'speelveld'));
 
             $("#speelveld").one("mousedown", function () {
                 timer.starten();
@@ -42,8 +42,8 @@ $(function () {
                     console.log(i + '.' + y)
                     $('#' + i).append($('<td>').attr('id', i + '_' + y)
                         .click(function (event) {
-                            var rij = this.id.split('_')[0];
-                            var kolom = this.id.split('_')[1];
+                            var rij = +this.id.split('_')[0];
+                            var kolom = +this.id.split('_')[1];
                             console.log("links ", rij, ": ", kolom);
                             $('#' + this.id).attr('class', 'clicked');
                             $('#' + this.id);
@@ -66,6 +66,7 @@ $(function () {
                             }
                             $(this).removeClass('warning')
                             document.getElementById("aantalNogTeMarkerenBommen").innerHTML = aantalBommen - tellerV;
+
                         })
                     );
                 }
@@ -104,17 +105,17 @@ $(function () {
             timer = new MijnTimer();
 
             interval = setInterval(function () {
-                document.getElementById("toonTijd").innerHTML = timer.seconden;
+                document.getElementById("showTime").innerHTML = "Verstreken tijd: " + timer.seconden;
             }, 1000);
 
             $("#btnPauzeer").click(function () {
                 timer.stoppen();
-                $("#divSpel").hide();
+                $("#divSpelbord").hide();
             });
 
             $("#btnHerneem").click(function () {
                 timer.hernemen();
-                $("#divSpel").show();
+                $("#divSpelbord").show();
             });
 
             function controleerEindeSpel() {
@@ -215,8 +216,8 @@ $(function () {
 function haalUitLocalStorage() {
     var config = JSON.parse(localStorage.getItem("configuratie"));
     if (config) {
-        $("#invoerRijen").val(config.rijen);
-        $("#invoerKolommen").val(config.kolommen);
-        $("#invoerBommen").val(config.bommen);
+        $("#invoerRijen").val(+config.rijen);
+        $("#invoerKolommen").val(+config.kolommen);
+        $("#invoerBommen").val(+config.bommen);
     }
 }

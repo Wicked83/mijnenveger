@@ -32,10 +32,8 @@ Spel.prototype.ontdekVeiligVakjes = function (rij, kolom) {
 
   veiligeBuren.forEach(koords => {
     this.vakjeOmdraaien(koords[0], koords[1]);
-
-
   });
-  this.winControle();
+  // this.winControle();
 };
 
 
@@ -81,8 +79,10 @@ Spel.prototype.contoleerBuren = function (rij, kolom) {
   var veiligeBuren = [];
   for (var i = rij - 1; i <= rij + 1; i++) {
     if (this.bord[i]) {
+      // console.log(i)
       for (var j = kolom - 1; j <= kolom + 1; j++) {
         if (this.bord[i][j]) {
+          // console.log(j)
           if (this.bord[i][j].bom) {
             buurBommen++;
           } else {
