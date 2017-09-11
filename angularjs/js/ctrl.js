@@ -121,7 +121,7 @@ app.controller('mijnenCtrl', ['$interval', '$http', '$mdDialog', function($inter
       this.startTimer(this.spel.timer.starten);
       this.spel.vakjeOmdraaien(x, y);
       // this.spel.zoek(x, y);
-      if (this.spel.boem || this.spel.win) {
+      if (this.spel.einde) {
         this.stopTimer();
         this.showAlert('Booommmmmm!!!', 'You lose!!!');
       }

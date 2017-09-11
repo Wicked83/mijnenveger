@@ -13,8 +13,8 @@ function Spel(spelersnaam = "Joske", bommen = 10, rijen = 10, kolommen = 10) {
   this.bord = this.initialiseren();
   this.verdelingBommen();
   this.timer = new MijnTimer();
-  this.boem = false;
-  this.win = false;
+  this.einde = false;
+  // this.win = false;
   // this.omgedraaideVakjes = 0;
   this.markedVakjes = 0;
 }
@@ -46,7 +46,7 @@ Spel.prototype.winControle = function() {
         return false;
       }
     }
-    this.win = true;
+    // this.win = true;
     return true;
   }
 };
@@ -57,7 +57,7 @@ Spel.prototype.vakjeOmdraaien = function(rij, kolom) {
   // kolom = +kolom;
   if (!this.bord[rij][kolom].omgedraaid && this.bord[rij][kolom].symboolBepalen() != 'v') {
     if (this.bord[rij][kolom].bom) {
-      this.boem = true;
+      this.einde = true;
       // return false;
     } else {
       // console.log('fie omdraaien')
