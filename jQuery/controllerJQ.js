@@ -17,7 +17,7 @@ $(function() {
         } else {
 
             // console.log("bommen: " + $('#invoerBommen').val());
-            // console.log("rijen: " + $('#invoerRijen').val());
+            // console.log("rijen: " + $('#invoerRijen').val()); 
             // console.log("kolommen: " + $('#invoerKolommen').val());
             // console.log('product: ' + $('#invoerRijen').val() * $('#invoerKolommen').val());
 
@@ -55,7 +55,9 @@ $(function() {
                                 $('#' + this.id);
                                 spel.vakjeOmdraaien(rij, kolom);
                                 grafischeWeergaveAanpassen();
-                                controleerEindeSpel();
+                                spel.winControle();
+                                var klik = "links";
+                                controleerEindeSpel(klik);
                             }
                         }).contextmenu(function(event) {
                             var rij = this.id.split('_')[0]
@@ -67,7 +69,9 @@ $(function() {
                             if (spel.bord[rij][kolom].symboolBepalen() == 'v') {
                                 tellerV++;
                                 spel.markedVakjes++;
-                                controleerEindeSpel(rij, kolom);
+                                spel.winControle();
+                                var klik = "rechts";
+                                controleerEindeSpel(klik);
                                 $(this).addClass('alert');
                                 // $(this).on('click', function () { prop("disabled", false) });
                                 // $(this).prop('click()', 'disabled')
@@ -81,7 +85,9 @@ $(function() {
                             } else if (spel.bord[rij][kolom].symboolBepalen() == '?') {
                                 tellerV--;
                                 spel.markedVakjes--;
-                                controleerEindeSpel(rij, kolom);
+                                spel.winControle();
+                                var klik = "rechts";
+                                controleerEindeSpel(klik);
                                 $(this).removeClass('alert');
                                 $(this).addClass('warning');
                                 $(this).prop('disabled', true)
@@ -144,10 +150,14 @@ $(function() {
                 $("#speelveld").show()
             });
 
-            function controleerEindeSpel(rij, kolom) {
-                console.log("Dit is spel winControle uit controleerEindeSpel: " + spel.winControle());
-                if (spel.winControle(rij, kolom) || spel.boem) {
+            function controleerEindeSpel(klik) {
+                if (spel.einde) {
                     timer.stoppen();
+                    if (klik == "links") {
+                        $("#divSpelbord").html("YOU LOOOSE !!!");
+                    } else {
+                        $("#divSpelbord").html("YOU WIN !!!");
+                    }
                 }
             }
 
