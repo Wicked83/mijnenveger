@@ -11,7 +11,7 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 
 // enable cross domain calls (CORS = cross origin resource sharing)
-app.all('/*', function (req, res, next) {
+app.all('/*', function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
@@ -27,67 +27,62 @@ app.get('/bommen', vulBommenIn);
 app.post('/nieuw', nieuweSpelerInvoegen);
 
 function haalNamenLijst(req, res) {
-    mongoClient.connect(url, function (error, db) {
+    mongoClient.connect(url, function(error, db) {
         console.log('connected to db');
         var collection = db.collection('mijnenveger');
-        collection.distinct('naam', (function (err, docs) {
+        collection.distinct('naam', (function(err, docs) {
             console.log(docs);
             res.send(JSON.stringify(docs));
             db.close();
-        })
-        )
+        }))
     })
 }
+
 function vulRijenIn(req, res) {
-    mongoClient.connect(url, function (error, db) {
+    mongoClient.connect(url, function(error, db) {
         console.log('connected to db');
         var collection = db.collection('mijnenveger');
-        collection.distinct('rijen', (function (err, docs) {
+        collection.distinct('rijen', (function(err, docs) {
             console.log(docs);
             res.send(docs);
             db.close();
-        })
-        )
+        }))
     })
 }
+
 function vulKolommennIn(req, res) {
     var rij = +req.query.rij; // ok
-    mongoClient.connect(url, function (error, db) {
+    mongoClient.connect(url, function(error, db) {
         console.log('connected to db');
         var collection = db.collection('mijnenveger');
-        collection.aggregate(
-            {
+        collection.aggregate({
                 $match: { rijen: rij }
-            },
-            {
+            }, {
                 $group: { _id: '$kolommen' }
-            }, function (err, docs) {
+            }, function(err, docs) {
                 // console.log(docs);
                 res.send(JSON.stringify(docs));
                 db.close();
-            }
-        )//.toArray()
+            }) //.toArray()
     })
 }
-function vulBommenIn(req, res) {
-  var rij = +req.query.rij;
-  var kolom = +req.query.kolom;
 
-    mongoClient.connect(url, function (error, db) {
+function vulBommenIn(req, res) {
+    var rij = +req.query.rij;
+    var kolom = +req.query.kolom;
+
+    mongoClient.connect(url, function(error, db) {
         console.log('connected to db');
         var collection = db.collection('mijnenveger');
-        collection.aggregate(
-            {
-                $match: { rijen: rij, kolommen: kolom }
-            },
-            {
-                $group: { _id: '$bommen' }
-            }, function (err, docs) {
-                // console.log(docs);
-                res.send(JSON.stringify(docs));
-                db.close();
-            }
-        )
+        collection.aggregate({
+            $match: { rijen: rij, kolommen: kolom }
+        }, {
+            $group: { _id: '$bommen' }
+        }, function(err, docs) {
+            // console.log(docs);
+            res.send(JSON.stringify(docs));
+            db.close();
+        })
     })
 }
 
@@ -95,16 +90,27 @@ function haalDeelnemerlijstOp(request, response) {
 
     console.log(request.query.naam)
     var naam = request.query.naam;
-    var bommen = +request.query.bommen, rijen = +request.query.rijen, kolommen = +request.query.kolommen;
-    var query = naam ? { 'naam': naam } : bommen ? { 'bommen': bommen, 'rijen': rijen, 'kolommen': kolommen } : {};
-    // var query = { 'naam': naam };
+    var bommen = +request.query.bommen,
+        rijen = +request.query.rijen,
+        kolommen = +request.query.kolommen;
 
-    mongoClient.connect(url, function (error, db) {
+    var query = {};
+    if (naam && bommen) {
+        query = { 'naam': new RegExp(naam, "i"), 'bommen': bommen, 'rijen': rijen, 'kolommen': kolommen };
+    } else {
+        if (naam) {
+            query = { 'naam': new RegExp(naam, "i") };
+        } else if (bommen) {
+            query = { 'bommen': bommen, 'rijen': rijen, 'kolommen': kolommen };
+        }
+    }
+
+    mongoClient.connect(url, function(error, db) {
         console.log('connected to db');
         var collection = db.collection('mijnenveger');
         collection.find(query)
             .sort({ bommen: -1, kolommen: -1, rijen: -1, tijd: 1 })
-            .toArray(function (err, docs) {
+            .toArray(function(err, docs) {
                 console.log('deelnemerlijst gevonden');
                 response.send(JSON.stringify(docs));
                 /* var resultaat = JSON.stringify(docs);
@@ -117,74 +123,67 @@ function haalDeelnemerlijstOp(request, response) {
 /* 3/config, orden tijd, push & pop */
 function nieuweSpelerInvoegen(req, res) {
     // console.log('you are here');
-    mongoClient.connect(url, function (err, db) {
+    mongoClient.connect(url, function(err, db) {
         console.log('nieuwe invoer opgestart');
-        console.log(req.body.naam)
+        console.log(req.body.naam);
         var collection = db.collection('mijnenveger');
         collection.insertOne({
-            naam: req.body.naam,
-            tijd: +req.body.tijd,
-            bommen: +req.body.bommen,
-            rijen: +req.body.rijen,
-            kolommen: +req.body.kolommen,
-            // bom: req.body.bom
-        }, function (err, r) {
-            // console.log("toegevoegd: " + r.insertedCount);
-            console.log("res: " + res);
-            console.log("tijdelijk toegevoegd");
-            /* console.log(req);
-            console.log("req.body: " + req.body);
-            console.log("req.body.naam: " + req.body.naam); */
-            if (!err) {
-                /* opvragen & vgl */
-                var bommen = +req.body.bommen,
-                    rijen = +req.body.rijen,
-                    kolommen = +req.body.kolommen;
-                var query = { 'bommen': bommen, 'rijen': rijen, 'kolommen': kolommen };
-                collection.find(query).sort({ tijd: -1 }).toArray(function (err, docs) {
-                    if (!err) {
-                        // console.log(docs)
-                        if (docs.length > 3) {
-                            var melding;
-                            if (+req.body.tijd < docs[0].tijd) {
-                                melding = "je staat in de top 3";
-                            } else {
-                                melding = "helaas... je staat niet in de top 3";
-                            }
-                            collection.deleteOne(docs[0], function (err, r) {
-                                if (!err) {
-                                    res.end(JSON.stringify({ message: melding }))
-                                    // TODO (optioneel): melden bijgevoegd in top3?
+                naam: req.body.naam,
+                tijd: +req.body.tijd,
+                bommen: +req.body.bommen,
+                rijen: +req.body.rijen,
+                kolommen: +req.body.kolommen,
+                // bom: req.body.bom
+            }, function(err, r) {
+                // console.log("toegevoegd: " + r.insertedCount);
+                console.log("res: " + res);
+                console.log("tijdelijk toegevoegd");
+                /* console.log(req);
+                console.log("req.body: " + req.body);
+                console.log("req.body.naam: " + req.body.naam); */
+                if (!err) {
+                    /* opvragen & vgl */
+                    var bommen = +req.body.bommen,
+                        rijen = +req.body.rijen,
+                        kolommen = +req.body.kolommen;
+                    var query = { 'bommen': bommen, 'rijen': rijen, 'kolommen': kolommen };
+                    collection.find(query).sort({ tijd: -1 }).toArray(function(err, docs) {
+                        if (!err) {
+                            // console.log(docs)
+                            if (docs.length > 3) {
+                                var melding;
+                                if (+req.body.tijd < docs[0].tijd) {
+                                    melding = "je staat in de top 3";
                                 } else {
-                                    res.end(JSON.stringify({ message: "Er is iets foutgelopen bij het aanpassen van de nieuwe top3" }));
-                                    console.log('error: ' + err)
+                                    melding = "helaas... je staat niet in de top 3";
                                 }
-                                db.close();
-                            })
+                                collection.deleteOne(docs[0], function(err, r) {
+                                    if (!err) {
+                                        res.end(JSON.stringify({ message: melding }))
+                                            // TODO (optioneel): melden bijgevoegd in top3?
+                                    } else {
+                                        res.end(JSON.stringify({ message: "Er is iets foutgelopen bij het aanpassen van de nieuwe top3" }));
+                                        console.log('error: ' + err);
+                                    }
+                                    db.close();
+                                })
+                            } else {
+                                res.end(JSON.stringify({ message: "je staat in de top3" }));
+                            }
                         } else {
-                            res.end(JSON.stringify({ message: "je staat in de top3" }));
+                            res.end(JSON.stringify({ message: "Er is iets foutgelopen bij het opvragen van de nieuwe top3" }));
+                            console.log('error: ' + err)
+                            db.close();
                         }
-                    } else {
-                        res.end(JSON.stringify({ message: "Er is iets foutgelopen bij het opvragen van de nieuwe top3" }));
-                        console.log('error: ' + err)
-                        db.close();
-                    }
+                    });
+                } else {
+                    res.end(JSON.stringify({ message: "Er is iets foutgelopen bij het toevoegen aan de top3" }));
+                    console.log('error: ' + err);
+                    db.close();
+                }
 
-                });
-
-            } else {
-                res.end(JSON.stringify({ message: "Er is iets foutgelopen bij het toevoegen aan de top3" }));
-                console.log('error: ' + err);
-                db.close();
-            }
-
-        })
-
-
-
-        // if (tijd < collection.find({}))
-
-
+            })
+            // if (tijd < collection.find({}))
     })
 }
 
