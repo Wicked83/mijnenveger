@@ -45,11 +45,11 @@ Spel.prototype.winControle = function() {
             var k = this.bomCoords[i];
             if (this.bord[k[0]][k[1]].symboolBepalen() !== 'v') {
                 result = false;
+                break;
             }
         }
-        // this.einde = true;
-        // return true;
         this.einde = result;
+        // return true;
     }
 };
 
