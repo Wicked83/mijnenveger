@@ -41,7 +41,7 @@
        ng-app="mijnenApp"
        ng-controller="mijnenCtrl as ctrl"
        ng-cloack>
-    <md-tabs md-selected="ctrl.activeTab" md-dynamic-height md-center-tabs>
+    <md-tabs md-selected="ctrl.activeTab" md-dynamic-height md-center-tabs class="centered-content" md-stretch-tabs="never">
       <md-tab>
         <md-tab-label>
           Controls
@@ -127,7 +127,7 @@
             </div>
           </form>
 
-        <table>
+        <table class="bord-table">
           <thead>
             <tr>
               <td>Name</td>
@@ -151,29 +151,31 @@
             <div id="timer" ng-hide="ctrl.spel.win"><span >{{ctrl.spel.speltijd}}</span>
               <button ng-click="ctrl.stopTimer()"
                       ng-show="ctrl.running"
-                      ng-disabled="ctrl.spel.boem || ctrl.spel.win">
+                      ng-disabled="ctrl.spel.einde || ctrl.spel.win">
                       Pause
               </button>
               <button ng-click="ctrl.startTimer(ctrl.spel.timer.hernemen)"
                       ng-show="!ctrl.running && ctrl.spel.speltijd"
-                      ng-disabled="ctrl.spel.boem || ctrl.spel.win">
+                      ng-disabled="ctrl.spel.einde || ctrl.spel.win">
                       Continue
               </button>
               Marked cells: <span>{{ctrl.spel.bommen - ctrl.spel.markedVakjes}}</span>
             </div>
-            <table>
+            <table class="bord-table">
               <tr ng-repeat="rij in ctrl.spel.bord">
                 <td ng-repeat="vak in rij"
                     ng-class="{omgedraaid: vak.omgedraaid, nietOmgedraaid: !vak.omgedraaid}"
                     ng-click="ctrl.handleLC($parent.$index, $index)"
                     ng-right-click="ctrl.handleRC(vak)">
-                  <span ng-show="vak.omgedraaid">{{vak.bomBuren}}</span>
-                  <span ng-show="!vak.omgedraaid">{{vak.symboolBepalen()}}</span>
-                  <span ng-show="ctrl.spel.boem && vak.bom">B</span>
+                  <span class="fixed" ng-show="vak.omgedraaid">{{vak.bomBuren}}</span>
+                  <span class="fixed" ng-show="!vak.omgedraaid">{{vak.symboolBepalen()}}</span>
+                  <span ng-show="ctrl.spel.einde && vak.bom">B</span>
+
+                  </div>
                 </td>
               </tr>
             </table>
-            <md-button ng-click="ctrl.startGame()" ng-show="ctrl.spel.boem">Restart game</md-button>
+            <md-button ng-click="ctrl.startGame()" ng-show="ctrl.spel.einde">Restart game</md-button>
           </md-tab-body>
         </md-tab>
     </md-tabs>
@@ -187,11 +189,11 @@
         >
           <span ng-show="vak.omgedraaid">{{vak.bomBuren}}</span>
           <span ng-show="!vak.omgedraaid">{{vak.symboolBepalen()}}</span>
-          <span ng-show="ctrl.spel.boem && vak.bom">B</span>
+          <span ng-show="ctrl.spel.einde && vak.bom">B</span>
         </md-grid-tile>
       </md-grid-list> -->
 
-      <!-- <button class="button" ng-click="ctrl.reload()" ng-show="ctrl.spel.boem || ctrl.spel.win">Start new game</button> -->
+      <!-- <button class="button" ng-click="ctrl.reload()" ng-show="ctrl.spel.einde || ctrl.spel.win">Start new game</button> -->
     </div>
   </div>
 
