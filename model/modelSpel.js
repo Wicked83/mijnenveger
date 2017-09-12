@@ -39,15 +39,17 @@ Spel.prototype.ontdekVeiligVakjes = function(rij, kolom) {
 
 
 Spel.prototype.winControle = function() {
+  var result = true;
     if (this.markedVakjes == this.bommen) {
         for (var i = 0; i < this.bommen; i++) {
             var k = this.bomCoords[i];
             if (this.bord[k[0]][k[1]].symboolBepalen() !== 'v') {
-                return false;
+                result = false;
             }
         }
         // this.einde = true;
-        return true;
+        // return true;
+        this.einde = result;
     }
 };
 
@@ -135,12 +137,12 @@ Vak.prototype.symboolBepalen = function() {
 };
 
 Vak.prototype.omdraai = function() {
-    if (this.symboolBepalen() == 'v') {} else if (this.bom) {
+    if (this.bom) {
         this.einde = true;
-        return false;
+        // return false;
     } else {
         this.omgedraaid = true;
-        return true;
+        // return true;
     }
 };
 
