@@ -46,8 +46,8 @@ Spel.prototype.winControle = function() {
                 return false;
             }
         }
-        this.einde = true;
-        //return true;
+        // this.einde = true;
+        return true;
     }
 };
 
