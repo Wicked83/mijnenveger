@@ -39,15 +39,17 @@ Spel.prototype.ontdekVeiligVakjes = function(rij, kolom) {
 
 
 Spel.prototype.winControle = function() {
+    var result = true;
     if (this.markedVakjes == this.bommen) {
         for (var i = 0; i < this.bommen; i++) {
             var k = this.bomCoords[i];
             if (this.bord[k[0]][k[1]].symboolBepalen() !== 'v') {
-                return false;
+                result = false;
+                break;
             }
         }
-        // this.einde = true;
-        return true;
+        this.einde = result;
+        // return true;
     }
 };
 
