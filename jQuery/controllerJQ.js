@@ -2,7 +2,7 @@
 Property query van de eerste parameter van de callback functie van methode get stelt de waarden van de doorgestuurde invoervelden voor. (of juister: van de querystring, dit is in de url van een request het gedeelte na het vraagteken, dat bestaat uit key-value paren)
 Om hetzelfde te doen als de form naar de server gestuurd is via een POST, moeten we vooraf module body-parser installeren (npm install body-parser) en gebruiken: */
 
-$(function() {
+$(function () {
 
     var interval;
     var timer;
@@ -11,7 +11,7 @@ $(function() {
 
     $("#divSpelbord").hide();
 
-    $("#btnStart").click(function() {
+    $("#btnStart").click(function () {
         if ($('#invoerBommen').val() < 1 || $('#invoerBommen').val() >= $('#invoerRijen').val() * $('#invoerKolommen').val()) {
             alert('Gelieve het spelidee te respecteren')
         } else {
@@ -35,7 +35,7 @@ $(function() {
 
             $('#divSpelbord').append($("<table>").attr('id', 'speelveld'));
 
-            $("#speelveld").one("mousedown", function() {
+            $("#speelveld").one("mousedown", function () {
                 timer.starten();
             });
 
@@ -45,7 +45,7 @@ $(function() {
                     //console.log(i + '.' + y)
                     // console.log(i + '.' + y)
                     $('#' + i).append($('<td>').attr('id', i + '_' + y)
-                        .click(function(event) {
+                        .click(function (event) {
                             var rij = +this.id.split('_')[0];
                             var kolom = +this.id.split('_')[1];
                             //console.log("links ", rij, ": ", kolom);
@@ -59,13 +59,13 @@ $(function() {
                                 var klik = "links";
                                 controleerEindeSpel(klik);
                             }
-                        }).contextmenu(function(event) {
+                        }).contextmenu(function (event) {
                             var rij = this.id.split('_')[0]
                             var kolom = this.id.split('_')[1]
                             spel.bord[rij][kolom].vlag()
                             $("#" + this.id).html(spel.bord[rij][kolom].symboolBepalen())
-                                //console.log("rechts ", rij, ": ", kolom);
-                                // console.log("rechts ", rij, ": ", kolom);
+                            //console.log("rechts ", rij, ": ", kolom);
+                            // console.log("rechts ", rij, ": ", kolom);
                             if (spel.bord[rij][kolom].symboolBepalen() == 'v') {
                                 tellerV++;
                                 spel.markedVakjes++;
@@ -76,12 +76,12 @@ $(function() {
                                 // $(this).on('click', function () { prop("disabled", false) });
                                 // $(this).prop('click()', 'disabled')
                                 $(this).attr({ disabled: true })
-                                    // $(this).attr('disabled', 'disabled')
-                                    //console.log(this)
-                                    //console.log($(this))
-                                    // $(this).attr('disabled', 'disabled')
-                                    // console.log(this)
-                                    // console.log($(this))
+                                // $(this).attr('disabled', 'disabled')
+                                //console.log(this)
+                                //console.log($(this))
+                                // $(this).attr('disabled', 'disabled')
+                                // console.log(this)
+                                // console.log($(this))
                             } else if (spel.bord[rij][kolom].symboolBepalen() == '?') {
                                 tellerV--;
                                 spel.markedVakjes--;
@@ -111,7 +111,7 @@ $(function() {
                         if (spel.bord[i][y].bomBuren) {
                             //bomburen opsporen
                             $('#' + i + '_' + y).html(spel.bord[i][y].bomBuren)
-                                //console.log(spel.bord[i][y].bomBuren)
+                            //console.log(spel.bord[i][y].bomBuren)
                         }
                     }
                 }
@@ -130,11 +130,13 @@ $(function() {
 
             timer = new MijnTimer();
 
-            interval = setInterval(function() {
-                document.getElementById("showTime").innerHTML = "Verstreken tijd: " + timer.seconden;
+            interval = setInterval(function () {
+                // document.getElementById("showTime").innerHTML = "Verstreken tijd: " + timer.seconden; 
+                // gelijk aan
+                $("#showTime").html("Verstreken tijd: " + timer.seconden);
             }, 1000);
 
-            $("#btnPauzeer").click(function() {
+            $("#btnPauzeer").click(function () {
                 timer.stoppen();
                 // $("#divSpelbord").hide();
                 // $("#divSpelbord").addClass('pauze')
@@ -143,7 +145,7 @@ $(function() {
             });
 
 
-            $("#btnHerneem").click(function() {
+            $("#btnHerneem").click(function () {
                 timer.hernemen();
                 $("#divSpelbord").show();
                 $("#divSpelbord>img").remove()
@@ -154,9 +156,15 @@ $(function() {
                 if (spel.einde) {
                     timer.stoppen();
                     if (klik == "links") {
-                        $("#divSpelbord").html("YOU LOOOSE !!!");
+                        // $("#divSpelbord").html("YOU LOOOSE !!!");
+                        $("#divSpelbord").prepend($('<img>').attr("src", "Images/lose.jpg"));
+                        $("#speelveld").hide();
+
+
                     } else {
-                        $("#divSpelbord").html("YOU WIN !!!");
+                        // $("#divSpelbord").html("YOU WIN !!!")
+                        $("#divSpelbord").prepend($('<img>').attr("src", "Images/win.jpg"));
+                        $("#speelveld").hide();
                     }
                 }
             }
@@ -165,7 +173,7 @@ $(function() {
                 localStorage.setItem("configuratie", JSON.stringify(config));
             }
 
-            $('#getIt').click(function() {
+            $('#getIt').click(function () {
 
                 var naam = $("#dnNaam").val(),
                     bom = $("#dnBom").val(),
@@ -185,10 +193,10 @@ $(function() {
                         "kolommen": kolom
                     },
                     dataType: 'json'
-                }).done(function(param) {
+                }).done(function (param) {
                     //console.log("naam: " + naam)
                     //console.log(param)
-                }).done(function(param) {
+                }).done(function (param) {
                     // console.log("naam: " + naam)
                     // console.log(param)
                     verwerkGegevens(param)
@@ -199,20 +207,20 @@ $(function() {
             function verwerkGegevens(data) {
                 // if ($("#tabelDeelnrs")) {
                 $("#tabelDeelnrs").remove()
-                    // }  // test blijkbaar niet nodig...?
-                    // console.log('data fie is ' + data)
+                // }  // test blijkbaar niet nodig...?
+                // console.log('data fie is ' + data)
                 var arr = data
 
                 $('#getIt').after(($('<table>').attr('id', 'tabelDeelnrs'))
-                        .append($('<thead>')
-                            .append($('<th>').html('Naam'))
-                            .append($('<th>').html('Tijd'))
-                            .append($('<th>').html('Bommen'))
-                            .append($('<th>').html('Rijen'))
-                            .append($('<th>').html('Kolommen')))
-                        .append($('<tbody>').attr('id', 'dlns')))
-                    //console.log(arr)
-                arr.forEach(function(deelnemer) {
+                    .append($('<thead>')
+                        .append($('<th>').html('Naam'))
+                        .append($('<th>').html('Tijd'))
+                        .append($('<th>').html('Bommen'))
+                        .append($('<th>').html('Rijen'))
+                        .append($('<th>').html('Kolommen')))
+                    .append($('<tbody>').attr('id', 'dlns')))
+                //console.log(arr)
+                arr.forEach(function (deelnemer) {
 
                     $('#dlns').append($('<tr>')
                         .append($('<td>').html(deelnemer.naam))
@@ -224,7 +232,7 @@ $(function() {
             }
 
 
-            $('#btnSubmit').click(function(e) {
+            $('#btnSubmit').click(function (e) {
                 // console.log("let's go!: " + e)
                 var naam = $("#naam").val(),
                     bom = $("#bom").val(),
@@ -240,7 +248,7 @@ $(function() {
                         "kolommen": kolom,
                         "tijd": tijd
                     },
-                    success: function() {
+                    success: function () {
                         // console.log('ok')
                     }
                 })
