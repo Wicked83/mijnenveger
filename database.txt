@@ -1,4 +1,5 @@
-ter informatie: queries om collectie te cre�eren en er spelers in te steken
+
+// ter informatie: queries om collectie te cre�eren en er spelers in te steken
 
 // db.getCollection('mijnenveger').drop()
 db.createCollection('mijnenveger')
@@ -96,4 +97,3 @@ db.getCollection('mijnenveger').insert({'naam':'Joske','tijd':18,'bommen':20,'ri
 db.getCollection('mijnenveger').insert({'naam':'Joske','tijd':19,'bommen':20,'rijen':30,'kolommen':40})
 db.getCollection('mijnenveger').insert({'naam':'Joske','tijd':20,'bommen':20,'rijen':30,'kolommen':40})
 db.getCollection('mijnenveger').insert({'naam':'Joske','tijd':2,'bommen':20,'rijen':30,'kolommen':40})
-
