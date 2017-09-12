@@ -120,7 +120,7 @@
               <md-input-container ng-show="ctrl.kolommenSel">
                 <md-select ng-model="ctrl.bommenSel"
                            placeholder="Select a bom"
-                           ng-change="ctrl.kreegTop3(ctrl.namen, ctrl.rijenSel, ctrl.kolommenSel, ctrl.bommenSel)">
+                           ng-change="ctrl.kreegTop3(null, ctrl.rijenSel, ctrl.kolommenSel, ctrl.bommenSel)">
                   <md-option ng-value="b" ng-repeat="b in ctrl.fullLijst.bommen | orderBy: b :true">{{ b }}</md-option>
                 </md-select>
               </md-input-container>
@@ -148,15 +148,16 @@
           Play
         </md-tab-label>
         <md-tab-body>
-            <div id="timer" ng-hide="ctrl.spel.win"><span >{{ctrl.spel.speltijd}}</span>
+            <div ng-show="ctrl.running && !ctrl.spel.einde"><span >{{ctrl.spel.speltijd}}</span>
               <button ng-click="ctrl.stopTimer()"
                       ng-show="ctrl.running"
-                      ng-disabled="ctrl.spel.einde || ctrl.spel.win">
+
+                      ng-disabled="ctrl.spel.einde">
                       Pause
               </button>
               <button ng-click="ctrl.startTimer(ctrl.spel.timer.hernemen)"
                       ng-show="!ctrl.running && ctrl.spel.speltijd"
-                      ng-disabled="ctrl.spel.einde || ctrl.spel.win">
+                      ng-disabled="ctrl.spel.einde">
                       Continue
               </button>
               Marked cells: <span>{{ctrl.spel.bommen - ctrl.spel.markedVakjes}}</span>
@@ -167,11 +168,9 @@
                     ng-class="{omgedraaid: vak.omgedraaid, nietOmgedraaid: !vak.omgedraaid}"
                     ng-click="ctrl.handleLC($parent.$index, $index)"
                     ng-right-click="ctrl.handleRC(vak)">
-                  <span class="fixed" ng-show="vak.omgedraaid">{{vak.bomBuren}}</span>
-                  <span class="fixed" ng-show="!vak.omgedraaid">{{vak.symboolBepalen()}}</span>
+                  <span ng-show="vak.omgedraaid">{{vak.bomBuren}}</span>
+                  <span ng-show="!vak.omgedraaid">{{vak.symboolBepalen()}}</span>
                   <span ng-show="ctrl.spel.einde && vak.bom">B</span>
-
-                  </div>
                 </td>
               </tr>
             </table>
