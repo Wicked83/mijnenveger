@@ -15,3 +15,12 @@ function controleerEindeSpel(klik) {
         }
     }
 }
+
+// interval stond paar regels hoger
+interval = setInterval(function () {
+    // document.getElementById("showTime").innerHTML = "Verstreken tijd: " + timer.seconden; 
+    // gelijk aan
+    $("#showTime").html("Verstreken tijd: " + timer.seconden);
+}, 1000);
+
+// niet echt een belangrijke wijziging
