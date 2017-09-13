@@ -12,8 +12,8 @@ app.controller('mijnenCtrl', ['$interval', '$http', '$mdDialog', function($inter
   // this.showCtrl2 = false;
   this.fullLijst = {};
   this.sortOptie = 'naam';
-  // this.apiUrl = 'http://192.168.23.124:1111';
-  this.apiUrl = 'http://localhost:1111';
+  this.apiUrl = 'http://192.168.23.124:1111';
+  // this.apiUrl = 'http://localhost:1111';
   // this.toggleViewCtrl = function(tabNum) {
   //   switch (tabNum) {
   //     case 1:
@@ -48,12 +48,81 @@ app.controller('mijnenCtrl', ['$interval', '$http', '$mdDialog', function($inter
       // console.log(res);
     });
   };
+
+  //omdraien met vertraging functies
   this.tableReborn = function() {
-    return this.spel.bord.map(rij => rij.map(vak => {
+    return this.spel.bord.map((rij, i) => rij.map((vak, j) => {
       vak.marked = false;
+      // vak.id = i + '' + j;
       return vak;
     }));
   };
+
+  this.zoek = function(rij, kolom, array) {
+    var buurBommen = 0;
+    var veiligeBuren = [];
+    for (var i = rij - 1; i <= rij + 1; i++) {
+        if (this.spel.bord[i]) {
+            for (var j = kolom - 1; j <= kolom + 1; j++) {
+                if (this.spel.bord[i][j]) {
+                    if (this.spel.bord[i][j].bom) {
+                        buurBommen++;
+                    } else {
+                        if (!this.spel.bord[i][j].marked) {
+                            veiligeBuren.push([i, j]);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    this.spel.bord[rij][kolom].bomBuren = buurBommen;
+    veiligeBuren = !buurBommen ? veiligeBuren : [];
+    if (veiligeBuren.length) {
+
+      veiligeBuren.forEach(koords => {
+        var r = koords[0];
+        var k = koords[1];
+        if (!this.spel.bord[r][k].marked && this.spel.bord[r][k].symboolBepalen() != 'v') {
+          this.spel.bord[r][k].marked = true;
+          array.push(this.spel.bord[r][k]);
+          this.zoek(r, k, array);
+        }
+      });
+    }
+
+    return array;
+  };
+
+  this.draaiVakjesTrager = function(vakjes) {
+    // vakjes.forEach(vak => vak.omdraai());
+    (function f(index, array) {
+      if (index < array.length) {
+        setTimeout(function() {
+            array[index].omdraai();
+            // $('#' + array[index].id).addClass('flipOutY');
+          f(index + 1, array);
+        }, 10);
+        // func(100)(array[index]).then(function(vak) {
+        //   vak.omdraai();
+        // });
+        // f(index + 1, array, func);
+
+      }
+    })(0, vakjes);
+
+  };
+
+  // this.delay = function(milliseconds) {
+  //   return function(result) {
+  //     return new Promise(function(resolve, reject) {
+  //       setTimeout(function() {
+  //         resolve(result);
+  //       }, milliseconds);
+  //     });
+  //   };
+  // };
+// end
   this.rijSelChange = function() {
     $http.get(this.apiUrl + '/kolommen?rij=' + this.rijenSel)
     .then(function(response) {
@@ -96,7 +165,6 @@ app.controller('mijnenCtrl', ['$interval', '$http', '$mdDialog', function($inter
   this.startGame = function() {
     this.spel = new Spel(this.naam, this.bommen, this.rijen, this.kolommen);
     this.spel.bord = this.tableReborn();
-    
     this.saveConfig();
     this.changeActiveTab(2);
     // this.naam = '';
@@ -119,8 +187,15 @@ app.controller('mijnenCtrl', ['$interval', '$http', '$mdDialog', function($inter
   this.handleLC = function(x, y) {
     if (this.running) {
       this.startTimer(this.spel.timer.starten);
+
+        // if (!this.spel.bord[x][y].omgedraaid && this.spel.bord[x][y].symboolBepalen() != 'v') {
+        //     this.spel.bord[x][y].omdraai();
+        //     // $('#' + this.spel.bord[x][y].id).addClass('flipOutY');
+        //     this.draaiVakjesTrager(this.zoek(x, y, []));
+        // }
+
       this.spel.vakjeOmdraaien(x, y);
-      // this.spel.zoek(x, y);
+      // console.log(this.zoek(x, y, []));
       if (this.spel.einde) {
         this.stopTimer();
         this.showAlert('Booommmmmm!!!', 'You lose!!!');
@@ -138,7 +213,8 @@ app.controller('mijnenCtrl', ['$interval', '$http', '$mdDialog', function($inter
           this.spel.markedVakjes--;
         }
       }
-      if (this.spel.winControle()) {
+      this.spel.winControle();
+      if (this.spel.einde) {
         this.stopTimer();
         this.showAlert('Congratulations!!!', 'You win!!!');
         this.stuurData();
@@ -180,7 +256,11 @@ app.controller('mijnenCtrl', ['$interval', '$http', '$mdDialog', function($inter
   this.loadConfig();
   this.kreegNamenEnRijen();
 
-}]);
+}]).config(function($mdIconProvider) {
+    $mdIconProvider
+      .icon('play', 'images/ic_play_arrow_black_24px.svg', 24)
+       .icon('pause', 'images/ic_pause_circle_filled_black_24px.svg', 24)
+   });
 
 app.directive('ngRightClick', function($parse) {
   return function(scope, element, attrs) {
