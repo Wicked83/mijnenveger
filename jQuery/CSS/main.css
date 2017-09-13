@@ -64,7 +64,8 @@ td {
 }
 
 table {
-    border: 10px solid#94a2af
+    border: 10px solid#94a2af;
+    width: 80%
 }
 
 input, button {
@@ -80,3 +81,21 @@ input, button {
     background-color: rgb(255, 255, 0);
     color: rgb(255, 125, 10)
 }
+
+table:after {
+    content: "";
+    display: block;
+    padding-bottom: 100%;
+}
+
+table {
+    
+        /* border: 5px solid red; */
+    
+        text-align: center;
+    
+        width: 50vw;
+    
+        height: 50vw;
+    
+      }

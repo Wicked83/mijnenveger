@@ -15,9 +15,6 @@ $(function() {
         if ($('#invoerBommen').val() < 1 || $('#invoerBommen').val() >= $('#invoerRijen').val() * $('#invoerKolommen').val()) {
             alert('Gelieve het spelidee te respecteren')
         } else {
-
-
-
             nieuwSpelUI();
             // console.log("bommen: " + $('#invoerBommen').val());
             // console.log("rijen: " + $('#invoerRijen').val()); 
@@ -118,7 +115,6 @@ $(function() {
                         }
                     }
                 }
-                //}
             }
 
             console.log(spel.bord);
