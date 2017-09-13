@@ -60,7 +60,7 @@ function vulKolommennIn(req, res) {
             }, {
                 $group: { _id: '$kolommen' }
             }, function(err, docs) {
-                // console.log(docs);
+                console.log("Dit zijn de kolommen: " + docs);
                 res.send(JSON.stringify(docs));
                 db.close();
             }) //.toArray()

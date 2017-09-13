@@ -134,22 +134,6 @@ $(function() {
                     document.getElementById("showTime").innerHTML = "Verstreken tijd: " + timer.seconden;
                 }, 1000);
 
-                $("#btnPauzeer").click(function() {
-                    timer.stoppen();
-                    // $("#divSpelbord").hide();
-                    // $("#divSpelbord").addClass('pauze')
-                    $("#divSpelbord").prepend($('<img>').attr("src", "Images/pauze.gif"))
-                    $("#speelveld").hide()
-                });
-
-
-                $("#btnHerneem").click(function() {
-                    timer.hernemen();
-                    $("#divSpelbord").show();
-                    $("#divSpelbord>img").remove()
-                    $("#speelveld").show()
-                });
-
                 function controleerEindeSpel(klik) {
                     if (spel.einde) {
                         timer.stoppen();
@@ -168,6 +152,22 @@ $(function() {
             }
         })
         // einde start button
+
+    $("#btnPauzeer").click(function() {
+        timer.stoppen();
+        // $("#divSpelbord").hide();
+        // $("#divSpelbord").addClass('pauze')
+        $("#divSpelbord").prepend($('<img>').attr("src", "Images/pauze.gif"))
+        $("#speelveld").hide()
+    });
+
+
+    $("#btnHerneem").click(function() {
+        timer.hernemen();
+        $("#divSpelbord").show();
+        $("#divSpelbord>img").remove()
+        $("#speelveld").show()
+    });
 
     function haalUitLocalStorage() {
         var config = JSON.parse(localStorage.getItem("configuratie"));
@@ -258,4 +258,55 @@ $(function() {
         })
     }
 
+    //$('#dnNaam').click(function() {
+    $.ajax({
+            //url: "http://192.168.23.124:1111/namenlijst",
+            url: "http://127.0.0.1:1111/namenlijst",
+            async: true, // 
+            data: {},
+            dataType: 'json'
+        }).done(function(namen) {
+            console.log(namen);
+            for (var i = 0; i < namen.length; i++) {
+                var nieuweOptie = document.createElement('option');
+                nieuweOptie.text = namen[i];
+                nieuweOptie.value = namen[i];
+                document.getElementById("dnNaam").add(nieuweOptie);
+            }
+        })
+        //});
+
+    $.ajax({
+        //url: "http://192.168.23.124:1111/namenlijst",
+        url: "http://127.0.0.1:1111/rijen",
+        async: true, // 
+        data: {},
+        dataType: 'json'
+    }).done(function(rijen) {
+        console.log("Dit zijn de rijen: " + rijen);
+        for (var i = 0; i < rijen.length; i++) {
+            var nieuweOptie = document.createElement('option');
+            nieuweOptie.text = rijen[i];
+            nieuweOptie.value = rijen[i];
+            document.getElementById("dnRij").add(nieuweOptie);
+        }
+    })
+
+    $.ajax({
+        //url: "http://192.168.23.124:1111/namenlijst",
+        url: "http://127.0.0.1:1111/kolommen",
+        async: true, // 
+        data: { "rij": 10 },
+        dataType: 'json'
+    }).done(function(kolommen) {
+        console.log("Dit zijn de kolommen: " + kolommen);
+        for (var i = 0; i < kolommen.length; i++) {
+            var nieuweOptie = document.createElement('option');
+            nieuweOptie.text = kolommen[i];
+            nieuweOptie.value = kolommen[i];
+            document.getElementById("dnKolom").add(nieuweOptie);
+        }
+    })
+
 });
+// einde van de onload

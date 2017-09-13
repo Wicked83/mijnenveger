@@ -167,8 +167,8 @@ function MijnTimer() {
     }
 
     self.stoppen = function() {
-        if (self.interval != null)
-            clearTimeout(self.interval);
+        //if (self.interval != null)
+        clearTimeout(self.interval);
     }
 
     self.hernemen = function() {
