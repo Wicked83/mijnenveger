@@ -52,6 +52,7 @@ function vulRijenIn(req, res) {
 
 function vulKolommennIn(req, res) {
     var rij = +req.query.rij; // ok
+    console.log("Dit is de rij in de restful: " + rij);
     mongoClient.connect(url, function(error, db) {
         console.log('connected to db');
         var collection = db.collection('mijnenveger');
@@ -60,7 +61,7 @@ function vulKolommennIn(req, res) {
             }, {
                 $group: { _id: '$kolommen' }
             }, function(err, docs) {
-                console.log("Dit zijn de kolommen: " + docs);
+                console.log("Dit zijn de kolommen: " + JSON.stringify(docs));
                 res.send(JSON.stringify(docs));
                 db.close();
             }) //.toArray()

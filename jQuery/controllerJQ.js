@@ -10,7 +10,8 @@ $(function() {
     haalUitLocalStorage();
 
     $("#divSpelbord").hide();
-
+    $("#dnKolom").hide();
+    $("#dnBom").hide();
     $("#btnStart").click(function() {
             if ($('#invoerBommen').val() < 1 || $('#invoerBommen').val() >= $('#invoerRijen').val() * $('#invoerKolommen').val()) {
                 alert('Gelieve het spelidee te respecteren')
@@ -23,6 +24,7 @@ $(function() {
 
                 $('#speelveld').remove();
                 $("#divSpelbord").show();
+
                 var tellerV = 0;
                 var aantalRijen = +$("#invoerRijen").val();
                 var aantalKolommen = +$("#invoerKolommen").val();
@@ -258,23 +260,23 @@ $(function() {
         })
     }
 
-    //$('#dnNaam').click(function() {
     $.ajax({
-            //url: "http://192.168.23.124:1111/namenlijst",
-            url: "http://127.0.0.1:1111/namenlijst",
-            async: true, // 
-            data: {},
-            dataType: 'json'
-        }).done(function(namen) {
-            console.log(namen);
-            for (var i = 0; i < namen.length; i++) {
-                var nieuweOptie = document.createElement('option');
-                nieuweOptie.text = namen[i];
-                nieuweOptie.value = namen[i];
-                document.getElementById("dnNaam").add(nieuweOptie);
-            }
-        })
-        //});
+        //url: "http://192.168.23.124:1111/namenlijst",
+        url: "http://127.0.0.1:1111/namenlijst",
+        async: true, // 
+        data: {},
+        dataType: 'json'
+    }).done(function(namen) {
+        console.log(namen);
+        for (var i = 0; i < namen.length; i++) {
+            // var nieuweOptie = document.createElement('option');
+            // nieuweOptie.text = namen[i];
+            // nieuweOptie.value = namen[i];
+            // document.getElementById("dnNaam").add(nieuweOptie);
+            $("#dnNaam").append($("<option>").text(namen[i]).val(namen[i]));
+
+        }
+    })
 
     $.ajax({
         //url: "http://192.168.23.124:1111/namenlijst",
@@ -285,28 +287,62 @@ $(function() {
     }).done(function(rijen) {
         console.log("Dit zijn de rijen: " + rijen);
         for (var i = 0; i < rijen.length; i++) {
-            var nieuweOptie = document.createElement('option');
-            nieuweOptie.text = rijen[i];
-            nieuweOptie.value = rijen[i];
-            document.getElementById("dnRij").add(nieuweOptie);
+            $("#dnRij").append($("<option>").text(rijen[i]).val(rijen[i]));
         }
     })
 
-    $.ajax({
-        //url: "http://192.168.23.124:1111/namenlijst",
-        url: "http://127.0.0.1:1111/kolommen",
-        async: true, // 
-        data: { "rij": 10 },
-        dataType: 'json'
-    }).done(function(kolommen) {
-        console.log("Dit zijn de kolommen: " + kolommen);
-        for (var i = 0; i < kolommen.length; i++) {
-            var nieuweOptie = document.createElement('option');
-            nieuweOptie.text = kolommen[i];
-            nieuweOptie.value = kolommen[i];
-            document.getElementById("dnKolom").add(nieuweOptie);
+    document.getElementById("dnRij").onchange = function() {
+        $("#dnKolom").show();
+        var idK = document.getElementById("dnKolom");
+        verwijderOpties(idK, "selecteer kolommen");
+        var indexR = document.getElementById("dnRij").selectedIndex;
+        var geselecteerdeOptieR = document.getElementById("dnRij")[indexR].value;
+        $.ajax({
+            //url: "http://192.168.23.124:1111/namenlijst",
+            url: "http://127.0.0.1:1111/kolommen",
+            async: true, // 
+            data: { "rij": geselecteerdeOptieR },
+            dataType: 'json'
+        }).done(function(kolommen) {
+            for (var i = 0; i < kolommen.length; i++) {
+                $("#dnKolom").append($("<option>").text(kolommen[i]._id).val(kolommen[i]._id));
+            }
+        })
+    }
+
+    document.getElementById("dnKolom").onchange = function() {
+        $("#dnBom").show();
+        var idB = document.getElementById("dnBom");
+        verwijderOpties(idB, "selecteer bommen");
+        var indexR = document.getElementById("dnRij").selectedIndex;
+        var geselecteerdeOptieR = document.getElementById("dnRij")[indexR].value;
+        var indexK = document.getElementById("dnKolom").selectedIndex;
+        var geselecteerdeOptieK = document.getElementById("dnKolom")[indexK].value;
+        $.ajax({
+            //url: "http://192.168.23.124:1111/bommen",
+            url: "http://127.0.0.1:1111/bommen",
+            async: true, // 
+            data: { "rij": geselecteerdeOptieR, "kolom": geselecteerdeOptieK },
+            dataType: 'json'
+        }).done(function(bommen) {
+            console.log("Dit zijn de bommen: " + bommen);
+            for (var i = 0; i < bommen.length; i++) {
+                $('#dnBom').append($('<option>').text(bommen[i]._id).val(bommen[i]._id));
+            }
+        })
+    }
+
+    function verwijderOpties(id, tekst) {
+        var aantalOpties = id.options.length;
+        console.log("Dit is aantal opties: " + aantalOpties);
+        for (var i = 0; i < aantalOpties; i++) {
+            id.remove(0);
         }
-    })
+        var defaultOptie = document.createElement('option');
+        defaultOptie.text = tekst;
+        defaultOptie.value = "";
+        id.add(defaultOptie);
+    }
 
 });
 // einde van de onload
