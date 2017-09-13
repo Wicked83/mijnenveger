@@ -52,18 +52,19 @@ function vulRijenIn(req, res) {
 
 function vulKolommennIn(req, res) {
     var rij = +req.query.rij; // ok
+    console.log("Dit is de rij in de restful: " + rij);
     mongoClient.connect(url, function(error, db) {
         console.log('connected to db');
         var collection = db.collection('mijnenveger');
         collection.aggregate({
-                $match: { rijen: rij }
-            }, {
-                $group: { _id: '$kolommen' }
-            }, function(err, docs) {
-                console.log("Dit zijn de kolommen: " + docs);
-                res.send(JSON.stringify(docs));
-                db.close();
-            }) //.toArray()
+            $match: { rijen: rij }
+        }, {
+            $group: { _id: '$kolommen' }
+        }, function(err, docs) {
+            console.log("Dit zijn de kolommen: " + JSON.stringify(docs));
+            res.send(JSON.stringify(docs));
+            db.close();
+        })
     })
 }
 
@@ -113,8 +114,6 @@ function haalDeelnemerlijstOp(request, response) {
             .toArray(function(err, docs) {
                 console.log('deelnemerlijst gevonden');
                 response.send(JSON.stringify(docs));
-                /* var resultaat = JSON.stringify(docs);
-                console.log(JSON.parse(resultaat)); */
                 db.close;
             })
     })
@@ -128,78 +127,56 @@ function nieuweSpelerInvoegen(req, res) {
         console.log(req.body.naam);
         var collection = db.collection('mijnenveger');
         collection.insertOne({
-                naam: req.body.naam,
-                tijd: +req.body.tijd,
-                bommen: +req.body.bommen,
-                rijen: +req.body.rijen,
-                kolommen: +req.body.kolommen,
-                // bom: req.body.bom
-            }, function(err, r) {
-                // console.log("toegevoegd: " + r.insertedCount);
-                console.log("res: " + res);
-                console.log("tijdelijk toegevoegd");
-                /* console.log(req);
-                console.log("req.body: " + req.body);
-                console.log("req.body.naam: " + req.body.naam); */
-                if (!err) {
-                    /* opvragen & vgl */
-                    var bommen = +req.body.bommen,
-                        rijen = +req.body.rijen,
-                        kolommen = +req.body.kolommen;
-                    var query = { 'bommen': bommen, 'rijen': rijen, 'kolommen': kolommen };
-                    collection.find(query).sort({ tijd: -1 }).toArray(function(err, docs) {
-                        if (!err) {
-                            // console.log(docs)
-                            if (docs.length > 3) {
-                                var melding;
-                                if (+req.body.tijd < docs[0].tijd) {
-                                    melding = "je staat in de top 3";
-                                } else {
-                                    melding = "helaas... je staat niet in de top 3";
-                                }
-                                collection.deleteOne(docs[0], function(err, r) {
-                                    if (!err) {
-                                        res.end(JSON.stringify({ message: melding }))
-                                            // TODO (optioneel): melden bijgevoegd in top3?
-                                    } else {
-                                        res.end(JSON.stringify({ message: "Er is iets foutgelopen bij het aanpassen van de nieuwe top3" }));
-                                        console.log('error: ' + err);
-                                    }
-                                    db.close();
-                                })
+            naam: req.body.naam,
+            tijd: +req.body.tijd,
+            bommen: +req.body.bommen,
+            rijen: +req.body.rijen,
+            kolommen: +req.body.kolommen
+        }, function(err, r) {
+            console.log("tijdelijk toegevoegd");
+            var melding;
+            if (!err) {
+                var bommen = +req.body.bommen,
+                    rijen = +req.body.rijen,
+                    kolommen = +req.body.kolommen;
+                var query = { 'bommen': bommen, 'rijen': rijen, 'kolommen': kolommen };
+                collection.find(query).sort({ tijd: -1 }).toArray(function(err, docs) {
+                    if (!err) {
+                        if (docs.length > 3) {
+                            if (+req.body.tijd < docs[0].tijd) {
+                                melding = "Je staat in de top 3";
                             } else {
-                                res.end(JSON.stringify({ message: "je staat in de top3" }));
+                                melding = "Helaas... je staat niet in de top 3";
                             }
+                            collection.deleteOne(docs[0], function(err, r) {
+                                if (!err) {
+                                    res.end(JSON.stringify(melding));
+                                } else {
+                                    melding = "Er is iets foutgelopen bij het aanpassen van de nieuwe top 3";
+                                    res.end(JSON.stringify(melding));
+                                    console.log('error: ' + err);
+                                }
+                                db.close();
+                            })
                         } else {
-                            res.end(JSON.stringify({ message: "Er is iets foutgelopen bij het opvragen van de nieuwe top3" }));
-                            console.log('error: ' + err)
-                            db.close();
+                            melding = "Je staat in de top 3";
+                            res.end(JSON.stringify(melding));
                         }
-                    });
-                } else {
-                    res.end(JSON.stringify({ message: "Er is iets foutgelopen bij het toevoegen aan de top3" }));
-                    console.log('error: ' + err);
-                    db.close();
-                }
-
-            })
-            // if (tijd < collection.find({}))
+                    } else {
+                        melding = "Er is iets foutgelopen bij het opvragen van de nieuwe top3";
+                        res.end(JSON.stringify(melding));
+                        console.log('error: ' + err)
+                        db.close();
+                    }
+                });
+            } else {
+                melding = "Er is iets foutgelopen bij het toevoegen aan de top3";
+                res.end(JSON.stringify(melding));
+                console.log('error: ' + err);
+                db.close();
+            }
+        })
     })
 }
 
 app.listen(1111);
-
-
-/* app.get('/', function (req, res) {
-    res.send('Hello world');
-})
-app.listen(3000) */
-
-/*
-opvragen top > configuratie >> top 3
-limit 3
-config inwerken > string 'bomxrijxkolom'
-config inwerken > string  config (gekregen)
-opvragen top 3 > opzoeken op naam
-post conffig/speler
- */
