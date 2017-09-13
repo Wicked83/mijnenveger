@@ -142,10 +142,13 @@ $(function () {
                     timer.stoppen();
                     if (klik == "links") {
                         $("#divSpelbord").hide();
-                        $('#divSpel').append($('<img>').attr('src', 'Images/lose.jpg'));
+                        $('#divSpel').append('<br>')
+                            .append($('<img>').attr('src', 'Images/lose.jpg'));
                     } else {
                         $("#divSpelbord").hide();
-                        $('#divSpel').append($('<img>').attr('src', 'Images/win.jpg'));
+                        $('#divSpel').append('<br>')
+                            .append($('<img>').attr('src', 'Images/win.jpg'))
+                            // .append('<div>').html(melding)
                         voegSpelerToeAanLijst(timer.seconden);
                     }
                 }
@@ -258,7 +261,10 @@ $(function () {
                 "tijd": tijd
             },
             success: function (melding) {
-                console.log(melding);
+                var mssg=melding
+                console.log(JSON.parse(mssg));
+
+                // $('img').after($('<div>').html(melding.message))
             }
         })
     }
@@ -319,7 +325,7 @@ $(function () {
     }
 
     function verwijderUI() {
-        console.log($('#divSpel'))
+        console.log($('#divSpel')) /* WTF? */
         $('#interface').children().remove();
         console.log($('#divSpel'))
     }
@@ -343,13 +349,26 @@ $(function () {
                         .append($('<input>').addClass("btn btn-default").attr('name', 'btnPauzeer').attr('id', 'btnPauzeer').attr('value', 'Pauzeer spel').attr('type', 'button'))
                         .append($('<input>').addClass("btn btn-default").attr('name', 'btnHerneem').attr('id', 'btnHerneem').attr('value', 'Herneem spel').attr('type', 'button'))
                         .append($('<br>'))
-                        .append($('<div>').addClass('btn btn-default').attr('id', 'showTime').attr('name', 'showTime'))
-                        .append($('<div>').addClass('btn btn-default').attr('id', 'showBombs').attr('name', 'showBombs')))))
-        $('#divSpel')
-            .after(($('<div>').addClass('btn-group')))
-            .after($('<div>').attr('id', 'divSpelbord').append($('<hr>')))
-
-
+                        .append(($('<div>').addClass('btn-group'))
+                            .append($('<div>').addClass('btn btn-default').attr('id', 'showTime').attr('name', 'showTime'))
+                            .append($('<div>').addClass('btn btn-default').attr('id', 'showBombs')
+                                .attr('name', 'showBombs'))))));
+        $('#divSpel').after($('<hr>'))
+            // .after(($('<div>').addClass('btn-group')))
+            .after($('<div>').attr('id', 'divSpelbord')//.append($('<hr>'))
+            );
+        /*
+                                        <div class="btn-group">
+                                            <div class="btn btn-default" name="showTime"
+                                                id="showTime"> Verstreken tijd</div>
+                                            <div class="btn btn-default" name="showBombs"
+                                                id="showBombs"> Resterende bommen </div>
+                                        </div>
+                    </div>
+        
+                                    <div id="divSpelbord">
+                                    </div>
+                </div> -->  */
 
     }
 });
