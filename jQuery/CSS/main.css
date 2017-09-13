@@ -1,5 +1,5 @@
 #gameHolder {
-    width: 600px;
+    /* width: 600px; */
     margin: 50px auto;
     text-align: center;
 }
@@ -9,15 +9,20 @@ table {
     border-collapse: collapse;
 }
 
-td {
+button {
     width: 50px;
     height: 50px;
     border: 1px solid black;
+    width: 20px;
+    height: 20px;
+    margin: 0px;
+    padding: 0px;
 }
 
-.clicked {
+
+/* .clicked {
     background-color: rgb( 170, 30, 9);
-}
+} */
 
 .bom {
     background-color: rebeccapurple;
@@ -25,6 +30,9 @@ td {
 
 .gedraaid {
     background-color: green;
+    border: 2px solid white;
+    /*   height: 10px;
+    width: 10px; */
 }
 
 .jumbotron {
@@ -54,13 +62,12 @@ td {
     max-width: 80vmax;
 } */
 
-td {
+button {
     border-radius: 5px 5px 5px 5px;
     border: 0 solid lightskyblue;
     background-color: #8695a4;
-    min-height: 20px;
-    width: height;
-    min-width: height;
+    height: 20px;
+    width: 20px;
 }
 
 table {
@@ -82,7 +89,8 @@ input, button {
     color: rgb(255, 125, 10)
 }
 
-table:after {
+
+/* table:after {
     content: "";
     display: block;
     padding-bottom: 100%;
@@ -91,11 +99,19 @@ table:after {
 table {
     
         /* border: 5px solid red; */
-    
+
+
+/*
         text-align: center;
     
         width: 50vw;
     
         height: 50vw;
     
-      }
+      } */
+
+.vierkant {
+    /* height: 10px;
+    width: 10px; */
+    border: 2px solid white;
+}
