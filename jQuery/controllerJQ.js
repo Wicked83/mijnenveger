@@ -2,7 +2,7 @@
 Property query van de eerste parameter van de callback functie van methode get stelt de waarden van de doorgestuurde invoervelden voor. (of juister: van de querystring, dit is in de url van een request het gedeelte na het vraagteken, dat bestaat uit key-value paren)
 Om hetzelfde te doen als de form naar de server gestuurd is via een POST, moeten we vooraf module body-parser installeren (npm install body-parser) en gebruiken: */
 
-$(function () {
+$(function() {
 
     var interval;
     var timer;
@@ -11,7 +11,7 @@ $(function () {
 
     $("#divSpelbord").hide();
 
-    $("#btnStart").click(function () {
+    $("#btnStart").click(function() {
         if ($('#invoerBommen').val() < 1 || $('#invoerBommen').val() >= $('#invoerRijen').val() * $('#invoerKolommen').val()) {
             alert('Gelieve het spelidee te respecteren')
         } else {
@@ -38,7 +38,7 @@ $(function () {
 
             $('#divSpelbord').append($("<table>").attr('id', 'speelveld'));
 
-            $("#speelveld").one("mousedown", function () {
+            $("#speelveld").one("mousedown", function() {
                 timer.starten();
             });
 
@@ -48,7 +48,7 @@ $(function () {
                     //console.log(i + '.' + y)
                     // console.log(i + '.' + y)
                     $('#' + i).append($('<td>').attr('id', i + '_' + y)
-                        .click(function (event) {
+                        .click(function(event) {
                             var rij = +this.id.split('_')[0];
                             var kolom = +this.id.split('_')[1];
                             //console.log("links ", rij, ": ", kolom);
@@ -62,13 +62,13 @@ $(function () {
                                 var klik = "links";
                                 controleerEindeSpel(klik);
                             }
-                        }).contextmenu(function (event) {
+                        }).contextmenu(function(event) {
                             var rij = this.id.split('_')[0]
                             var kolom = this.id.split('_')[1]
                             spel.bord[rij][kolom].vlag()
                             $("#" + this.id).html(spel.bord[rij][kolom].symboolBepalen())
-                            //console.log("rechts ", rij, ": ", kolom);
-                            // console.log("rechts ", rij, ": ", kolom);
+                                //console.log("rechts ", rij, ": ", kolom);
+                                // console.log("rechts ", rij, ": ", kolom);
                             if (spel.bord[rij][kolom].symboolBepalen() == 'v') {
                                 tellerV++;
                                 spel.markedVakjes++;
@@ -79,12 +79,12 @@ $(function () {
                                 // $(this).on('click', function () { prop("disabled", false) });
                                 // $(this).prop('click()', 'disabled')
                                 $(this).attr({ disabled: true })
-                                // $(this).attr('disabled', 'disabled')
-                                //console.log(this)
-                                //console.log($(this))
-                                // $(this).attr('disabled', 'disabled')
-                                // console.log(this)
-                                // console.log($(this))
+                                    // $(this).attr('disabled', 'disabled')
+                                    //console.log(this)
+                                    //console.log($(this))
+                                    // $(this).attr('disabled', 'disabled')
+                                    // console.log(this)
+                                    // console.log($(this))
                             } else if (spel.bord[rij][kolom].symboolBepalen() == '?') {
                                 tellerV--;
                                 spel.markedVakjes--;
@@ -114,7 +114,7 @@ $(function () {
                         if (spel.bord[i][y].bomBuren) {
                             //bomburen opsporen
                             $('#' + i + '_' + y).html(spel.bord[i][y].bomBuren)
-                            //console.log(spel.bord[i][y].bomBuren)
+                                //console.log(spel.bord[i][y].bomBuren)
                         }
                     }
                 }
@@ -133,7 +133,7 @@ $(function () {
 
             timer = new MijnTimer();
 
-            interval = setInterval(function () {
+            interval = setInterval(function() {
                 document.getElementById("showTime").innerHTML = "Verstreken tijd: " + timer.seconden;
             }, 1000);
 
@@ -148,7 +148,7 @@ $(function () {
                         $("#divSpelbord").hide();
                         $('#divSpel').append('<br>')
                             .append($('<img>').attr('src', 'Images/win.jpg'))
-                        // .append('<div>').html(melding)
+                            // .append('<div>').html(melding)
                         voegSpelerToeAanLijst(timer.seconden);
                     }
                 }
@@ -160,17 +160,17 @@ $(function () {
         }
         // einde start button
 
-        $("#btnPauzeer").on('click', function () {
+        $("#btnPauzeer").on('click', function() {
             timer.stoppen();
             console.log('ok')
-            // $("#divSpelbord").hide();
-            // $("#divSpelbord").addClass('pauze')
+                // $("#divSpelbord").hide();
+                // $("#divSpelbord").addClass('pauze')
             $("#divSpelbord").prepend($('<img>').attr("src", "Images/pauze.gif"))
             $("#speelveld").hide()
         });
 
 
-        $("#btnHerneem").click(function () {
+        $("#btnHerneem").click(function() {
             timer.hernemen();
             $("#divSpelbord").show();
             $("#divSpelbord>img").remove()
@@ -187,7 +187,7 @@ $(function () {
         }
     }
 
-    $('#getIt').click(function () {
+    $('#getIt').click(function() {
 
         var naam = $("#dnNaam").val(),
             bom = $("#dnBom").val(),
@@ -208,10 +208,10 @@ $(function () {
                 "kolommen": kolom
             },
             dataType: 'json'
-        }).done(function (param) {
+        }).done(function(param) {
             //console.log("naam: " + naam)
             //console.log(param)
-        }).done(function (param) {
+        }).done(function(param) {
             // console.log("naam: " + naam)
             console.log(param);
             verwerkGegevens(param)
@@ -221,20 +221,20 @@ $(function () {
     function verwerkGegevens(data) {
         // if ($("#tabelDeelnrs")) {
         $("#tabelDeelnrs").remove()
-        // }  // test blijkbaar niet nodig...?
-        // console.log('data fie is ' + data)
+            // }  // test blijkbaar niet nodig...?
+            // console.log('data fie is ' + data)
         var arr = data
 
         $('#getIt').after(($('<table>').attr('id', 'tabelDeelnrs'))
-            .append($('<thead>')
-                .append($('<th>').html('Naam'))
-                .append($('<th>').html('Tijd'))
-                .append($('<th>').html('Bommen'))
-                .append($('<th>').html('Rijen'))
-                .append($('<th>').html('Kolommen')))
-            .append($('<tbody>').attr('id', 'dlns')))
-        //console.log(arr)
-        arr.forEach(function (deelnemer) {
+                .append($('<thead>')
+                    .append($('<th>').html('Naam'))
+                    .append($('<th>').html('Tijd'))
+                    .append($('<th>').html('Bommen'))
+                    .append($('<th>').html('Rijen'))
+                    .append($('<th>').html('Kolommen')))
+                .append($('<tbody>').attr('id', 'dlns')))
+            //console.log(arr)
+        arr.forEach(function(deelnemer) {
 
             $('#dlns').append($('<tr>')
                 .append($('<td>').html(deelnemer.naam))
@@ -261,7 +261,7 @@ $(function () {
                 "kolommen": kolom,
                 "tijd": tijd
             },
-            success: function (melding) {
+            success: function(melding) {
                 var mssg = melding
                 console.log(JSON.parse(mssg));
 
@@ -270,23 +270,18 @@ $(function () {
         })
     }
 
-    //$('#dnNaam').click(function() {
     $.ajax({
         //url: "http://192.168.23.124:1111/namenlijst",
         url: "http://127.0.0.1:1111/namenlijst",
         async: true, // 
         data: {},
         dataType: 'json'
-    }).done(function (namen) {
+    }).done(function(namen) {
         console.log(namen);
         for (var i = 0; i < namen.length; i++) {
-            var nieuweOptie = document.createElement('option');
-            nieuweOptie.text = namen[i];
-            nieuweOptie.value = namen[i];
-            document.getElementById("dnNaam").add(nieuweOptie);
+            $("#dnNaam").append($("<option>").text(namen[i]).val(namen[i]));
         }
     })
-    //});
 
     $.ajax({
         //url: "http://192.168.23.124:1111/namenlijst",
@@ -294,31 +289,65 @@ $(function () {
         async: true, // 
         data: {},
         dataType: 'json'
-    }).done(function (rijen) {
+    }).done(function(rijen) {
         console.log("Dit zijn de rijen: " + rijen);
         for (var i = 0; i < rijen.length; i++) {
-            var nieuweOptie = document.createElement('option');
-            nieuweOptie.text = rijen[i];
-            nieuweOptie.value = rijen[i];
-            document.getElementById("dnRij").add(nieuweOptie);
+            $("#dnRij").append($("<option>").text(rijen[i]).val(rijen[i]));
         }
     })
 
-    $.ajax({
-        //url: "http://192.168.23.124:1111/namenlijst",
-        url: "http://127.0.0.1:1111/kolommen",
-        async: true, // 
-        data: { "rij": 10 },
-        dataType: 'json'
-    }).done(function (kolommen) {
-        console.log("Dit zijn de kolommen: " + kolommen);
-        for (var i = 0; i < kolommen.length; i++) {
-            var nieuweOptie = document.createElement('option');
-            nieuweOptie.text = kolommen[i];
-            nieuweOptie.value = kolommen[i];
-            document.getElementById("dnKolom").add(nieuweOptie);
+    document.getElementById("dnRij").onchange = function() {
+        $("#dnKolom").show();
+        var idK = document.getElementById("dnKolom");
+        verwijderOpties(idK, "selecteer kolommen");
+        var indexR = document.getElementById("dnRij").selectedIndex;
+        var geselecteerdeOptieR = document.getElementById("dnRij")[indexR].value;
+        $.ajax({
+            //url: "http://192.168.23.124:1111/namenlijst",
+            url: "http://127.0.0.1:1111/kolommen",
+            async: true, // 
+            data: { "rij": geselecteerdeOptieR },
+            dataType: 'json'
+        }).done(function(kolommen) {
+            for (var i = 0; i < kolommen.length; i++) {
+                $("#dnKolom").append($("<option>").text(kolommen[i]._id).val(kolommen[i]._id));
+            }
+        })
+    }
+
+    document.getElementById("dnKolom").onchange = function() {
+        $("#dnBom").show();
+        var idB = document.getElementById("dnBom");
+        verwijderOpties(idB, "selecteer bommen");
+        var indexR = document.getElementById("dnRij").selectedIndex;
+        var geselecteerdeOptieR = document.getElementById("dnRij")[indexR].value;
+        var indexK = document.getElementById("dnKolom").selectedIndex;
+        var geselecteerdeOptieK = document.getElementById("dnKolom")[indexK].value;
+        $.ajax({
+            //url: "http://192.168.23.124:1111/bommen",
+            url: "http://127.0.0.1:1111/bommen",
+            async: true, // 
+            data: { "rij": geselecteerdeOptieR, "kolom": geselecteerdeOptieK },
+            dataType: 'json'
+        }).done(function(bommen) {
+            console.log("Dit zijn de bommen: " + bommen);
+            for (var i = 0; i < bommen.length; i++) {
+                $('#dnBom').append($('<option>').text(bommen[i]._id).val(bommen[i]._id));
+            }
+        })
+    }
+
+    function verwijderOpties(id, tekst) {
+        var aantalOpties = id.options.length;
+        console.log("Dit is aantal opties: " + aantalOpties);
+        for (var i = 0; i < aantalOpties; i++) {
+            id.remove(0);
         }
-    })
+        var defaultOptie = document.createElement('option');
+        defaultOptie.text = tekst;
+        defaultOptie.value = "";
+        id.add(defaultOptie);
+    }
 
     function nieuwSpelUI() {
         verwijderUI();
@@ -330,6 +359,7 @@ $(function () {
         $('#interface').children().remove();
         console.log($('#divSpel'))
     }
+
     function bouwNieuweUI() {
         /* div#spel
             div
@@ -356,7 +386,7 @@ $(function () {
                                 .attr('name', 'showBombs'))))));
         $('#divSpel').after($('<hr>'))
             // .after(($('<div>').addClass('btn-group')))
-            .after($('<div>').attr('id', 'divSpelbord')//.append($('<hr>'))
+            .after($('<div>').attr('id', 'divSpelbord') //.append($('<hr>'))
             );
         /*
                                         <div class="btn-group">
