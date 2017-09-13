@@ -58,6 +58,9 @@ td {
     border-radius: 5px 5px 5px 5px;
     border: 0 solid lightskyblue;
     background-color: #8695a4;
+    min-height: 20px;
+    width: height;
+    min-width: height;
 }
 
 table {
