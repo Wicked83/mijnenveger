@@ -148,7 +148,7 @@ $(function () {
                         $("#divSpelbord").hide();
                         $('#divSpel').append('<br>')
                             .append($('<img>').attr('src', 'Images/win.jpg'))
-                            // .append('<div>').html(melding)
+                        // .append('<div>').html(melding)
                         voegSpelerToeAanLijst(timer.seconden);
                     }
                 }
@@ -158,24 +158,25 @@ $(function () {
                 localStorage.setItem("configuratie", JSON.stringify(config));
             }
         }
+        // einde start button
+
+        $("#btnPauzeer").on('click', function () {
+            timer.stoppen();
+            console.log('ok')
+            // $("#divSpelbord").hide();
+            // $("#divSpelbord").addClass('pauze')
+            $("#divSpelbord").prepend($('<img>').attr("src", "Images/pauze.gif"))
+            $("#speelveld").hide()
+        });
+
+
+        $("#btnHerneem").click(function () {
+            timer.hernemen();
+            $("#divSpelbord").show();
+            $("#divSpelbord>img").remove()
+            $("#speelveld").show()
+        });
     })
-    // einde start button
-
-    $("#btnPauzeer").click(function () {
-        timer.stoppen();
-        // $("#divSpelbord").hide();
-        // $("#divSpelbord").addClass('pauze')
-        $("#divSpelbord").prepend($('<img>').attr("src", "Images/pauze.gif"))
-        $("#speelveld").hide()
-    });
-
-
-    $("#btnHerneem").click(function () {
-        timer.hernemen();
-        $("#divSpelbord").show();
-        $("#divSpelbord>img").remove()
-        $("#speelveld").show()
-    });
 
     function haalUitLocalStorage() {
         var config = JSON.parse(localStorage.getItem("configuratie"));
@@ -261,7 +262,7 @@ $(function () {
                 "tijd": tijd
             },
             success: function (melding) {
-                var mssg=melding
+                var mssg = melding
                 console.log(JSON.parse(mssg));
 
                 // $('img').after($('<div>').html(melding.message))
