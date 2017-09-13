@@ -10,6 +10,8 @@ $(function() {
     haalUitLocalStorage();
 
     $("#divSpelbord").hide();
+    $("#dnKolom").hide();
+    $("#dnBom").hide();
 
     $("#btnStart").click(function() {
         if ($('#invoerBommen').val() < 1 || $('#invoerBommen').val() >= $('#invoerRijen').val() * $('#invoerKolommen').val()) {
@@ -184,7 +186,6 @@ $(function() {
     }
 
     $('#getIt').click(function() {
-
         var naam = $("#dnNaam").val(),
             bom = $("#dnBom").val(),
             rij = $("#dnRij").val(),
@@ -219,7 +220,7 @@ $(function() {
         $("#tabelDeelnrs").remove()
             // }  // test blijkbaar niet nodig...?
             // console.log('data fie is ' + data)
-        var arr = data
+        var arr = data;
 
         $('#getIt').after(($('<table>').attr('id', 'tabelDeelnrs'))
                 .append($('<thead>')
@@ -258,10 +259,8 @@ $(function() {
                 "tijd": tijd
             },
             success: function(melding) {
-                var mssg = melding
-                console.log(JSON.parse(mssg));
-
-                // $('img').after($('<div>').html(melding.message))
+                console.log(melding);
+                $('img').after($('<div>').html(JSON.parse(melding)));
             }
         })
     }
@@ -385,18 +384,19 @@ $(function() {
             .after($('<div>').attr('id', 'divSpelbord') //.append($('<hr>'))
             );
         /*
-                                        <div class="btn-group">
-                                            <div class="btn btn-default" name="showTime"
-                                                id="showTime"> Verstreken tijd</div>
-                                            <div class="btn btn-default" name="showBombs"
-                                                id="showBombs"> Resterende bommen </div>
-                                        </div>
-                    </div>
+                                                <div class="btn-group">
+                                                    <div class="btn btn-default" name="showTime"
+                                                        id="showTime"> Verstreken tijd</div>
+                                                    <div class="btn btn-default" name="showBombs"
+                                                        id="showBombs"> Resterende bommen </div>
+                                                </div>
+                            </div>
         
-                                    <div id="divSpelbord">
-                                    </div>
-                </div> -->  */
+                                            <div id="divSpelbord">
+                                            </div>
+                        </div> -->  */
 
     }
+
 });
 // einde van de onload
