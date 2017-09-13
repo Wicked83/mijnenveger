@@ -16,6 +16,9 @@ $(function () {
             alert('Gelieve het spelidee te respecteren')
         } else {
 
+
+
+            nieuwSpelUI();
             // console.log("bommen: " + $('#invoerBommen').val());
             // console.log("rijen: " + $('#invoerRijen').val()); 
             // console.log("kolommen: " + $('#invoerKolommen').val());
@@ -310,5 +313,44 @@ $(function () {
         }
     })
 
+    function nieuwSpelUI() {
+        verwijderUI();
+        bouwNieuweUI();
+    }
+
+    function verwijderUI() {
+        console.log($('#divSpel'))
+        $('#interface').children().remove();
+        console.log($('#divSpel'))
+    }
+    function bouwNieuweUI() {
+        /* div#spel
+            div
+                div.btn etc
+                    input
+                    input
+                div
+                br
+                div.btn
+                    div showtime
+                    div showbombs
+            div#spelbord */
+
+        $('#interface')
+            .append(($('<div>').attr('id', 'divSpel'))
+                .append(($('<div>'))
+                    .append(($('<div>').addClass('btn-group'))
+                        .append($('<input>').addClass("btn btn-default").attr('name', 'btnPauzeer').attr('id', 'btnPauzeer').attr('value', 'Pauzeer spel').attr('type', 'button'))
+                        .append($('<input>').addClass("btn btn-default").attr('name', 'btnHerneem').attr('id', 'btnHerneem').attr('value', 'Herneem spel').attr('type', 'button'))
+                        .append($('<br>'))
+                        .append($('<div>').addClass('btn btn-default').attr('id', 'showTime').attr('name', 'showTime'))
+                        .append($('<div>').addClass('btn btn-default').attr('id', 'showBombs').attr('name', 'showBombs')))))
+        $('#divSpel')
+            .after(($('<div>').addClass('btn-group')))
+            .after($('<div>').attr('id', 'divSpelbord').append($('<hr>')))
+
+
+
+    }
 });
 // einde van de onload
