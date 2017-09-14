@@ -20,7 +20,7 @@ db.getCollection('mijnenveger').insert({'naam':'Mike','tijd':10,'bommen':120,'ri
 db.getCollection('mijnenveger').insert({'naam':'Reda','tijd':10,'bommen':120,'rijen':5,'kolommen':10})
 db.getCollection('mijnenveger').insert({'naam':'Ann','tijd':10,'bommen':120,'rijen':5,'kolommen':10})
 db.getCollection('mijnenveger').insert({'naam':'Benji','tijd':10,'bommen':120,'rijen':5,'kolommen':10})
-db.getCollection('mijnenveger').insert({'naam':'Mireille','tijd':107,'bommen'1210,'rijen':5,'kolommen':10})
+db.getCollection('mijnenveger').insert({'naam':'Mireille','tijd':107,'bommen':1210,'rijen':5,'kolommen':10})
 db.getCollection('mijnenveger').insert({'naam':'Nikolay','tijd':10,'bommen':120,'rijen':10,'kolommen':10})
 
 db.getCollection('mijnenveger').insert({'naam':'Joske','tijd':35,'bommen':10,'rijen':10,'kolommen':10})
