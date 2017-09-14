@@ -263,7 +263,7 @@ $(function() {
             },
             success: function(melding) {
                 console.log(melding);
-                $('img').after($('<div>').html(JSON.parse(melding)));
+                $('img').after($('<div>').html(JSON.parse(melding)).css({'background':'white','color':'red','fontSize':'50px','backgroundColor':'green','textStroke':'2px yellow'}));
 
             }
         })
