@@ -1,31 +1,9 @@
-// @import url('https://fonts.googleapis.com/css?family=Baloo+Tammudu');
-// @import url('https://fonts.googleapis.com/css?family=Archivo+Black|Bal');
-// @import url('https://fonts.googleapis.com/css?family=Archivo+Black|Baloo+Tammudu|Gloria+Hallelujah');
-//
-$cell-width: 40px;
-// $bar-color: #aaaaaa;
-// $bg-color:  #fef4e8;
-// $font-color: #dddddd;
-// $window-color: #cccccc;
-// $cel-color: #bbbbbb;
-
 .timer {
   width: 220px;
   margin: 30px auto;
   padding-bottom: 10px;
-  position: absolute;
+  position:  absolute;
   right: 90px;
-}
-
-
-
-.omgedraaid {
-  position: relative;
-  background-color: yellow;
-}
-
-.nietOmgedraaid {
-  background-color: green;
 }
 
 .top3 {
@@ -36,24 +14,12 @@ $cell-width: 40px;
   }
 }
 
-// .top3-row {
-//   border: 1px solid black;
-// }
 .cover {
-  width: $cell-width + 2px;
-  height: $cell-width + 2px;
+  width: 100%;
+  height: 100%;
   position: absolute;
   top: 0;
   left: 0;
-  // background-color: #aaaaaa;
-}
-
-
-.td-pos-rel {
-  position: relative;
-  width: $cell-width;
-  height: $cell-width;
-  border: 1px solid gray;
 }
 
 .fixed {
@@ -73,14 +39,14 @@ $cell-width: 40px;
 
 .cover-table {
   z-index: 10;
-  // background-color: blue;
 }
+
 .bord-table {
   margin: 30px auto;
   border-collapse: collapse;
     .table-cell {
-      width: $cell-width;
-      height: $cell-width;
+      width: 3vw;
+      height: 3vw;
       border: 3px solid white;
       position: relative;
 

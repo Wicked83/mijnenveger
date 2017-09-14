@@ -26,7 +26,7 @@
   <md-toolbar layout="row" class="md-toolbar-tools">
     <h1>Mijnenveger</h1>
   </md-toolbar>
-  <md-content id="gameHolder">
+  <md-content>
     <md-tabs md-selected="ctrl.activeTab" md-dynamic-height md-center-tabs class="centered-content" md-stretch-tabs="never">
       <md-tab>
         <md-tab-label>
@@ -62,6 +62,10 @@
             </div>
             <md-button class="md-raised md-primary md-cornered" type="submit">Start game</md-button>
           </form>
+          <md-progress-linear md-mode="determinate"
+          ng-disabled="!ctrl.progressBarValue"
+          value="{{ctrl.progressBarValue}}">
+        </md-progress-linear>
         </md-tab-body>
       </md-tab>
       <md-tab>
@@ -150,7 +154,8 @@
                 <span class="fixed" ng-show="vak.omgedraaid">{{vak.bomBuren}}</span>
                 <span class="niveau-2 fixed"
                       ng-show="!vak.omgedraaid">{{vak.symboolBepalen()}}</span>
-                <span class="fixed" ng-show="ctrl.spel.einde && vak.bom">B</span>
+                <span class="fixed"
+                      ng-show="ctrl.spel.einde && vak.bom">B</span>
                 <div class="cover animated"
                     md-colors="{background: 'primary-500-1'}"
                     ng-class="{flipOutY: vak.omgedraaid}"></div>

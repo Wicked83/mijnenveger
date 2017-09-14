@@ -14,26 +14,18 @@ function Spel(spelersnaam = "Joske", bommen = 10, rijen = 10, kolommen = 10) {
     this.verdelingBommen();
     this.timer = new MijnTimer();
     this.einde = false;
-    // this.win = false;
-    // this.omgedraaideVakjes = 0;
     this.markedVakjes = 0;
 }
 
 
 Spel.prototype.ontdekVeiligVakjes = function(rij, kolom) {
-    // var self = this;
-    // rij = +rij;
-    // kolom = +kolom;
     if (this.bord[rij][kolom].bomBuren != null) {
-        // if (!this.bord[rij][kolom].bomBuren) { // zelfde resultaat?
         return false;
     }
     var veiligeBuren = this.contoleerBuren(rij, kolom);
-
     veiligeBuren.forEach(koords => {
         this.vakjeOmdraaien(koords[0], koords[1]);
     });
-    // this.winControle();
 };
 
 
@@ -49,40 +41,28 @@ Spel.prototype.winControle = function() {
             }
         }
         this.einde = result;
-        // return true;
     }
 };
 
 
 Spel.prototype.vakjeOmdraaien = function(rij, kolom) {
-    // rij = +rij;
-    // kolom = +kolom;
     if (!this.bord[rij][kolom].omgedraaid && this.bord[rij][kolom].symboolBepalen() != 'v') {
         if (this.bord[rij][kolom].bom) {
             this.einde = true;
-            // return false;
         } else {
-            // console.log('fie omdraaien')
             this.bord[rij][kolom].omgedraaid = true;
-            // console.log(this.bord[rij][kolom].omgedraaid)//= true;
-            // this.omgedraaideVakjes++;
             this.ontdekVeiligVakjes(rij, kolom);
-            // return true;
         }
     }
 };
 
 Spel.prototype.contoleerBuren = function(rij, kolom) {
-    // rij = +rij;
-    // kolom = +kolom;
     var buurBommen = 0;
     var veiligeBuren = [];
     for (var i = rij - 1; i <= rij + 1; i++) {
         if (this.bord[i]) {
-            // console.log(i)
             for (var j = kolom - 1; j <= kolom + 1; j++) {
                 if (this.bord[i][j]) {
-                    // console.log(j)
                     if (this.bord[i][j].bom) {
                         buurBommen++;
                     } else {
@@ -136,16 +116,6 @@ Vak.prototype.symboolBepalen = function() {
     return mod ? mod == 1 ? 'v' : '?' : '';
 };
 
-Vak.prototype.omdraai = function() {
-    if (this.bom) {
-        this.einde = true;
-        // return false;
-    } else {
-        this.omgedraaid = true;
-        // return true;
-    }
-};
-
 Vak.prototype.vlag = function() {
     this.teller++;
 }
@@ -167,7 +137,6 @@ function MijnTimer() {
     }
 
     self.stoppen = function() {
-        //if (self.interval != null)
         clearTimeout(self.interval);
     }
 

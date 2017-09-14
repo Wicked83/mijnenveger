@@ -1,35 +1,17 @@
 
-app.controller('mijnenCtrl', ['$interval', '$http', '$mdDialog', function($interval, $http, $mdDialog) {
+app.controller('mijnenCtrl', ['$interval', '$timeout', '$http', '$mdDialog', function($interval, $timeout, $http, $mdDialog) {
   var self = this;
   this.naam = '';
   this.spel = null;
-  this.flatBord = [];
-  // this.tijd = 0;
+  this.progressBarValue = 0;
   this.interval = null;
   this.running = true;
   this.top3 = [];
   this.activeTab = 0;
-  // this.showCtrl1 = true;
-  // this.showCtrl2 = false;
   this.fullLijst = {};
   this.sortOptie = 'naam';
   this.apiUrl = 'http://192.168.23.124:1111';
-  // this.apiUrl = 'http://localhost:1111';
-  // this.toggleViewCtrl = function(tabNum) {
-  //   switch (tabNum) {
-  //     case 1:
-  //       this.showCtrl1 = true;
-  //       this.showCtrl2= false;
-  //       break;
-  //     case 2:
-  //       this.showCtrl1 = false;
-  //       this.showCtrl2= true;
-  //       break;
-  //     default:
-  //   }
-  // };
   this.changeActiveTab = function(tabNum) {
-    // angular.element(document.getElementsByTagName('md-tabs')[0]).attr('md-selected', tabNum);
     this.activeTab = tabNum;
   };
   this.kreegTop3 = function(naam, rijen, kolommen, bommen) {
@@ -38,8 +20,6 @@ app.controller('mijnenCtrl', ['$interval', '$http', '$mdDialog', function($inter
       (rijen && kolommen && bommen ? '?rijen=' + rijen + '&kolommen=' + kolommen + '&bommen=' + bommen : '');
     $http.get(url)
     .then(function(response) {
-      // console.log(url);
-      // console.log(response.data);
       self.top3 = response.data.slice(0, 3);
     });
   };
@@ -66,9 +46,7 @@ app.controller('mijnenCtrl', ['$interval', '$http', '$mdDialog', function($inter
          );
          self.top3[spellerIndex].bold = true;
       }
-      // console.log('success', res);
     }).then(function(res) {
-      // console.log('errrorr',res);
     });
   };
 
@@ -76,17 +54,16 @@ app.controller('mijnenCtrl', ['$interval', '$http', '$mdDialog', function($inter
   this.tableReborn = function() {
     return this.spel.bord.map((rij, i) => rij.map((vak, j) => {
       vak.marked = false;
-      vak.x = i;
-      vak.y = j;
+
       return vak;
-    }))//.reduce((a, b) => a.concat(b));
+    }));
   };
 
-  this.tableFlaten = function() {
-    return this.spel ? this.spel.bord.reduce((a, b) => a.concat(b)) : null;
-  };
-
-  this.zoek = function(rij, kolom, array) {
+  this.zoek = function(rij, kolom) {
+    var array = [];
+    // while () {
+    //
+    // }
     var buurBommen = 0;
     var veiligeBuren = [];
     for (var i = rij - 1; i <= rij + 1; i++) {
@@ -107,7 +84,6 @@ app.controller('mijnenCtrl', ['$interval', '$http', '$mdDialog', function($inter
     this.spel.bord[rij][kolom].bomBuren = buurBommen;
     veiligeBuren = !buurBommen ? veiligeBuren : [];
     if (veiligeBuren.length) {
-
       veiligeBuren.forEach(koords => {
         var r = koords[0];
         var k = koords[1];
@@ -118,7 +94,6 @@ app.controller('mijnenCtrl', ['$interval', '$http', '$mdDialog', function($inter
         }
       });
     }
-
     return array;
   };
 
@@ -127,69 +102,49 @@ app.controller('mijnenCtrl', ['$interval', '$http', '$mdDialog', function($inter
     (function f(index, array) {
       if (index < array.length) {
         setTimeout(function() {
-            array[index].omdraai();
-            this.flatBord = self.tableFlaten();
-            // $('#' + array[index].id).addClass('flipOutY');
+            array[index].omgedraaid = true;
           f(index + 1, array);
         }, 10);
-        // func(100)(array[index]).then(function(vak) {
-        //   vak.omdraai();
-        // });
-        // f(index + 1, array, func);
-
       }
     })(0, vakjes);
-
   };
 
-  // this.delay = function(milliseconds) {
-  //   return function(result) {
-  //     return new Promise(function(resolve, reject) {
-  //       setTimeout(function() {
-  //         resolve(result);
-  //       }, milliseconds);
-  //     });
-  //   };
-  // };
-// end
   this.rijSelChange = function() {
     $http.get(this.apiUrl + '/kolommen?rij=' + this.rijenSel)
     .then(function(response) {
-      // console.log(response.data);
       self.fullLijst.kolommen = response.data.map(val => +val._id);
     });
   };
   this.kolSelChange = function() {
     $http.get(this.apiUrl + '/bommen?rij=' + this.rijenSel + '&kolom=' + this.kolommenSel)
     .then(function(response) {
-      // console.log(response.data);
       self.fullLijst.bommen = response.data.map(val => +val._id);
     });
   };
   this.kreegNamenEnRijen = function() {
     $http.get(this.apiUrl + '/namenlijst')
     .then(function(response) {
-      // console.log(response.data);
       self.fullLijst.namen = response.data;
     });
     $http.get(this.apiUrl + '/rijen')
     .then(function(response) {
-      // console.log(response.data);
       self.fullLijst.rijen = response.data;
     });
   };
 
-  // this.reload = function() {
-  //   location.reload();
-  // };
   this.startGame = function() {
     this.spel = new Spel(this.naam, this.bommen, this.rijen, this.kolommen);
     this.spel.bord = this.tableReborn();
-    this.flatBord = this.tableFlaten();
     this.saveConfig();
-    this.changeActiveTab(2);
-    // this.naam = '';
-    this.running = true;
+    var progressBarInterval = $interval(function () {
+      self.progressBarValue += 2;
+    }, 5);
+    $timeout(() => {
+      self.changeActiveTab(2);
+      $interval.cancel(progressBarInterval);
+      this.running = true;
+      this.progressBarValue = 0;
+    }, 1000);
   };
   this.loadConfig = function() {
     var config = JSON.parse(localStorage.getItem('bordConfig'));
@@ -208,25 +163,28 @@ app.controller('mijnenCtrl', ['$interval', '$http', '$mdDialog', function($inter
   this.handleLC = function(x, y) {
     if (this.running) {
       this.startTimer(this.spel.timer.starten);
-
-        // if (!this.spel.bord[x][y].omgedraaid && this.spel.bord[x][y].symboolBepalen() != 'v') {
-        //     this.spel.bord[x][y].omdraai();
-        //     // $('#' + this.spel.bord[x][y].id).addClass('flipOutY');
-        //     this.draaiVakjesTrager(this.zoek(x, y, []));
-        // }
-
-      this.spel.vakjeOmdraaien(x, y);
-      // this.flatBord = this.tableFlaten();
-      // console.log(this.flatBord[x * this.rijen + y]);
-      // console.log(this.zoek(x, y, []));
+      if (!this.spel.bord[x][y].omgedraaid && this.spel.bord[x][y].symboolBepalen() != 'v') {
+        if (this.spel.bord[x][y].bom) {
+          this.spel.einde = true;
+        }  else {
+          this.spel.bord[x][y].omgedraaid = true;
+          this.draaiVakjesTrager(this.zoek(x, y, []));
+        }
+      }
+      // this.spel.vakjeOmdraaien(x, y);
       if (this.spel.einde) {
+        this.toonAlleBommen();
         this.stopTimer();
         this.showAlert('Booommmmmm!!!', 'You lose!!!');
       }
     }
   };
+
+  this.toonAlleBommen = function() {
+    this.spel.bomCoords.forEach(koords => this.spel.bord[koords[0]][koords[1]].omgedraaid = true);
+  };
   this.handleRC = function(vak) {
-    if (this.running) {
+    if (this.running && !vak.omgedraaid) {
       var currVal = vak.symboolBepalen();
       vak.vlag();
       if (vak.symboolBepalen() == 'v') {
@@ -241,7 +199,6 @@ app.controller('mijnenCtrl', ['$interval', '$http', '$mdDialog', function($inter
         this.stopTimer();
         this.showAlert('Congratulations!!!', 'You win!!!');
         this.stuurData();
-
         this.changeActiveTab(1);
       }
     }
