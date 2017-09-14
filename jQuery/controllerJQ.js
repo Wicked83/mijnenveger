@@ -222,29 +222,36 @@ $(function() {
 
     function verwerkGegevens(data) {
         // if ($("#tabelDeelnrs")) {
-        $("#tabelDeelnrs").remove()
-            // }  // test blijkbaar niet nodig...?
-            // console.log('data fie is ' + data)
+        $("#tabelDeelnrs").remove();
+        $("#geenDeelnrs").remove();
+        // }  // test blijkbaar niet nodig...?
+        // console.log('data fie is ' + data)
+        console.log("Dit zijn de data: " + data);
         var arr = data;
+        console.log("Dit is de arr: " + arr);
+        if (arr.length > 0) {
+            $('#getIt').after(($('<table>').attr('id', 'tabelDeelnrs'))
+                    .append($('<thead>')
+                        .append($('<th>').html('Naam'))
+                        .append($('<th>').html('Tijd'))
+                        .append($('<th>').html('Bommen'))
+                        .append($('<th>').html('Rijen'))
+                        .append($('<th>').html('Kolommen')))
+                    .append($('<tbody>').attr('id', 'dlns')))
+                //console.log(arr)
+            arr.forEach(function(deelnemer) {
 
-        $('#getIt').after(($('<table>').attr('id', 'tabelDeelnrs'))
-                .append($('<thead>')
-                    .append($('<th>').html('Naam'))
-                    .append($('<th>').html('Tijd'))
-                    .append($('<th>').html('Bommen'))
-                    .append($('<th>').html('Rijen'))
-                    .append($('<th>').html('Kolommen')))
-                .append($('<tbody>').attr('id', 'dlns')))
-            //console.log(arr)
-        arr.forEach(function(deelnemer) {
-
-            $('#dlns').append($('<tr>')
-                .append($('<td>').html(deelnemer.naam))
-                .append($('<td>').html(deelnemer.tijd))
-                .append($('<td>').html(deelnemer.bommen))
-                .append($('<td>').html(deelnemer.rijen))
-                .append($('<td>').html(deelnemer.kolommen)))
-        }, this);
+                $('#dlns').append($('<tr>')
+                    .append($('<td>').html(deelnemer.naam))
+                    .append($('<td>').html(deelnemer.tijd))
+                    .append($('<td>').html(deelnemer.bommen))
+                    .append($('<td>').html(deelnemer.rijen))
+                    .append($('<td>').html(deelnemer.kolommen)))
+            }, this);
+        } else {
+            console.log();
+            $('#getIt').after($("<div>").attr('id', 'geenDeelnrs').html("Geen deelnemers gevonden met deze naam en/of configuratie."));
+        }
     }
 
     function voegSpelerToeAanLijst(tijd) {
