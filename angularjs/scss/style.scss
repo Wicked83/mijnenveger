@@ -3,45 +3,16 @@
 // @import url('https://fonts.googleapis.com/css?family=Archivo+Black|Baloo+Tammudu|Gloria+Hallelujah');
 //
 $cell-width: 40px;
-$bar-color: #aaaaaa;
-$bg-color:  #fef4e8;
-$font-color: #dddddd;
-$window-color: #cccccc;
-$cel-color: #bbbbbb;
-//
-// body {
-  // font-family: Arial;
-  // margin: 0;
-  // background-color: $bg-color;
-// }
-//
-// #gameHolder {
-//   width: 600px;
-//   margin: 20px auto;
-//   padding: 20px;
-//   // background-color: #727272;
-//   // border: 1px solid black;
-//
-//   text-align: center;
-//   table {
-//     margin: 30px auto;
-//     border-collapse: collapse;
-//     tr {
-//       td {
-//         width: $cell-width;
-//         height: $cell-width;
-//         border: 1px solid black;
-//
-//       }
-//     }
-//   }
-// }
-//
+// $bar-color: #aaaaaa;
+// $bg-color:  #fef4e8;
+// $font-color: #dddddd;
+// $window-color: #cccccc;
+// $cel-color: #bbbbbb;
 
 .timer {
-  width: 200px;
+  width: 220px;
   margin: 30px auto;
-  padding-bottom: 15px;
+  padding-bottom: 10px;
   position: absolute;
   right: 90px;
 }
@@ -58,20 +29,23 @@ $cel-color: #bbbbbb;
 }
 
 .top3 {
-  width: 200px;
+  width: 330px;
   margin: 0 auto;
-  .top3-row {
-    border: 1px solid black;
+  .table-item {
+    padding: 10px;
   }
 }
 
+// .top3-row {
+//   border: 1px solid black;
+// }
 .cover {
   width: $cell-width + 2px;
   height: $cell-width + 2px;
   position: absolute;
   top: 0;
   left: 0;
-  background-color: #aaaaaa;
+  // background-color: #aaaaaa;
 }
 
 
@@ -90,6 +64,7 @@ $cel-color: #bbbbbb;
 }
 
 .niveau-2 {
+  color: white;
   z-index: 5;
 }
 .centered-content {
@@ -98,7 +73,7 @@ $cel-color: #bbbbbb;
 
 .cover-table {
   z-index: 10;
-  background-color: blue;
+  // background-color: blue;
 }
 .bord-table {
   margin: 30px auto;
@@ -106,7 +81,7 @@ $cel-color: #bbbbbb;
     .table-cell {
       width: $cell-width;
       height: $cell-width;
-      border: 1px solid gray;
+      border: 3px solid white;
       position: relative;
 
     }

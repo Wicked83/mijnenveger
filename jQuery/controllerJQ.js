@@ -116,7 +116,9 @@ $(function() {
                         if (spel.bord[i][y].bomBuren) {
                             //bomburen opsporen
                             $('#' + i + '_' + y).html(spel.bord[i][y].bomBuren)
-                                //console.log(spel.bord[i][y].bomBuren)
+                                .css({ 'backgroundColor': 'black', 'color': 'yellow', 'borderColor': 'red' });
+                            // .addClass('bomBuren').removeClass('gedraaid')
+                            //console.log(spel.bord[i][y].bomBuren)
                         }
                     }
                 }
@@ -265,9 +267,7 @@ $(function() {
                 "tijd": tijd
             },
             success: function(melding) {
-                //console.log(melding);
-                $('img').after($('<div>').html(JSON.parse(melding)).attr('id', 'melding'));
-                // $("#melding").after("Dit is een test");
+                $('img').after($('<div>').html(JSON.parse(melding)).attr('id', 'melding').css({ 'background': 'white', 'color': 'red', 'fontSize': '50px', 'backgroundColor': 'green', 'textStroke': '2px yellow' }));
                 haalTop3();
             }
         })
@@ -340,6 +340,8 @@ $(function() {
             $("#dnRij").append($("<option>").text(rijen[i]).val(rijen[i]));
         }
     })
+
+
 
     document.getElementById("dnRij").onchange = function() {
         $("#dnKolom").show().attr('required');
@@ -434,17 +436,17 @@ $(function() {
             .after($('<div>').attr('id', 'divSpelbord') //.append($('<hr>'))
             );
         /*
-                                                <div class="btn-group">
-                                                    <div class="btn btn-default" name="showTime"
-                                                        id="showTime"> Verstreken tijd</div>
-                                                    <div class="btn btn-default" name="showBombs"
-                                                        id="showBombs"> Resterende bommen </div>
-                                                </div>
-                            </div>
+                                                            <div class="btn-group">
+                                                                <div class="btn btn-default" name="showTime"
+                                                                    id="showTime"> Verstreken tijd</div>
+                                                                <div class="btn btn-default" name="showBombs"
+                                                                    id="showBombs"> Resterende bommen </div>
+                                                            </div>
+                                        </div>
         
-                                            <div id="divSpelbord">
-                                            </div>
-                        </div> -->  */
+                                                        <div id="divSpelbord">
+                                                        </div>
+                                    </div> -->  */
 
     }
 

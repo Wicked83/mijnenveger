@@ -3,6 +3,7 @@ app.controller('mijnenCtrl', ['$interval', '$http', '$mdDialog', function($inter
   var self = this;
   this.naam = '';
   this.spel = null;
+  this.flatBord = [];
   // this.tijd = 0;
   this.interval = null;
   this.running = true;
@@ -31,6 +32,18 @@ app.controller('mijnenCtrl', ['$interval', '$http', '$mdDialog', function($inter
     // angular.element(document.getElementsByTagName('md-tabs')[0]).attr('md-selected', tabNum);
     this.activeTab = tabNum;
   };
+  this.kreegTop3 = function(naam, rijen, kolommen, bommen) {
+    var url = this.apiUrl + '/deelnemers' +
+      (naam ? '?naam=' + naam : '') +
+      (rijen && kolommen && bommen ? '?rijen=' + rijen + '&kolommen=' + kolommen + '&bommen=' + bommen : '');
+    $http.get(url)
+    .then(function(response) {
+      // console.log(url);
+      // console.log(response.data);
+      self.top3 = response.data.slice(0, 3);
+    });
+  };
+
   this.stuurData = function() {
     $http({
       method: 'post',
@@ -43,9 +56,19 @@ app.controller('mijnenCtrl', ['$interval', '$http', '$mdDialog', function($inter
         bommen: this.spel.bommen
       }
     }).then(function(res) {
-      // console.log(res);
+      self.kreegTop3('', self.rijen,self.kolommen,self.bommen);
+      if (res.data[0] == 'J') {
+        var spellerIndex = self.top3.findIndex( speller =>
+          speller.naam == res.config.data.naam &&
+          speller.rijen == res.config.data.rijen &&
+          speller.kolommen == res.config.data.kolommen &&
+          speller.bommen == res.config.data.bommen
+         );
+         self.top3[spellerIndex].bold = true;
+      }
+      // console.log('success', res);
     }).then(function(res) {
-      // console.log(res);
+      // console.log('errrorr',res);
     });
   };
 
@@ -53,9 +76,14 @@ app.controller('mijnenCtrl', ['$interval', '$http', '$mdDialog', function($inter
   this.tableReborn = function() {
     return this.spel.bord.map((rij, i) => rij.map((vak, j) => {
       vak.marked = false;
-      // vak.id = i + '' + j;
+      vak.x = i;
+      vak.y = j;
       return vak;
-    }));
+    }))//.reduce((a, b) => a.concat(b));
+  };
+
+  this.tableFlaten = function() {
+    return this.spel ? this.spel.bord.reduce((a, b) => a.concat(b)) : null;
   };
 
   this.zoek = function(rij, kolom, array) {
@@ -100,6 +128,7 @@ app.controller('mijnenCtrl', ['$interval', '$http', '$mdDialog', function($inter
       if (index < array.length) {
         setTimeout(function() {
             array[index].omdraai();
+            this.flatBord = self.tableFlaten();
             // $('#' + array[index].id).addClass('flipOutY');
           f(index + 1, array);
         }, 10);
@@ -149,22 +178,14 @@ app.controller('mijnenCtrl', ['$interval', '$http', '$mdDialog', function($inter
       self.fullLijst.rijen = response.data;
     });
   };
-  this.kreegTop3 = function(naam, rijen, kolommen, bommen) {
-    var url = this.apiUrl + '/deelnemers' +
-      (naam ? '?naam=' + naam : '') +
-      (rijen && kolommen && bommen ? '?rijen=' + rijen + '&kolommen=' + kolommen + '&bommen=' + bommen : '');
-    $http.get(url)
-    .then(function(response) {
-      // console.log(response.data);
-      self.top3 = response.data.slice(0, 3);
-    });
-  };
+
   // this.reload = function() {
   //   location.reload();
   // };
   this.startGame = function() {
     this.spel = new Spel(this.naam, this.bommen, this.rijen, this.kolommen);
     this.spel.bord = this.tableReborn();
+    this.flatBord = this.tableFlaten();
     this.saveConfig();
     this.changeActiveTab(2);
     // this.naam = '';
@@ -195,6 +216,8 @@ app.controller('mijnenCtrl', ['$interval', '$http', '$mdDialog', function($inter
         // }
 
       this.spel.vakjeOmdraaien(x, y);
+      // this.flatBord = this.tableFlaten();
+      // console.log(this.flatBord[x * this.rijen + y]);
       // console.log(this.zoek(x, y, []));
       if (this.spel.einde) {
         this.stopTimer();
@@ -218,8 +241,8 @@ app.controller('mijnenCtrl', ['$interval', '$http', '$mdDialog', function($inter
         this.stopTimer();
         this.showAlert('Congratulations!!!', 'You win!!!');
         this.stuurData();
+
         this.changeActiveTab(1);
-        this.kreegTop3('', this.rijen,this.kolommen,this.bommen);
       }
     }
   };
