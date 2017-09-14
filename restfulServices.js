@@ -31,10 +31,19 @@ function haalNamenLijst(req, res) {
         console.log('connected to db');
         var collection = db.collection('mijnenveger');
         collection.distinct('naam', (function(err, docs) {
-            console.log(docs);
-            res.send(JSON.stringify(docs));
-            db.close();
-        }))
+                console.log(docs);
+                res.send(JSON.stringify(docs));
+                db.close();
+            }))
+            // collection.aggregate({
+            //     $group: { _id: "$naam" }
+            // }, {
+            //     $sort: { _id: 1 }
+            // }, function(err, docs) {
+
+        //     res.send(JSON.stringify(docs));
+        //     db.close();
+        // })
     })
 }
 

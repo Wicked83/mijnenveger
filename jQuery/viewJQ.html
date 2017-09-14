@@ -74,29 +74,31 @@
         <!-- LIJST SPELERS-->
         <div id="divLijst"></div>
         <!--<form action="http://192.168.23.124:1111/deelnemers" onsubmit="return false">-->
-        <form action="http://127.0.0.1:1111/deelnemers" onsubmit="return false">
-            <!--<div class="form-group"> <input type="text" name="naam" id="dnNaam" placeholder="Zoek op naam"></div>-->
-            <select name="naam" id="dnNaam">  
+        <div class="form-group">
+            <form action="http://127.0.0.1:1111/deelnemers" onsubmit="return false">
+                <!--<div class="form-group"> <input type="text" name="naam" id="dnNaam" placeholder="Zoek op naam"></div>-->
+                <select class="form-control" name="naam" id="dnNaam">  
                 <option value="" selected> Zoek op naam </option>             
             </select>
-            <br>
-            <!--<div class="form-group"><input type="text" name="rijen" id="dnRij" placeholder="Zoek op aantal rijen"></div>-->
-            <select name="rijen" id="dnRij" value="Selecteer">    
+                <br>
+                <!--<div class="form-group"><input type="text" name="rijen" id="dnRij" placeholder="Zoek op aantal rijen"></div>-->
+                <select class="form-control" name="rijen" id="dnRij" value="Selecteer">    
                  <option value="" selected> Zoek op configuratie </option>           
             </select>
-            <br>
-            <!--<div class="form-group"><input type="text" name="kolommen" id="dnKolom" placeholder="Zoek op aantal kolommen"></div>-->
-            <select name="kolommen" id="dnKolom">      
+                <br>
+                <!--<div class="form-group"><input type="text" name="kolommen" id="dnKolom" placeholder="Zoek op aantal kolommen"></div>-->
+                <select class="form-control" name="kolommen" id="dnKolom">      
                  <option value="" selected required> Selecteer kolommen </option> 
             </select>
-            <br>
-            <!--<div class="form-group"><input type="text" name="bommen" id="dnBom" placeholder="Zoek op aantal bommen"></div>-->
-            <select name="bommen" id="dnBom">    
+                <br>
+                <!--<div class="form-group"><input type="text" name="bommen" id="dnBom" placeholder="Zoek op aantal bommen"></div>-->
+                <select class="form-control" name="bommen" id="dnBom">    
                 <option value="" selected required> Selecteer bommen </option>             
             </select>
-            <br>
-            <input type="submit" id="getIt" value="Haal selectie op">
-        </form>
+                <br>
+                <input class="btn btn-default" type="submit" id="getIt" value="Haal selectie op">
+            </form>
+        </div>
 
         <div id="deelnemers"></div>
         <!-- EINDE LIJST SPELERS-->
