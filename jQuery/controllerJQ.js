@@ -10,6 +10,7 @@ $(function() {
     haalUitLocalStorage();
 
     $("#divSpelbord").hide();
+
     $("#dnKolom").hide();
     $("#dnBom").hide();
 
@@ -197,8 +198,8 @@ $(function() {
             kolom = $("#dnKolom").val();
 
         $.ajax({
-            //url: "http://192.168.23.124:1111/deelnemers",
-            url: "http://127.0.0.1:1111/deelnemers",
+            url: "http://192.168.23.124:1111/deelnemers",
+            //url: "http://127.0.0.1:1111/deelnemers",
             async: true, // overbodig
             /* success: function (param) {
                 verwerkGegevens(param)
@@ -264,8 +265,8 @@ $(function() {
             naam = prompt("Geef je naam aub. ");
         }
         $.post({
-            //url: "http://192.168.23.124:1111/nieuw",
-            url: "http://127.0.0.1:1111/nieuw",
+            url: "http://192.168.23.124:1111/nieuw",
+            //url: "http://127.0.0.1:1111/nieuw",
             data: {
                 "naam": naam,
                 "bommen": bom,
@@ -286,8 +287,8 @@ $(function() {
             kolom = $("#invoerKolommen").val();
 
         $.ajax({
-            //url: "http://192.168.23.124:1111/deelnemers",
-            url: "http://127.0.0.1:1111/deelnemers",
+            url: "http://192.168.23.124:1111/deelnemers",
+            //url: "http://127.0.0.1:1111/deelnemers",
             async: true,
             data: {
                 "bommen": bom,
@@ -323,8 +324,8 @@ $(function() {
     }
 
     $.ajax({
-        //url: "http://192.168.23.124:1111/namenlijst",
-        url: "http://127.0.0.1:1111/namenlijst",
+        url: "http://192.168.23.124:1111/namenlijst",
+        //url: "http://127.0.0.1:1111/namenlijst",
         async: true, // 
         data: {},
         dataType: 'json'
@@ -336,8 +337,8 @@ $(function() {
     })
 
     $.ajax({
-        //url: "http://192.168.23.124:1111/namenlijst",
-        url: "http://127.0.0.1:1111/rijen",
+        url: "http://192.168.23.124:1111/rijen",
+        //url: "http://127.0.0.1:1111/rijen",
         async: true, // 
         data: {},
         dataType: 'json'
@@ -357,8 +358,8 @@ $(function() {
         var indexR = document.getElementById("dnRij").selectedIndex;
         var geselecteerdeOptieR = document.getElementById("dnRij")[indexR].value;
         $.ajax({
-            //url: "http://192.168.23.124:1111/namenlijst",
-            url: "http://127.0.0.1:1111/kolommen",
+            url: "http://192.168.23.124:1111/kolommen",
+            //url: "http://127.0.0.1:1111/kolommen",
             async: true, // 
             data: { "rij": geselecteerdeOptieR },
             dataType: 'json'
@@ -378,8 +379,8 @@ $(function() {
         var indexK = document.getElementById("dnKolom").selectedIndex;
         var geselecteerdeOptieK = document.getElementById("dnKolom")[indexK].value;
         $.ajax({
-            //url: "http://192.168.23.124:1111/bommen",
-            url: "http://127.0.0.1:1111/bommen",
+            url: "http://192.168.23.124:1111/bommen",
+            //url: "http://127.0.0.1:1111/bommen",
             async: true, // 
             data: { "rij": geselecteerdeOptieR, "kolom": geselecteerdeOptieK },
             dataType: 'json'
