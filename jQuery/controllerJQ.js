@@ -251,6 +251,9 @@ $(function() {
             rij = $("#invoerRijen").val(),
             kolom = $("#invoerKolommen").val(),
             tijd = tijd;
+        if (!naam) {
+            naam = prompt("Geef je naam aub. ");
+        }
         $.post({
             //url: "http://192.168.23.124:1111/nieuw",
             url: "http://127.0.0.1:1111/nieuw",
@@ -262,10 +265,53 @@ $(function() {
                 "tijd": tijd
             },
             success: function(melding) {
-                console.log(melding);
-                $('img').after($('<div>').html(JSON.parse(melding)));
-
+                //console.log(melding);
+                $('img').after($('<div>').html(JSON.parse(melding)).attr('id', 'melding'));
+                // $("#melding").after("Dit is een test");
+                haalTop3();
             }
+        })
+    }
+
+    function haalTop3() {
+        bom = $("#invoerBommen").val(),
+            rij = $("#invoerRijen").val(),
+            kolom = $("#invoerKolommen").val();
+
+        $.ajax({
+            //url: "http://192.168.23.124:1111/deelnemers",
+            url: "http://127.0.0.1:1111/deelnemers",
+            async: true,
+            data: {
+                "bommen": bom,
+                "rijen": rij,
+                "kolommen": kolom
+            },
+            dataType: 'json'
+        }).done(function(param) {
+            console.log(param);
+            // $("#melding").append($('<tr>')
+            //     .append($('<td>').html(deelnemer.naam))
+            //     .append($('<td>').html("test2"))
+            //     .append($('<td>').html("test3")));
+            $('#melding').after(($('<table>').attr('id', 'tabelTop3'))
+                    .append($('<thead>')
+                        .append($('<th>').html('Naam'))
+                        .append($('<th>').html('Tijd')))
+                    //.append($('<th>').html('Bommen'))
+                    //.append($('<th>').html('Rijen'))
+                    //.append($('<th>').html('Kolommen')))
+                    .append($('<tbody>').attr('id', 'top3')))
+                //console.log(arr)
+            param.forEach(function(deelnemer) {
+
+                $('#top3').append($('<tr>')
+                        .append($('<td>').html(deelnemer.naam))
+                        .append($('<td>').html(deelnemer.tijd)))
+                    //.append($('<td>').html(deelnemer.bommen))
+                    //.append($('<td>').html(deelnemer.rijen))
+                    //.append($('<td>').html(deelnemer.kolommen)))
+            }, this);
         })
     }
 
@@ -296,7 +342,7 @@ $(function() {
     })
 
     document.getElementById("dnRij").onchange = function() {
-        $("#dnKolom").show();
+        $("#dnKolom").show().attr('required');
         var idK = document.getElementById("dnKolom");
         verwijderOpties(idK, "selecteer kolommen");
         var indexR = document.getElementById("dnRij").selectedIndex;
