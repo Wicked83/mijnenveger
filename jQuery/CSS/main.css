@@ -70,17 +70,21 @@ button {
     width: 20px;
 }
 
+
+/* 
 table {
     border: 10px solid#94a2af;
-}
+} */
 
 input, button {
     text-align: center;
 }
 
-.alert {
+.gevaar {
     color: rgb(255, 255, 0);
-    background-color: rgb(255, 125, 10)
+    background-color: rgb(255, 125, 10);
+    height: 20px;
+    width: 20px;
 }
 
 .warning {
@@ -136,4 +140,8 @@ table {
     width: 80%;
     margin: 0 auto;
     border: 0 solid black;
+}
+
+td {
+    align-content: space-around;
 }

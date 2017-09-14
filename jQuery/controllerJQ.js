@@ -77,7 +77,7 @@ $(function() {
                                     spel.winControle();
                                     var klik = "rechts";
                                     controleerEindeSpel(klik);
-                                    $(this).addClass('alert');
+                                    $(this).addClass('gevaar');
                                     // $(this).on('click', function () { prop("disabled", false) });
                                     // $(this).prop('click()', 'disabled')
                                     // $(this).attr({ disabled: true })
