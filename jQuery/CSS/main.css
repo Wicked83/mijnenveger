@@ -120,23 +120,20 @@ table {
     border: 2px solid white;
 }
 
-#dlns tr:nth-child(2n) {
+#dlns tr:nth-child(2n), #tabelTop3 tr:nth-child(2n) {
     background-color: #F7D20E;
 }
 
-#dlns tr:nth-child(2n+1) {
+#dlns tr:nth-child(2n+1), #tabelTop3 tr:nth-child(2n+1) {
     background-color: #A4A49C;
 }
 
-#tabelDeelnrs th{
+#tabelDeelnrs th, #tabelTop3 th {
     background-color: #DDE0D6
 }
 
-#tabelDeelnrs {
+#tabelDeelnrs, #tabelTop3 {
     width: 80%;
     margin: 0 auto;
-}
-
-#tabelDeelnrs{
     border: 0 solid black;
 }
