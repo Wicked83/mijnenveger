@@ -1,7 +1,7 @@
 #gameHolder {
-    /* width: 600px; */
-    margin: 50px auto;
+    margin: 0 auto;
     text-align: center;
+    width: 80%;
 }
 
 table {
@@ -51,11 +51,10 @@ button {
 }
 
 .body {
-    max-width: 80%;
-    max-height: 95vh;
-    min-width: 100%vw;
-    background-color: lightslategray
-    
+    /*     max-width: 80%;
+    max-height: 95vh; */
+    width: 100%;
+    background-color: lightslategray;
 }
 
 
@@ -73,7 +72,6 @@ button {
 
 table {
     border: 10px solid#94a2af;
-    width: 80%
 }
 
 input, button {
@@ -81,7 +79,7 @@ input, button {
 }
 
 .alert {
-    color: rgb(255, 255, 0); 
+    color: rgb(255, 255, 0);
     background-color: rgb(255, 125, 10)
 }
 
@@ -120,4 +118,22 @@ table {
 .bomBuren {
     background-color: yellow;
     border: 2px solid white;
+}
+
+#dlns tr:nth-child(2n), #tabelTop3 tr:nth-child(2n) {
+    background-color: #F7D20E;
+}
+
+#dlns tr:nth-child(2n+1), #tabelTop3 tr:nth-child(2n+1) {
+    background-color: #A4A49C;
+}
+
+#tabelDeelnrs th, #tabelTop3 th {
+    background-color: #DDE0D6
+}
+
+#tabelDeelnrs, #tabelTop3 {
+    width: 80%;
+    margin: 0 auto;
+    border: 0 solid black;
 }
