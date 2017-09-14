@@ -51,10 +51,11 @@ button {
 }
 
 .body {
-    max-width: 100%;
-    max-height: 100%;
+    max-width: 80%;
+    max-height: 95vh;
     min-width: 100%vw;
     background-color: lightslategray
+    
 }
 
 
@@ -80,7 +81,7 @@ input, button {
 }
 
 .alert {
-    color: rgb(255, 255, 0);
+    color: rgb(255, 255, 0); 
     background-color: rgb(255, 125, 10)
 }
 
@@ -113,5 +114,10 @@ table {
 .vierkant {
     /* height: 10px;
     width: 10px; */
+    border: 2px solid white;
+}
+
+.bomBuren {
+    background-color: yellow;
     border: 2px solid white;
 }
