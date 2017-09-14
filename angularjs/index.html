@@ -45,19 +45,19 @@
             <div layout="row" layout-align='center center'>
               <md-input-container>
                 <label>Rows</label>
-                <input type="number" min="0" max="50" ng-model="ctrl.rijen">
+                <input type="number" min="0" max="30" ng-model="ctrl.rijen">
               </md-input-container>
             </div>
             <div layout="row" layout-align='center center'>
               <md-input-container>
                 <label>Cols</label>
-                <input type="number" min="0" max="50" ng-model="ctrl.kolommen">
+                <input type="number" min="0" max="30" ng-model="ctrl.kolommen">
               </md-input-container>
             </div>
             <div layout="row" layout-align='center center'>
               <md-input-container>
                 <label>Boms</label>
-                <input type="number" min="0" max="50" ng-model="ctrl.bommen">
+                <input type="number" min="0" max="{{ctrl.kolommen * ctrl.rijen - 1}}" ng-model="ctrl.bommen">
               </md-input-container>
             </div>
             <md-button class="md-raised md-primary md-cornered" type="submit">Start game</md-button>
