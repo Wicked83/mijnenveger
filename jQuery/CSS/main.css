@@ -142,6 +142,7 @@ table {
     border: 0 solid black;
 }
 
-td {
+span {
     align-content: space-around;
+    margin: 0 auto;
 }
